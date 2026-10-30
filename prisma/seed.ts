@@ -50,9 +50,9 @@ async function main() {
     report_not_received_window_hours: "24",
     site_name: "CrazyTech",
     site_announcement: "⚡ Welcome to CrazyTech! Instant automated telecom data dispatch across MTN, Telecel, and AirtelTigo.",
-    support_whatsapp: "+233240000000",
-    support_phone: "0240000000",
-    support_email: "dzrahfelix@gmail.com",
+    support_whatsapp: "+233507904981",
+    support_phone: "0507904981",
+    support_email: "agoemmanuel9@gmail.com",
     support_telegram: "@crazytech",
   };
 

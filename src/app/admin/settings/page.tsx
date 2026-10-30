@@ -1276,7 +1276,7 @@ export default function AdminSettingsPage() {
                 <Input
                   value={settings.support_whatsapp ?? ""}
                   onChange={(e) => setSettings((s) => ({ ...s, support_whatsapp: e.target.value }))}
-                  placeholder="233XXXXXXXXX"
+                  placeholder="+233507904981"
                 />
                 <p className="text-[11px] text-slate-400">
                   Target for the floating support WhatsApp bubble on the bottom right.
@@ -1287,7 +1287,7 @@ export default function AdminSettingsPage() {
                 <Input
                   value={settings.default_momo_number ?? ""}
                   onChange={(e) => setSettings((s) => ({ ...s, default_momo_number: e.target.value }))}
-                  placeholder="024XXXXXXX"
+                  placeholder="0507904981"
                 />
               </div>
               <div className="space-y-1.5">
@@ -1296,7 +1296,7 @@ export default function AdminSettingsPage() {
                   type="email"
                   value={settings.contact_email ?? ""}
                   onChange={(e) => setSettings((s) => ({ ...s, contact_email: e.target.value }))}
-                  placeholder="dzrahfelix@gmail.com"
+                  placeholder="agoemmanuel9@gmail.com"
                 />
               </div>
             </div>
@@ -1866,7 +1866,7 @@ export default function AdminSettingsPage() {
                 <Input
                   value={settings.support_phone ?? ""}
                   onChange={(e) => setSettings((s) => ({ ...s, support_phone: e.target.value }))}
-                  placeholder="233XXXXXXXXX"
+                  placeholder="0507904981"
                 />
               </div>
               <div className="space-y-1.5">
@@ -1882,7 +1882,7 @@ export default function AdminSettingsPage() {
                 <Input
                   value={settings.support_email ?? ""}
                   onChange={(e) => setSettings((s) => ({ ...s, support_email: e.target.value }))}
-                  placeholder="dzrahfelix@gmail.com"
+                  placeholder="agoemmanuel9@gmail.com"
                 />
               </div>
               <div className="space-y-1.5">

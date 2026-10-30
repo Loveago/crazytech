@@ -299,20 +299,20 @@ export function LegalPageShell({
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <a
-                href="mailto:dzrahfelix@gmail.com"
+                href="mailto:agoemmanuel9@gmail.com"
                 className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-emerald-500 transition-colors"
               >
                 <Mail className="h-3.5 w-3.5" />
-                <span>dzrahfelix@gmail.com</span>
+                <span>agoemmanuel9@gmail.com</span>
               </a>
               <a
-                href="https://wa.me/233242319697"
+                href="https://wa.me/233507904981"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-800 shadow-xs hover:bg-slate-50 dark:border-white/10 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 transition-colors"
               >
                 <Phone className="h-3.5 w-3.5 text-emerald-500" />
-                <span>0242319697</span>
+                <span>0507904981</span>
               </a>
             </div>
           </div>

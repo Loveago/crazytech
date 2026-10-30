@@ -144,14 +144,9 @@ NEXT_PUBLIC_MAIN_DOMAIN="crazytechent.com"
 STOREFRONT_DOMAIN="wolfdatahub.xyz"
 NEXT_PUBLIC_STOREFRONT_DOMAIN="wolfdatahub.xyz"
 
-# Paystack (Ghana MoMo Top-ups & Storefront Checkout)
-# Get keys at: https://dashboard.paystack.com/#/settings/developers
-PAYSTACK_SECRET_KEY="your_paystack_secret_key_here"
-NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY="your_paystack_public_key_here"
-
 # Initial Admin Credentials (used during seed)
 ADMIN_EMAIL="admin@crazytechent.com"
-ADMIN_PASSWORD="Laudforu2cmt112233!"
+ADMIN_PASSWORD="LaudCforu2cmt112233!"
 ADMIN_NAME="Super Admin"
 
 # Node Environment

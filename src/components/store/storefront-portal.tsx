@@ -142,7 +142,7 @@ export function StorefrontPortal({
 
   // Customer contact details
   const rawContact = storefront.whatsapp || storefront.phone || "";
-  const displayPhone = rawContact || "0240000000";
+  const displayPhone = rawContact || "0507904981";
   const waChatUrl = whatsappDirectLink(rawContact);
   const waGroupUrl = storefront.whatsappGroupLink || waChatUrl;
 

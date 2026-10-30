@@ -280,13 +280,13 @@ async function runE2ETests() {
       amount: 10.0,
       payoutMethod: "MOMO",
       network: "MTN",
-      momoNumber: "0242319697",
+      momoNumber: "0507904981",
       accountName: "Felix Dzrah",
     });
 
     assert.strictEqual(momoResult.status, "PENDING");
     assert.strictEqual(momoResult.payoutMethod, "MOMO");
-    assert.strictEqual(momoResult.momoNumber, "0242319697");
+    assert.strictEqual(momoResult.momoNumber, "0507904981");
 
     const postMomoRoot = await prisma.user.findUnique({ where: { id: rootAgent.id } });
     assert.strictEqual(postMomoRoot?.affiliateBalance, 5.0, "Affiliate balance must decrease to 5.00 while held in escrow");
