@@ -23,10 +23,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const input = packageSchema.parse(body);
 
-    const existing = await prisma.dataPackage.findUnique({
-      where: { network_gbAmount: { network: input.network, gbAmount: input.gbAmount } },
+    const existing = await prisma.dataPackage.findFirst({
+      where: { network: input.network, gbAmount: input.gbAmount },
     });
-    if (existing) return apiError(409, "A package with this network and size already exists");
+    if (existing) {
+      return apiError(
+        409,
+        `A package for ${input.network} with ${input.gbAmount} GB already exists ("${existing.name}"${existing.active ? "" : " - currently inactive"}). Please edit that package or choose a different data size.`
+      );
+    }
 
     const pkg = await prisma.dataPackage.create({
       data: {

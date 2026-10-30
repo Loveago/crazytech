@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { AuthError } from "./auth";
+import { Prisma } from "@prisma/client";
 
 export function apiError(status: number, message: string) {
   return NextResponse.json({ error: message }, { status });
@@ -16,6 +17,25 @@ export function zodFail(err: ZodError) {
 export function handleRouteError(err: unknown) {
   if (err instanceof ZodError) return zodFail(err);
   if (err instanceof AuthError) return apiError(err.status, err.message);
+
+  if (err instanceof Prisma.PrismaClientKnownRequestError || (typeof err === "object" && err !== null && "code" in err)) {
+    const code = (err as any).code;
+    if (code === "P2002") {
+      const target = (err as any).meta?.target;
+      const targetStr = Array.isArray(target) ? target.join(", ") : String(target || "");
+      if (targetStr.includes("network") && targetStr.includes("gbAmount")) {
+        return apiError(
+          409,
+          "A package with this network and data size already exists. Please choose a different data size or edit the existing package."
+        );
+      }
+      return apiError(409, `A record with these unique details already exists (${targetStr || "duplicate"}).`);
+    }
+    if (code === "P2025") {
+      return apiError(404, "The requested record was not found.");
+    }
+  }
+
   const message = err instanceof Error ? err.message : "Something went wrong";
   console.error("[api]", err);
   return apiError(500, message);

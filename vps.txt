@@ -1,5 +1,7 @@
 ================================================================================
      COMPLETE VPS DEPLOYMENT GUIDE: DUAL-DOMAIN ARCHITECTURE
+     • crazytech.net -> Management Portal, Admin, User Dashboards
+     • cmtshop.net    -> Customer Storefronts, Orders & Tracking
      • crazytechent.com -> Management Portal, Admin, User Dashboards
      • wolfdatahub.xyz  -> Customer Storefronts, Orders & Tracking
 ================================================================================
@@ -19,6 +21,7 @@ TABLE OF CONTENTS
 6. Step 5: Configure Production Environment (.env)
 7. Step 6: Database Setup & Next.js Production Build
 8. Step 7: Configure PM2 Process Manager
+9. Step 8: Configure Nginx for Both Domains (crazytech.net & cmtshop.net)
 9. Step 8: Configure Nginx for Both Domains (crazytechent.com & wolfdatahub.xyz)
 10. Step 9: Issue Free SSL Certificates (Certbot HTTPS)
 11. Step 10: Configure Paystack Webhooks & Callbacks
@@ -30,17 +33,21 @@ TABLE OF CONTENTS
 1. DNS CONFIGURATION (BOTH DOMAINS POINT TO SAME VPS IP)
 ================================================================================
 A VPS has one public IP address. Both domains will point to that SAME IP.
+When a visitor visits cmtshop.net, Nginx proxies to Next.js with Host: cmtshop.net,
+serving customer storefronts. When a user visits crazytech.net, they access the portal.
 When a visitor visits wolfdatahub.xyz, Nginx proxies to Next.js with Host: wolfdatahub.xyz,
 serving customer storefronts. When a user visits crazytechent.com, they access the portal.
 
 In your DNS manager (Namecheap, Cloudflare, GoDaddy, Hostinger, etc.):
 
+For crazytech.net:
 For crazytechent.com:
 | Type | Host / Name | Value / Destination | TTL |
 | :--- | :--- | :--- | :--- |
 | A    | @           | <YOUR_VPS_IP>       | Auto / 1 min |
 | A    | www         | <YOUR_VPS_IP>       | Auto / 1 min |
 
+For cmtshop.net:
 For wolfdatahub.xyz:
 | Type | Host / Name | Value / Destination | TTL |
 | :--- | :--- | :--- | :--- |
@@ -144,9 +151,14 @@ NEXT_PUBLIC_MAIN_DOMAIN="crazytechent.com"
 STOREFRONT_DOMAIN="wolfdatahub.xyz"
 NEXT_PUBLIC_STOREFRONT_DOMAIN="wolfdatahub.xyz"
 
+# Paystack (Ghana MoMo Top-ups & Storefront Checkout)
+# Get keys at: https://dashboard.paystack.com/#/settings/developers
+PAYSTACK_SECRET_KEY="your_paystack_secret_key_here"
+NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY="your_paystack_public_key_here"
+
 # Initial Admin Credentials (used during seed)
 ADMIN_EMAIL="admin@crazytechent.com"
-ADMIN_PASSWORD="LaudCforu2cmt112233!"
+ADMIN_PASSWORD="Laudforu2cmt112233!"
 ADMIN_NAME="Super Admin"
 
 # Node Environment
@@ -217,7 +229,7 @@ curl -I http://127.0.0.1:3000
 ================================================================================
 We create two modular Nginx site configs: one for crazytechent.com and one for wolfdatahub.xyz.
 
---- [ 8A: NGINX CONFIG FOR COMMONTECH.NET ] ---
+--- [ 8A: NGINX CONFIG FOR CRAZYTECHENT.COM ] ---
 cat << 'EOF' > /etc/nginx/sites-available/crazytechent.com
 server {
     listen 80;
@@ -255,7 +267,7 @@ server {
 }
 EOF
 
---- [ 8B: NGINX CONFIG FOR CMTSHOP.NET ] ---
+--- [ 8B: NGINX CONFIG FOR WOLFDATAHUB.XYZ ] ---
 cat << 'EOF' > /etc/nginx/sites-available/wolfdatahub.xyz
 server {
     listen 80;

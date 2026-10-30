@@ -46,6 +46,7 @@ export function PackageFormDialog({
   const [active, setActive] = React.useState(true);
   const [sortOrder, setSortOrder] = React.useState("0");
   const [saving, setSaving] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const availableCategories = React.useMemo(() => {
     const set = new Set([...DEFAULT_NETWORKS, ...categories]);
@@ -72,12 +73,15 @@ export function PackageFormDialog({
       setPrice(pkg?.retailPriceGHS != null ? String(pkg.retailPriceGHS) : "");
       setActive(pkg?.active ?? true);
       setSortOrder(String(pkg?.sortOrder ?? 0));
+      setError(null);
     }
   }, [open, pkg, availableCategories]);
 
   const save = async () => {
+    setError(null);
     const resolvedNetwork = isCustomNetwork ? customNetwork.trim().toUpperCase() : network;
     if (!resolvedNetwork) {
+      setError("Please specify a network/category");
       return toast("Please specify a network/category", "error");
     }
     setSaving(true);
@@ -98,7 +102,11 @@ export function PackageFormDialog({
         body: JSON.stringify(body),
       });
       const json = await res.json();
-      if (!res.ok) return toast(json.error ?? "Save failed", "error");
+      if (!res.ok) {
+        const msg = json.error ?? "Save failed";
+        setError(msg);
+        return toast(msg, "error");
+      }
       toast(pkg ? "Package updated" : "Package created", "success");
       onSaved();
       onClose();
@@ -171,6 +179,11 @@ export function PackageFormDialog({
           <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
           <span>Active (available for ordering)</span>
         </label>
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+            {error}
+          </div>
+        )}
         <Button className="w-full" onClick={save} disabled={saving}>
           {saving && <Spinner />} {pkg ? "Save changes" : "Create package"}
         </Button>

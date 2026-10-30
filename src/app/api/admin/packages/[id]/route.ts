@@ -18,6 +18,21 @@ export async function PATCH(
     const body = await request.json();
     const input = packageSchema.parse(body);
 
+    // Check if another package with this network and gbAmount already exists
+    const duplicate = await prisma.dataPackage.findFirst({
+      where: {
+        network: input.network,
+        gbAmount: input.gbAmount,
+        id: { not: id },
+      },
+    });
+    if (duplicate) {
+      return apiError(
+        409,
+        `A package for ${input.network} with ${input.gbAmount} GB already exists ("${duplicate.name}"${duplicate.active ? "" : " - currently inactive"}). Please edit that package or choose a different data size.`
+      );
+    }
+
     const pkg = await prisma.dataPackage.update({
       where: { id },
       data: {

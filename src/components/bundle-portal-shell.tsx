@@ -29,6 +29,7 @@ import {
   LogOut,
   ExternalLink,
   Share2,
+  Sparkles,
 } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { useTheme } from "next-themes";
@@ -58,6 +59,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard/orders", label: "Orders", icon: ClipboardList },
   { href: "/dashboard/customers", label: "Customers", icon: Users },
   { href: "/dashboard/packages", label: "Products", icon: Package },
+  { href: "/dashboard/services", label: "Other Services", icon: Sparkles },
   { href: "/dashboard/billing", label: "Wallet & Billing", icon: Wallet },
   { href: "/dashboard/transactions", label: "Transactions", icon: ArrowLeftRight },
   { href: "/dashboard/mtn-verification", label: "MTN Verification", icon: ShieldCheck },
