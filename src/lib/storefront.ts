@@ -237,6 +237,19 @@ export async function syncStorefrontWithPricingProfile(
     const costP = toPesewas(costGHS);
     const existing = existingMap.get(pkg.id);
 
+    const STALE_SEEDED_PRICES: Record<number, number> = {
+      1: 1000,
+      2: 2000,
+      3: 3000,
+      5: 5000,
+      10: 9000,
+    };
+    const isStaleSeedPrice =
+      Boolean(existing) &&
+      STALE_SEEDED_PRICES[pkg.gbAmount] != null &&
+      existing!.sellingPrice === STALE_SEEDED_PRICES[pkg.gbAmount] &&
+      existing!.sellingPrice > costP;
+
     if (!existing) {
       operations.push(
         prisma.storefrontProduct.create({
@@ -257,7 +270,7 @@ export async function syncStorefrontWithPricingProfile(
           },
         })
       );
-    } else if (existing.sellingPrice < costP) {
+    } else if (existing.sellingPrice < costP || isStaleSeedPrice) {
       operations.push(
         prisma.storefrontProduct.update({
           where: { id: existing.id },
