@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 90" width="480" height="90" fill="none">
+  <defs>
+    <linearGradient id="ctLogoArc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="40%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <linearGradient id="ctTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Freestanding Mark on left -->
+  <g transform="translate(10, 8) scale(0.74)">
+    <rect width="100" height="100" rx="24" fill="#070b14" />
+    <rect x="1" y="1" width="98" height="98" rx="23" stroke="#1e293b" stroke-width="1.5" />
+    <path d="M 75 25 A 34 34 0 1 0 75 75" fill="none" stroke="url(#ctLogoArc)" stroke-width="12" stroke-linecap="round" />
+    <path d="M 42 38 L 84 38" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" />
+    <path d="M 63 38 L 63 68" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" />
+    <circle cx="63" cy="38" r="4.5" fill="#06b6d4" />
+    <circle cx="63" cy="38" r="2" fill="#ffffff" />
+  </g>
+
+  <!-- Typography -->
+  <g transform="translate(98, 51)">
+    <text x="0" y="0" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="36" font-weight="900" letter-spacing="-0.8">
+      <tspan fill="#0f172a">Crazy</tspan><tspan fill="url(#ctTextGrad)">Tech</tspan>
+    </text>
+    <text x="2" y="24" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="800" letter-spacing="2.4" fill="#6366f1">
+      HIGH-SPEED TELECOM &amp; AUTOMATION
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,384 @@
+================================================================================
+     COMPLETE VPS DEPLOYMENT GUIDE: DUAL-DOMAIN ARCHITECTURE
+     • crazytechent.com -> Management Portal, Admin, User Dashboards
+     • wolfdatahub.xyz  -> Customer Storefronts, Orders & Tracking
+================================================================================
+OS: Ubuntu 22.04 / 24.04 LTS or Debian 12
+VPS Setup: Single Next.js App (Port 3000) + PM2 + Local PostgreSQL + Nginx + Certbot
+Architecture: Both domains point to the SAME VPS IP address and share the same database.
+================================================================================
+
+--------------------------------------------------------------------------------
+TABLE OF CONTENTS
+--------------------------------------------------------------------------------
+1. DNS Configuration (Both Domains Point to Same IP)
+2. Step 1: Connect to VPS & Configure Firewall
+3. Step 2: Install Node.js 22 LTS & PM2
+4. Step 3: Install & Configure PostgreSQL
+5. Step 4: Clone Repository & Install Dependencies
+6. Step 5: Configure Production Environment (.env)
+7. Step 6: Database Setup & Next.js Production Build
+8. Step 7: Configure PM2 Process Manager
+9. Step 8: Configure Nginx for Both Domains (crazytechent.com & wolfdatahub.xyz)
+10. Step 9: Issue Free SSL Certificates (Certbot HTTPS)
+11. Step 10: Configure Paystack Webhooks & Callbacks
+12. Step 11: Verification & Live Testing
+13. Step 12: 1-Click Update Script & Maintenance Commands
+
+
+================================================================================
+1. DNS CONFIGURATION (BOTH DOMAINS POINT TO SAME VPS IP)
+================================================================================
+A VPS has one public IP address. Both domains will point to that SAME IP.
+When a visitor visits wolfdatahub.xyz, Nginx proxies to Next.js with Host: wolfdatahub.xyz,
+serving customer storefronts. When a user visits crazytechent.com, they access the portal.
+
+In your DNS manager (Namecheap, Cloudflare, GoDaddy, Hostinger, etc.):
+
+For crazytechent.com:
+| Type | Host / Name | Value / Destination | TTL |
+| :--- | :--- | :--- | :--- |
+| A    | @           | <YOUR_VPS_IP>       | Auto / 1 min |
+| A    | www         | <YOUR_VPS_IP>       | Auto / 1 min |
+
+For wolfdatahub.xyz:
+| Type | Host / Name | Value / Destination | TTL |
+| :--- | :--- | :--- | :--- |
+| A    | @           | <YOUR_VPS_IP>       | Auto / 1 min |
+| A    | www         | <YOUR_VPS_IP>       | Auto / 1 min |
+
+(Both domains live together on the same server and database!)
+
+
+================================================================================
+2. STEP 1: CONNECT TO VPS & CONFIGURE FIREWALL
+================================================================================
+# SSH into your VPS (replace your_vps_ip with your actual VPS IP address)
+ssh root@your_vps_ip
+
+# Update system packages and install prerequisites
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl git ufw build-essential libpq-dev nginx certbot python3-certbot-nginx
+
+# Configure UFW Firewall (allows SSH, HTTP port 80, HTTPS port 443)
+sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw --force enable
+sudo ufw status
+
+
+================================================================================
+3. STEP 2: INSTALL NODE.JS 22 LTS & PM2
+================================================================================
+# Install Node.js 22 LTS via NodeSource
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Verify versions
+node -v
+npm -v
+
+# Install PM2 globally
+sudo npm install -g pm2
+
+# Configure PM2 to automatically launch on system reboot
+sudo pm2 startup systemd -u root --hp /root
+
+
+================================================================================
+4. STEP 3: INSTALL & CONFIGURE POSTGRESQL
+================================================================================
+# Install PostgreSQL and contrib tools
+sudo apt install -y postgresql postgresql-contrib
+
+# Start and enable PostgreSQL service
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+# Create database user and database
+# (Replace 'YourSecurePassword123!' with your chosen secure database password)
+sudo -u postgres psql << 'EOF'
+CREATE USER crazytech_user WITH PASSWORD 'YourSecurePassword123crazy!';
+CREATE DATABASE crazytech_db OWNER crazytech_user;
+GRANT ALL PRIVILEGES ON DATABASE crazytech_db TO crazytech_user;
+ALTER USER crazytech_user CREATEDB;
+\q
+EOF
+
+# Grant schema privileges (PostgreSQL 15+)
+sudo -u postgres psql -d crazytech_db -c "GRANT ALL ON SCHEMA public TO crazytech_user;"
+
+# Test connecting to the local database
+PGPASSWORD='YourSecurePassword123crazy!' psql -U crazytech_user -d crazytech_db -h 127.0.0.1 -c "\conninfo"
+
+
+================================================================================
+5. STEP 4: CLONE REPOSITORY & INSTALL DEPENDENCIES
+================================================================================
+# Create web directory
+sudo mkdir -p /var/www
+cd /var/www
+
+# Clone repository
+git clone https://github.com/Loveago/crazytech.git crazytech
+cd /var/www/crazytech
+
+# Install dependencies
+npm install
+
+
+================================================================================
+6. STEP 5: CONFIGURE PRODUCTION ENVIRONMENT (.ENV)
+================================================================================
+# Create production .env file
+cat << 'EOF' > /var/www/crazytech/.env
+# Database Connection (Local PostgreSQL)
+DATABASE_URL="postgresql://crazytech_user:YourSecurePassword123crazy!@localhost:5432/crazytech_db?schema=public"
+
+# Auth Session Secret (Generate with: openssl rand -base64 32)
+AUTH_SECRET="CHANGEdd_THIS_ddTO_ddA_VddERYe_s22!SECUREfsfsd_LONG_RANDOM_SEdsfsdCRET_KEY_123456"
+
+# Multi-Domain Platform Architecture
+MAIN_DOMAIN="crazytechent.com"
+NEXT_PUBLIC_MAIN_DOMAIN="crazytechent.com"
+STOREFRONT_DOMAIN="wolfdatahub.xyz"
+NEXT_PUBLIC_STOREFRONT_DOMAIN="wolfdatahub.xyz"
+
+# Paystack (Ghana MoMo Top-ups & Storefront Checkout)
+# Get keys at: https://dashboard.paystack.com/#/settings/developers
+PAYSTACK_SECRET_KEY="your_paystack_secret_key_here"
+NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY="your_paystack_public_key_here"
+
+# Initial Admin Credentials (used during seed)
+ADMIN_EMAIL="admin@crazytechent.com"
+ADMIN_PASSWORD="Laudforu2cmt112233!"
+ADMIN_NAME="Super Admin"
+
+# Node Environment
+NODE_ENV="production"
+PORT=3000
+EOF
+
+# Restrict permissions so only root/node can read secrets
+chmod 600 /var/www/crazytech/.env
+
+
+================================================================================
+7. STEP 6: DATABASE SETUP & NEXT.JS PRODUCTION BUILD
+================================================================================
+cd /var/www/crazytech
+
+# Generate Prisma Client
+npx prisma generate
+
+# Push database schema to PostgreSQL
+npx prisma db push
+
+# (Optional) Seed initial admin user and default settings/packages
+npx tsx prisma/seed.ts
+
+# Build Next.js application for production
+NODE_OPTIONS="--max-old-space-size=2048" npm run build
+
+
+================================================================================
+8. STEP 7: CONFIGURE PM2 PROCESS MANAGER
+================================================================================
+# Create PM2 ecosystem file
+cat << 'EOF' > /var/www/crazytech/ecosystem.config.js
+module.exports = {
+  apps: [
+    {
+      name: "crazytech",
+      cwd: "/var/www/crazytech",
+      script: "node_modules/next/dist/bin/next",
+      args: "start -p 3000",
+      instances: "max",
+      exec_mode: "cluster",
+      autorestart: true,
+      watch: false,
+      max_memory_restart: "1G",
+      env: {
+        NODE_ENV: "production",
+        PORT: 3000
+      }
+    }
+  ]
+};
+EOF
+
+# Start application with PM2
+pm2 start /var/www/crazytech/ecosystem.config.js
+
+# Save PM2 process list to persist across reboots
+pm2 save
+
+# Verify application responds locally
+curl -I http://127.0.0.1:3000
+
+
+================================================================================
+9. STEP 8: CONFIGURE NGINX FOR BOTH DOMAINS
+================================================================================
+We create two modular Nginx site configs: one for crazytechent.com and one for wolfdatahub.xyz.
+
+--- [ 8A: NGINX CONFIG FOR COMMONTECH.NET ] ---
+cat << 'EOF' > /etc/nginx/sites-available/crazytechent.com
+server {
+    listen 80;
+    listen [::]:80;
+    server_name crazytechent.com www.crazytechent.com;
+
+    client_max_body_size 250M;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+
+        # WebSocket support
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+
+        # Multi-tenant proxy headers
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 60s;
+    }
+
+    # Static file caching
+    location /_next/static/ {
+        alias /var/www/crazytech/.next/static/;
+        expires 365d;
+        access_log off;
+    }
+}
+EOF
+
+--- [ 8B: NGINX CONFIG FOR CMTSHOP.NET ] ---
+cat << 'EOF' > /etc/nginx/sites-available/wolfdatahub.xyz
+server {
+    listen 80;
+    listen [::]:80;
+    server_name wolfdatahub.xyz www.wolfdatahub.xyz;
+
+    client_max_body_size 250M;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+
+        # WebSocket support
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+
+        # Multi-tenant proxy headers
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 60s;
+    }
+
+    # Static file caching
+    location /_next/static/ {
+        alias /var/www/crazytech/.next/static/;
+        expires 365d;
+        access_log off;
+    }
+}
+EOF
+
+--- [ 8C: ENABLE SITES & TEST NGINX ] ---
+sudo ln -sf /etc/nginx/sites-available/crazytechent.com /etc/nginx/sites-enabled/
+sudo ln -sf /etc/nginx/sites-available/wolfdatahub.xyz /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
+
+# Test Nginx syntax
+sudo nginx -t
+
+# Reload Nginx
+sudo systemctl reload nginx
+
+
+================================================================================
+10. STEP 9: ISSUE FREE SSL CERTIFICATES (CERTBOT HTTPS)
+================================================================================
+Run Certbot to secure both domains and their www subdomains in one command:
+
+sudo certbot --nginx -d crazytechent.com -d www.crazytechent.com -d wolfdatahub.xyz -d www.wolfdatahub.xyz --non-interactive --agree-tos -m admin@crazytechent.com --redirect
+
+# Test automatic SSL certificate renewal
+sudo certbot renew --dry-run
+
+
+================================================================================
+11. STEP 10: CONFIGURE PAYSTACK WEBHOOKS & CALLBACKS
+================================================================================
+In Paystack Dashboard -> Settings -> API Keys & Webhooks
+(https://dashboard.paystack.com/#/settings/developers):
+
+1. Webhook URL:
+   https://crazytechent.com/api/billing/paystack/webhook
+   (Handles user wallet top-up confirmations)
+
+2. Storefront Webhook URL (if using second webhook or primary):
+   https://wolfdatahub.xyz/api/store/paystack/callback
+   (Handles customer reseller order payments)
+
+3. Default Callback URL:
+   https://crazytechent.com/dashboard/billing
+
+
+================================================================================
+12. STEP 11: VERIFICATION & LIVE TESTING
+================================================================================
+Run these curl checks directly on the VPS to verify routing:
+
+# 1. Test storefront root (Storefront discovery homepage)
+curl -I -H "Host: wolfdatahub.xyz" http://127.0.0.1:3000/
+# Expected: HTTP 200
+
+# 2. Test security redirect (blocks admin/management on storefront domain)
+curl -I -H "Host: wolfdatahub.xyz" http://127.0.0.1:3000/admin
+# Expected: HTTP 307/308 Redirect to https://crazytechent.com/login
+
+# 3. Test clean store routing
+curl -I -H "Host: wolfdatahub.xyz" http://127.0.0.1:3000/loveagostore
+# Expected: HTTP 200
+
+# 4. Test main platform
+curl -I -H "Host: crazytechent.com" http://127.0.0.1:3000/dashboard
+# Expected: HTTP 200 / 307 (auth redirect)
+
+
+================================================================================
+13. STEP 12: 1-CLICK UPDATE SCRIPT & MAINTENANCE
+================================================================================
+Whenever you push updates to GitHub, run this single command on the VPS:
+
+cd /var/www/crazytech && \
+git pull origin main && \
+npm install && \
+npx prisma generate && \
+npx prisma db push && \
+NODE_OPTIONS="--max-old-space-size=2048" npm run build && \
+pm2 reload all
+
+Helpful maintenance commands:
+• Check PM2 status:     pm2 status
+• View live app logs:   pm2 logs crazytech
+• Restart application:  pm2 reload crazytech
+• Check Nginx error:    sudo tail -f /var/log/nginx/error.log
+• PostgreSQL console:   sudo -u postgres psql -d crazytech_db
+• Database backup:      pg_dump -U crazytech_user -h 127.0.0.1 crazytech_db > ~/crazytech_backup_$(date +%F).sql
+================================================================================
