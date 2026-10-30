@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Sliders, CheckCircle2, AlertCircle, Package, ArrowUpRight, ShieldCheck, Zap } from "lucide-react";
+import { Loader2, Sliders, CheckCircle2, AlertCircle, Package, ArrowUpRight, ShieldCheck, Zap, RefreshCw } from "lucide-react";
 
 interface Pkg {
   id: string;
@@ -42,7 +42,14 @@ export function PricingEditor({
   const byId = React.useMemo(() => new Map(productList.map((p) => [p.packageId, p])), [productList]);
 
   const [prices, setPrices] = React.useState<Record<string, string>>(() =>
-    Object.fromEntries(packages.map((p) => [p.id, byId.get(p.id)?.sellingPrice?.toFixed(2) ?? ""]))
+    Object.fromEntries(
+      packages.map((p) => [
+        p.id,
+        byId.get(p.id)?.sellingPrice != null
+          ? byId.get(p.id)!.sellingPrice.toFixed(2)
+          : p.cost.toFixed(2),
+      ])
+    )
   );
 
   const [savingId, setSavingId] = React.useState<string | null>(null);
@@ -52,6 +59,7 @@ export function PricingEditor({
   const [filter, setFilter] = React.useState<string>("MTN");
   const [msg, setMsg] = React.useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [bulkBusy, setBulkBusy] = React.useState(false);
+  const [syncingProfile, setSyncingProfile] = React.useState(false);
 
   // Sync state if props change
   React.useEffect(() => {
@@ -211,6 +219,50 @@ export function PricingEditor({
     }
   }
 
+  async function syncWithPricingProfile(markupGHS = 0) {
+    setSyncingProfile(true);
+    setMsg(null);
+    try {
+      const res = await fetch("/api/storefront/products/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ markup: markupGHS }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to sync pricing profile");
+
+      if (Array.isArray(data.packages)) {
+        setPackageList(data.packages);
+      }
+      if (Array.isArray(data.products)) {
+        const prods: Prod[] = data.products.map((p: any) => ({
+          packageId: p.packageId,
+          sellingPrice: p.sellingPrice / 100,
+          isActive: p.isActive,
+        }));
+        setProductList(prods);
+        const pkgs = data.packages || packageList;
+        setPrices(
+          Object.fromEntries(
+            pkgs.map((pkg: Pkg) => {
+              const match = prods.find((pr) => pr.packageId === pkg.id);
+              return [pkg.id, (match ? match.sellingPrice : pkg.cost).toFixed(2)];
+            })
+          )
+        );
+      }
+      setMsg({
+        kind: "ok",
+        text: `✓ Successfully synced all ${data.updated ?? ""} storefront products with your current pricing profile rates!`,
+      });
+      router.refresh();
+    } catch (e) {
+      setMsg({ kind: "err", text: e instanceof Error ? e.message : "Sync failed" });
+    } finally {
+      setSyncingProfile(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
       {msg && (
@@ -248,6 +300,21 @@ export function PricingEditor({
           </div>
 
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={() => syncWithPricingProfile(0)}
+              disabled={syncingProfile || disabled}
+              className="inline-flex h-10 flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 px-4 text-xs font-black shadow-sm transition active:scale-95 cursor-pointer disabled:opacity-40 whitespace-nowrap"
+              title="Sync all products with your current pricing profile rates"
+            >
+              {syncingProfile ? (
+                <Loader2 className="h-4 w-4 animate-spin text-cyan-400" />
+              ) : (
+                <RefreshCw className="h-4 w-4 text-cyan-400" />
+              )}
+              <span>Sync with My Pricing Profile</span>
+            </button>
+
             <div className="relative flex-1 sm:flex-none">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 dark:text-slate-500">GHS</span>
               <input
@@ -261,7 +328,7 @@ export function PricingEditor({
             <button
               onClick={applyBulk}
               disabled={bulkBusy || selected.size === 0 || disabled}
-              className="inline-flex h-10 flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl bg-[#00df82] px-4 text-xs font-black text-[#060b13] shadow-md shadow-[#00df82]/20 hover:bg-[#00df82]/90 disabled:opacity-40 transition cursor-pointer"
+              className="inline-flex h-10 flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl bg-[#00df82] px-4 text-xs font-black text-[#060b13] shadow-md shadow-[#00df82]/20 hover:bg-[#00df82]/90 disabled:opacity-40 transition cursor-pointer whitespace-nowrap"
             >
               {bulkBusy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               <span>Apply to ({selected.size}) Selected</span>

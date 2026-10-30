@@ -199,6 +199,83 @@ export async function getMarkupBounds(): Promise<{ minMarkupP: number; maxMarkup
   return { minMarkupP: 0, maxMarkupP: Number.MAX_SAFE_INTEGER };
 }
 
+/**
+ * Synchronizes storefront products with the owner's effective pricing profile.
+ * - Missing active packages are seeded/created using the agent's current pricing profile prices.
+ * - If force = true, all existing product prices are updated to match the agent's current pricing profile (+ optional markup).
+ * - If force = false, products with a selling price below current wholesale cost are bumped up to cost.
+ */
+export async function syncStorefrontWithPricingProfile(
+  storefrontId: string,
+  userId: string,
+  options: { force?: boolean; uniformMarkupGHS?: number } = {}
+): Promise<{ updated: number }> {
+  const { force = false, uniformMarkupGHS = 0 } = options;
+  const markupP = toPesewas(Math.max(0, uniformMarkupGHS));
+  const { resolveUserWholesalePrice } = await import("./orders");
+
+  const [owner, allActivePackages, existingProducts] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, role: true, pricingProfileId: true, referredById: true },
+    }),
+    prisma.dataPackage.findMany({
+      where: { active: true },
+    }),
+    prisma.storefrontProduct.findMany({
+      where: { storefrontId },
+    }),
+  ]);
+
+  if (!owner || allActivePackages.length === 0) return { updated: 0 };
+
+  const existingMap = new Map(existingProducts.map((p) => [p.packageId, p]));
+  const operations: Prisma.PrismaPromise<any>[] = [];
+
+  for (const pkg of allActivePackages) {
+    const costGHS = await resolveUserWholesalePrice(owner, pkg);
+    const costP = toPesewas(costGHS);
+    const existing = existingMap.get(pkg.id);
+
+    if (!existing) {
+      operations.push(
+        prisma.storefrontProduct.create({
+          data: {
+            storefrontId,
+            packageId: pkg.id,
+            sellingPrice: costP + markupP,
+            isActive: true,
+          },
+        })
+      );
+    } else if (force) {
+      operations.push(
+        prisma.storefrontProduct.update({
+          where: { id: existing.id },
+          data: {
+            sellingPrice: costP + markupP,
+          },
+        })
+      );
+    } else if (existing.sellingPrice < costP) {
+      operations.push(
+        prisma.storefrontProduct.update({
+          where: { id: existing.id },
+          data: {
+            sellingPrice: costP,
+          },
+        })
+      );
+    }
+  }
+
+  if (operations.length > 0) {
+    await prisma.$transaction(operations);
+  }
+
+  return { updated: operations.length };
+}
+
 export async function nextStorefrontSeq(
   tx: PrismaTransactionClient,
   model: "storefrontOrder" | "storefrontWithdrawal"

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Clock } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { fromPesewas } from "@/lib/storefront";
+import { fromPesewas, syncStorefrontWithPricingProfile } from "@/lib/storefront";
 import { NETWORK_ORDER, storeHref } from "@/components/store/brands";
 import { buildWhatsAppLink } from "@/lib/storefront-utils";
 import { StorefrontPortal } from "@/components/store/storefront-portal";
@@ -78,6 +78,9 @@ export default async function PublicStorePage({
       </div>
     );
   }
+
+  // Auto-sync missing active packages with agent's pricing profile
+  await syncStorefrontWithPricingProfile(storefront.id, storefront.userId, { force: false });
 
   const products = await prisma.storefrontProduct.findMany({
     where: { storefrontId: storefront.id, isActive: true, dataPackage: { active: true } },

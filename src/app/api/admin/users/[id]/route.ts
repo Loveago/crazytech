@@ -5,6 +5,7 @@ import { requireAdmin, requireStaff } from "@/lib/auth";
 import { updateUserSchema } from "@/lib/validation";
 import { recordAudit } from "@/lib/audit";
 import { handleRouteError, apiError } from "@/lib/api-helpers";
+import { syncStorefrontWithPricingProfile } from "@/lib/storefront";
 
 export async function GET(
   request: NextRequest,
@@ -69,6 +70,14 @@ export async function PATCH(
     }
 
     const updated = await prisma.user.update({ where: { id }, data });
+
+    // Sync storefront products if user's pricing profile or role was modified
+    if (input.pricingProfileId !== undefined || input.role !== undefined) {
+      const sf = await prisma.storefront.findUnique({ where: { userId: id } });
+      if (sf) {
+        await syncStorefrontWithPricingProfile(sf.id, id, { force: true });
+      }
+    }
 
     await recordAudit({
       userId: actor.id,

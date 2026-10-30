@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { handleRouteError, apiError } from "@/lib/api-helpers";
 import { storefrontProductUpsertSchema, storefrontBulkPricingSchema } from "@/lib/validation";
-import { requireStorefront, getMarkupBounds, toPesewas, fromPesewas } from "@/lib/storefront";
+import { requireStorefront, getMarkupBounds, toPesewas, fromPesewas, syncStorefrontWithPricingProfile } from "@/lib/storefront";
 import { resolveUserWholesalePrice } from "@/lib/orders";
 
 function validateMarkup(price: number, cost: number, minP: number, maxP: number) {
@@ -16,6 +16,10 @@ export async function GET() {
   try {
     const user = await requireUser();
     const storefront = await requireStorefront(user.id);
+
+    // Auto-seed missing packages or heal below-cost products with agent's pricing profile
+    await syncStorefrontWithPricingProfile(storefront.id, user.id, { force: false });
+
     const [products, allPackages] = await Promise.all([
       prisma.storefrontProduct.findMany({
         where: { storefrontId: storefront.id },

@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/auth";
 import { pricingProfileSchema } from "@/lib/validation";
 import { recordAudit } from "@/lib/audit";
 import { handleRouteError, apiError } from "@/lib/api-helpers";
+import { syncStorefrontWithPricingProfile } from "@/lib/storefront";
 
 export async function PATCH(
   request: NextRequest,
@@ -67,6 +68,19 @@ export async function PATCH(
           value: JSON.stringify(input.networkTiers),
         },
       });
+    }
+
+    // Auto-sync active storefronts whose owners are assigned this profile
+    const affectedStorefronts = await prisma.storefront.findMany({
+      where: {
+        user: {
+          pricingProfileId: id,
+        },
+      },
+      select: { id: true, userId: true },
+    });
+    for (const sf of affectedStorefronts) {
+      await syncStorefrontWithPricingProfile(sf.id, sf.userId, { force: true });
     }
 
     await recordAudit({

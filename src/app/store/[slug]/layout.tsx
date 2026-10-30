@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { StoreChrome } from "@/components/store/store-chrome";
 import { NETWORK_ORDER } from "@/components/store/brands";
+import { syncStorefrontWithPricingProfile } from "@/lib/storefront";
 import type { NetworkProvider } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -51,6 +52,7 @@ export default async function StoreLayout({
       where: { slug },
       select: {
         id: true,
+        userId: true,
         slug: true,
         name: true,
         description: true,
@@ -73,6 +75,10 @@ export default async function StoreLayout({
   // Disabled/unknown stores: skip chrome; the page itself renders notFound().
   if (!storefront || storefront.status !== "ENABLED") {
     return <div className="min-h-screen bg-[#e9ebf5] dark:bg-[#0a101e]">{children}</div>;
+  }
+
+  if (storefront.isActive) {
+    await syncStorefrontWithPricingProfile(storefront.id, storefront.userId, { force: false });
   }
 
   const rows = storefront.isActive

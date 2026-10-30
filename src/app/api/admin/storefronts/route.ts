@@ -8,6 +8,7 @@ import {
   isValidSlug,
   slugify,
   RESERVED_SLUGS,
+  syncStorefrontWithPricingProfile,
 } from "@/lib/storefront";
 
 /** Admin: list all storefronts with owner + wallet summary. */
@@ -58,6 +59,7 @@ export async function POST(request: NextRequest) {
         data: { status: "ENABLED", slug, rejectionNote: null },
       });
       await ensureWallet(input.userId);
+      await syncStorefrontWithPricingProfile(storefront.id, input.userId, { force: true });
       return NextResponse.json({ storefront });
     }
 
@@ -92,6 +94,7 @@ export async function POST(request: NextRequest) {
         create: { userId: input.userId, slug, name: target.name, status: "ENABLED" },
       });
       await ensureWallet(input.userId);
+      await syncStorefrontWithPricingProfile(storefront.id, input.userId, { force: true });
       return NextResponse.json({ storefront });
     }
 

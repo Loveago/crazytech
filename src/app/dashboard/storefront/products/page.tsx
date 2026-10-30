@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { requireActiveStorefront, getMarkupBounds } from "@/lib/storefront";
+import { requireActiveStorefront, getMarkupBounds, syncStorefrontWithPricingProfile } from "@/lib/storefront";
 import { resolveUserWholesalePrice } from "@/lib/orders";
 import { PricingEditor } from "./pricing-editor";
 import { Package, Sliders, ShieldCheck } from "lucide-react";
@@ -11,6 +11,10 @@ export const revalidate = 0;
 export default async function StorefrontProductsPage() {
   const user = await requireUser();
   const storefront = await requireActiveStorefront(user.id);
+
+  // Auto-sync missing packages or below-cost products with agent's pricing profile
+  await syncStorefrontWithPricingProfile(storefront.id, user.id, { force: false });
+
   const [packages, products, bounds] = await Promise.all([
     prisma.dataPackage.findMany({
       where: { active: true },

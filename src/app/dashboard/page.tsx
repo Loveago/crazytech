@@ -8,7 +8,6 @@ import {
   ShoppingCart,
   ShieldCheck,
   BarChart3,
-  Gift,
   Radio,
   Eye,
   Plus,
@@ -169,8 +168,8 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* ── CATEGORY QUICK CARDS (4 IN A ROW) ─────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* ── CATEGORY QUICK CARDS (3 IN A ROW) ─────────────────────────────── */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* MTN Bundles */}
         <Link
           href="/dashboard/buy-now?network=MTN"
@@ -207,25 +206,6 @@ export default async function DashboardPage() {
             </div>
           </div>
           <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-[#00df82] group-hover:translate-x-0.5 transition-all" />
-        </Link>
-
-        {/* All Products */}
-        <Link
-          href="/dashboard/packages"
-          className="group rounded-2xl border border-slate-200 dark:border-[#14233a] bg-white dark:bg-[#0a1220] p-4 flex items-center justify-between hover:border-purple-400/50 transition-all shadow-md"
-        >
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center shadow-md shadow-purple-500/10">
-              <Gift className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-purple-400 transition-colors">
-                All Products
-              </div>
-              <div className="text-[10px] text-slate-400">Networks &amp; packages</div>
-            </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all" />
         </Link>
 
         {/* Other Services */}
