@@ -46,6 +46,7 @@ For crazytechent.com:
 | :--- | :--- | :--- | :--- |
 | A    | @           | <YOUR_VPS_IP>       | Auto / 1 min |
 | A    | www         | <YOUR_VPS_IP>       | Auto / 1 min |
+| A    | portfolio   | <YOUR_VPS_IP>       | Auto / 1 min |
 
 For cmtshop.net:
 For wolfdatahub.xyz:
@@ -305,9 +306,48 @@ server {
 }
 EOF
 
---- [ 8C: ENABLE SITES & TEST NGINX ] ---
+--- [ 8C: NGINX CONFIG FOR PORTFOLIO.CRAZYTECHENT.COM ] ---
+cat << 'EOF' > /etc/nginx/sites-available/portfolio.crazytechent.com
+server {
+    listen 80;
+    listen [::]:80;
+    server_name portfolio.crazytechent.com;
+
+    client_max_body_size 50M;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+
+        # WebSocket support
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+
+        # Multi-tenant proxy headers
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 60s;
+    }
+
+    # Static file caching
+    location /_next/static/ {
+        alias /var/www/crazytech/.next/static/;
+        expires 365d;
+        access_log off;
+    }
+}
+EOF
+
+--- [ 8D: ENABLE SITES & TEST NGINX ] ---
 sudo ln -sf /etc/nginx/sites-available/crazytechent.com /etc/nginx/sites-enabled/
 sudo ln -sf /etc/nginx/sites-available/wolfdatahub.xyz /etc/nginx/sites-enabled/
+sudo ln -sf /etc/nginx/sites-available/portfolio.crazytechent.com /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 
 # Test Nginx syntax
@@ -320,9 +360,9 @@ sudo systemctl reload nginx
 ================================================================================
 10. STEP 9: ISSUE FREE SSL CERTIFICATES (CERTBOT HTTPS)
 ================================================================================
-Run Certbot to secure both domains and their www subdomains in one command:
+Run Certbot to secure all domains and subdomains in one command:
 
-sudo certbot --nginx -d crazytechent.com -d www.crazytechent.com -d wolfdatahub.xyz -d www.wolfdatahub.xyz --non-interactive --agree-tos -m admin@crazytechent.com --redirect
+sudo certbot --nginx -d crazytechent.com -d www.crazytechent.com -d wolfdatahub.xyz -d www.wolfdatahub.xyz -d portfolio.crazytechent.com --non-interactive --agree-tos -m admin@crazytechent.com --redirect
 
 # Test automatic SSL certificate renewal
 sudo certbot renew --dry-run

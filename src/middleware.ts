@@ -25,6 +25,10 @@ const MAIN_DOMAIN = cleanDomain(
   process.env.MAIN_DOMAIN || process.env.NEXT_PUBLIC_MAIN_DOMAIN,
   "crazytechent.com"
 );
+const PORTFOLIO_DOMAIN = cleanDomain(
+  process.env.PORTFOLIO_DOMAIN || process.env.NEXT_PUBLIC_PORTFOLIO_DOMAIN,
+  "portfolio.crazytechent.com"
+);
 
 export async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
@@ -32,9 +36,42 @@ export async function middleware(request: NextRequest) {
   const host = cleanDomain(rawHost);
   const isLocalhost = host.startsWith("localhost") || host.startsWith("127.0.0.1");
   const isStorefrontDomain = !isLocalhost && host === STOREFRONT_DOMAIN;
+  const isPortfolioDomain =
+    !isLocalhost && (host === PORTFOLIO_DOMAIN || host.startsWith("portfolio."));
 
   // ---------------------------------------------------------------------------
-  // 1. STOREFRONT DOMAIN ROUTING
+  // 1A. PORTFOLIO SUBDOMAIN ROUTING (portfolio.crazytechent.com)
+  // ---------------------------------------------------------------------------
+  if (isPortfolioDomain) {
+    // Static assets, api, and internal files pass directly
+    if (
+      pathname.startsWith("/api") ||
+      pathname.startsWith("/_next") ||
+      pathname.includes(".")
+    ) {
+      return NextResponse.next();
+    }
+
+    // Direct root access rewrites cleanly to /portfolio
+    if (pathname === "/" || pathname === "") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/portfolio";
+      return NextResponse.rewrite(url);
+    }
+
+    // If accessing /portfolio/... on the portfolio subdomain, let it pass
+    if (pathname.startsWith("/portfolio")) {
+      return NextResponse.next();
+    }
+
+    // Map any clean paths on portfolio subdomain to /portfolio
+    const url = request.nextUrl.clone();
+    url.pathname = "/portfolio";
+    return NextResponse.rewrite(url);
+  }
+
+  // ---------------------------------------------------------------------------
+  // 1B. STOREFRONT DOMAIN ROUTING
   // ---------------------------------------------------------------------------
   if (isStorefrontDomain) {
     // Prevent access to management dashboard & admin panel on the storefront domain
@@ -143,6 +180,7 @@ export async function middleware(request: NextRequest) {
     "register",
     "forgot-password",
     "reset-password",
+    "portfolio",
     "store",
     "terms",
     "terms-of-service",
@@ -205,6 +243,8 @@ export async function middleware(request: NextRequest) {
     pathname === "/refund-policy" ||
     pathname === "/refunds" ||
     pathname === "/cancellation-policy";
+  const isPortfolioPage =
+    pathname === "/portfolio" || pathname.startsWith("/portfolio");
 
   if (isAuthPage && role) {
     const url = request.nextUrl.clone();
@@ -222,7 +262,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!pathname.startsWith("/admin") && !pathname.startsWith("/api/admin")) {
-    if (isAuthPage || isLegalPage) return NextResponse.next();
+    if (isAuthPage || isLegalPage || isPortfolioPage) return NextResponse.next();
   }
 
   // Protect admin pages

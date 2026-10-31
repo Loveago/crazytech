@@ -238,14 +238,25 @@ export default function LoginPage() {
           )}
 
           {/* Footer Link */}
-          <div className="text-center pt-2">
-            <span className="text-xs text-slate-500 dark:text-slate-400">Don't have an account? </span>
-            <Link
-              href="/register"
-              className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
-            >
-              Sign up with invite code
-            </Link>
+          <div className="text-center pt-2 space-y-2">
+            <div>
+              <span className="text-xs text-slate-500 dark:text-slate-400">Don't have an account? </span>
+              <Link
+                href="/register"
+                className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                Sign up with invite code
+              </Link>
+            </div>
+            <div>
+              <Link
+                href="/portfolio"
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-cyan-600 dark:text-cyan-400 hover:underline"
+              >
+                <span>Explore Agency Portfolio &amp; Case Studies</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

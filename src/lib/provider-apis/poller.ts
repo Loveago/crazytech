@@ -30,6 +30,7 @@ export async function getPollerIntervalSeconds(): Promise<number> {
  */
 export function startProviderSyncPoller() {
   if (typeof window !== "undefined") return;
+  if (!process.env.DATABASE_URL) return;
 
   // In PM2 cluster mode, only instance 0 should run background polling loops
   const instanceId = process.env.pm_id ?? process.env.NODE_APP_INSTANCE;

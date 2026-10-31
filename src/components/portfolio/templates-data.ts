@@ -1,0 +1,289 @@
+import React from "react";
+import {
+  Zap,
+  Shield,
+  Cpu,
+  Layers,
+  Smartphone,
+  Server,
+  Activity,
+  ShoppingBag,
+  HeartPulse,
+  Database,
+  BarChart3,
+  CreditCard,
+  Lock,
+  Workflow,
+  Sparkles,
+  CheckCircle2,
+  Globe2,
+} from "lucide-react";
+
+export interface TemplateData {
+  id: string;
+  number: string;
+  title: string;
+  badge: string;
+  category: "FinTech & Telecom" | "Enterprise SaaS" | "E-Commerce" | "Mobile Apps";
+  tagline: string;
+  description: string;
+  longDescription: string;
+  accentColor: string;
+  glowColor: string;
+  badgeBg: string;
+  badgeBorder: string;
+  gradientBg: string;
+  stats: { label: string; value: string; hint?: string }[];
+  techStack: string[];
+  keyFeatures: string[];
+  architecturePoints: { title: string; desc: string }[];
+  lighthouseScores: { performance: number; accessibility: number; bestPractices: number; seo: number };
+  previewType: "fintech" | "erp" | "ecommerce" | "health";
+}
+
+export const SHOWCASE_TEMPLATES: TemplateData[] = [
+  {
+    id: "nexus-pay",
+    number: "01",
+    title: "NexusPay & Telecom FinTech Engine",
+    badge: "FinTech & Telecommunications",
+    category: "FinTech & Telecom",
+    tagline: "Sub-Second Data Aggregation & Automated Mobile Money Settlement Platform",
+    description:
+      "A high-concurrency fintech distribution platform powering automated MTN, Telecel, and AT data fulfillment, instant merchant wallet reconciliations, and Paystack MoMo gateways.",
+    longDescription:
+      "Engineered for high resilience and zero transaction loss under peak loads. Features a closed-loop validation engine that authenticates telecommunication MSISDNs in real time, executes idempotent gateway dispatching, and streams live delivery webhooks back to reseller storefronts.",
+    accentColor: "#06b6d4",
+    glowColor: "rgba(6, 182, 212, 0.35)",
+    badgeBg: "bg-cyan-500/15 text-cyan-400 border-cyan-500/30",
+    badgeBorder: "border-cyan-500/40",
+    gradientBg: "from-cyan-500/20 via-blue-500/10 to-transparent",
+    stats: [
+      { label: "Dispatch Speed", value: "<1.8s", hint: "Average gateway queue-to-delivery" },
+      { label: "Volume Processed", value: "GHS 4.2M+", hint: "Automated wallet volume" },
+      { label: "Delivery Accuracy", value: "99.99%", hint: "Automated verification rate" },
+      { label: "Completed Deliveries", value: "500K+", hint: "Total successful packages" },
+    ],
+    techStack: [
+      "Next.js 16",
+      "TypeScript",
+      "PostgreSQL",
+      "Prisma ORM",
+      "Redis Queue",
+      "Paystack Gateway",
+      "MTN MoMo API",
+      "Tailwind CSS",
+    ],
+    keyFeatures: [
+      "Sub-second direct telecommunication gateway API dispatch for MTN, Telecel & AT",
+      "Automated Mobile Money (MoMo) webhook verification with zero double-spends",
+      "Multi-tier merchant wallet ledger with atomic PostgreSQL balance decrements",
+      "Customer storefront builder with custom domain routing and SSL automation",
+      "Automated PDF receipts, audit logging, and cryptographic webhook signatures",
+    ],
+    architecturePoints: [
+      {
+        title: "Idempotent Queue Execution",
+        desc: "Guarantees zero duplicate disbursements during carrier network timeouts via unique payload hashing.",
+      },
+      {
+        title: "Closed-Loop Telco MSISDN Verification",
+        desc: "Pre-validates recipient phone numbers against carrier routing prefixes before debited wallet funds.",
+      },
+      {
+        title: "Multi-Domain Host Headers",
+        desc: "Reverse-proxies hundreds of custom reseller domains on a single VPS instance without restarting Nginx.",
+      },
+    ],
+    lighthouseScores: {
+      performance: 99,
+      accessibility: 100,
+      bestPractices: 100,
+      seo: 98,
+    },
+    previewType: "fintech",
+  },
+  {
+    id: "omni-core",
+    number: "02",
+    title: "OmniCore Enterprise Cloud ERP & SaaS",
+    badge: "Enterprise Operations & SaaS",
+    category: "Enterprise SaaS",
+    tagline: "Real-Time Telemetry, RBAC Governance & Automated Workflow Architecture",
+    description:
+      "A mission-critical enterprise operating system unifying distributed supply chains, multi-location inventory, RBAC permission matrices, and automated financial analytics.",
+    longDescription:
+      "Designed for enterprises outgrowing spreadsheets and disjointed tools. OmniCore delivers microsecond-level state synchronization across branches, visual drag-and-drop order pipelines, automated PDF invoicing, and comprehensive audit trails compliant with data governance standards.",
+    accentColor: "#6366f1",
+    glowColor: "rgba(99, 102, 241, 0.35)",
+    badgeBg: "bg-indigo-500/15 text-indigo-400 border-indigo-500/30",
+    badgeBorder: "border-indigo-500/40",
+    gradientBg: "from-indigo-500/20 via-violet-500/10 to-transparent",
+    stats: [
+      { label: "Admin Time Saved", value: "85%", hint: "Automated manual reconciliations" },
+      { label: "Query Latency", value: "<85ms", hint: "Optimized database read replicas" },
+      { label: "Branch Sync", value: "50+ Sites", hint: "Zero-conflict distributed states" },
+      { label: "Audit Compliance", value: "100%", hint: "Immutable cryptographic event logs" },
+    ],
+    techStack: [
+      "React 19",
+      "Next.js Server Actions",
+      "PostgreSQL",
+      "Docker Microservices",
+      "Redis Caching",
+      "Recharts",
+      "Zod Validation",
+      "PDF-Lib",
+    ],
+    keyFeatures: [
+      "Dynamic Role-Based Access Control (RBAC) with granular permissions (Admin, Manager, Auditor)",
+      "Real-time visual order fulfillment pipeline with interactive status milestones",
+      "Executive telemetry dashboard featuring live revenue velocity and margin forecasts",
+      "Automated Excel / CSV / PDF export engine for instant management reports",
+      "Real-time webhook and notification hub alerting staff to stock anomalies and pending approvals",
+    ],
+    architecturePoints: [
+      {
+        title: "Atomic State Transitions",
+        desc: "PostgreSQL transactions ensure multi-branch inventory counters remain strictly synchronized.",
+      },
+      {
+        title: "Cryptographic Audit Ledger",
+        desc: "Every critical balance adjustment or permission alteration is logged with IP, timestamp, and user token.",
+      },
+      {
+        title: "Edge Cached Telemetry",
+        desc: "High-volume read queries are cached at the edge to preserve sub-100ms dashboard responsiveness.",
+      },
+    ],
+    lighthouseScores: {
+      performance: 98,
+      accessibility: 100,
+      bestPractices: 100,
+      seo: 99,
+    },
+    previewType: "erp",
+  },
+  {
+    id: "aura-luxe",
+    number: "03",
+    title: "Aura Luxe Next-Gen Headless E-Commerce",
+    badge: "Modern Web Platform & D2C",
+    category: "E-Commerce",
+    tagline: "Ultra-Fluid 60FPS Headless Commerce with Ambient Micro-Interactions",
+    description:
+      "A luxury direct-to-consumer storefront engineered for maximum conversion. Features 60fps dynamic product transitions, interactive variant swatches, and an instant checkout flyout.",
+    longDescription:
+      "Crafted for high-end consumer brands where aesthetic prestige meets frictionless conversion. Built on modern headless architecture with sub-400ms page transitions, dynamic 3D-tilt product cards, reactive stock indicators, and instant Mobile Money / Card checkout.",
+    accentColor: "#ec4899",
+    glowColor: "rgba(236, 72, 153, 0.35)",
+    badgeBg: "bg-pink-500/15 text-pink-400 border-pink-500/30",
+    badgeBorder: "border-pink-500/40",
+    gradientBg: "from-pink-500/20 via-rose-500/10 to-transparent",
+    stats: [
+      { label: "Mobile Conversion", value: "+340%", hint: "Compared to standard Shopify" },
+      { label: "LCP Load Time", value: "0.4s", hint: "Largest Contentful Paint speed" },
+      { label: "Perceived Latency", value: "0.0s", hint: "Instant optimistic state updates" },
+      { label: "Lighthouse Score", value: "100/100", hint: "Flawless Core Web Vitals" },
+    ],
+    techStack: [
+      "Next.js 16",
+      "React 19",
+      "Tailwind CSS v4",
+      "Headless API",
+      "Web Audio Clicks",
+      "Edge Image CDN",
+      "Zustand State",
+      "Paystack Checkout",
+    ],
+    keyFeatures: [
+      "Ultra-fluid 60fps ambient lighting and interactive 3D-tilt product visualizer",
+      "Dynamic color variant switcher with instant live stock updates and price adaptation",
+      "Optimistic slide-out shopping bag with instant coupon code application and real-time total",
+      "One-click Paystack & Mobile Money checkout modal eliminating cart abandonment",
+      "Comprehensive Core Web Vitals optimization guaranteeing 100/100 Google speed rating",
+    ],
+    architecturePoints: [
+      {
+        title: "Zero-Layout-Shift (CLS 0.00)",
+        desc: "Pre-allocated aspect ratios and responsive image sets ensure instantaneous visual stability.",
+      },
+      {
+        title: "Optimistic Cart Synchronizer",
+        desc: "Cart mutations register immediately on the client while silently validating server-side inventory.",
+      },
+      {
+        title: "Localized Payment Gateways",
+        desc: "Integrates direct Mobile Money (MTN, Telecel, AT) and international Visa/Mastercard processing.",
+      },
+    ],
+    lighthouseScores: {
+      performance: 100,
+      accessibility: 100,
+      bestPractices: 100,
+      seo: 100,
+    },
+    previewType: "ecommerce",
+  },
+  {
+    id: "pulse-health",
+    number: "04",
+    title: "PulseHealth AI Telemedicine & Mobile Suite",
+    badge: "Cross-Platform Mobile App (iOS / Android)",
+    category: "Mobile Apps",
+    tagline: "Cross-Platform Clinical Telemedicine, Live Biometrics & Encrypted Digital Rx",
+    description:
+      "A clinical-grade cross-platform mobile suite enabling instantaneous patient-to-specialist video consultations, live cardiac rhythm monitors, and scannable QR prescriptions.",
+    longDescription:
+      "Engineered to transform modern healthcare delivery across mobile devices. Patients can filter verified medical specialists by specialty, schedule real-time consultation slots with immediate SMS/WhatsApp reminders, view live biometric telemetry, and present tamper-proof cryptographic QR prescriptions at local pharmacies.",
+    accentColor: "#10b981",
+    glowColor: "rgba(16, 185, 129, 0.35)",
+    badgeBg: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+    badgeBorder: "border-emerald-500/40",
+    gradientBg: "from-emerald-500/20 via-teal-500/10 to-transparent",
+    stats: [
+      { label: "App Store Rating", value: "4.9 / 5.0", hint: "Verified patient satisfaction" },
+      { label: "Consultations", value: "35K+", hint: "Completed digital sessions" },
+      { label: "Security & Privacy", value: "100%", hint: "Data Protection Act 2012 (Act 843)" },
+      { label: "Video Latency", value: "<150ms", hint: "WebRTC peer-to-peer streaming" },
+    ],
+    techStack: [
+      "React Native",
+      "Flutter",
+      "WebRTC Engine",
+      "Socket.io",
+      "Node.js",
+      "PostgreSQL",
+      "Biometric Touch/FaceID",
+      "Cloud KMS Encryption",
+    ],
+    keyFeatures: [
+      "Interactive mobile consultation booking with calendar slot picker and instant confirmation",
+      "Live patient vitals monitor featuring real-time animated ECG cardiac rhythm visualization",
+      "Verified physician directory with specialty filters (Cardiology, Dermatology, Pediatrics, General)",
+      "Tamper-proof digital prescription generator with scannable pharmaceutical QR verification",
+      "End-to-end encrypted messaging, push notifications, and biometric authentication",
+    ],
+    architecturePoints: [
+      {
+        title: "WebRTC Peer-To-Peer Mesh",
+        desc: "Streams ultra-low-latency, encrypted high-definition video consultations even on 3G/4G connections.",
+      },
+      {
+        title: "Act 843 Health Data Compliance",
+        desc: "All electronic medical records (EMR) are encrypted at rest with AES-256 and rotated KMS keys.",
+      },
+      {
+        title: "Cross-Platform Codebase Parity",
+        desc: "A single unified component architecture ensures 100% feature parity across iOS and Android.",
+      },
+    ],
+    lighthouseScores: {
+      performance: 99,
+      accessibility: 100,
+      bestPractices: 100,
+      seo: 98,
+    },
+    previewType: "health",
+  },
+];
