@@ -81,45 +81,40 @@ export function PortfolioView() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden font-sans">
-      {/* 60fps Interactive Particle Background */}
+    <div className="relative min-h-screen bg-[#08090d] text-zinc-100 selection:bg-white/20 selection:text-white overflow-x-hidden font-sans">
+      {/* Architectural Dot Grid & Ambient Light Background */}
       <InteractiveCanvasBg />
 
-      {/* Ambient Radial Gradient Overlays */}
-      <div className="pointer-events-none fixed -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[900px] rounded-full bg-gradient-to-b from-indigo-600/20 via-cyan-500/10 to-transparent blur-3xl opacity-70" />
-      <div className="pointer-events-none fixed top-1/3 -right-60 h-[500px] w-[600px] rounded-full bg-gradient-to-l from-violet-600/15 to-transparent blur-3xl opacity-50" />
-      <div className="pointer-events-none fixed bottom-1/4 -left-60 h-[500px] w-[600px] rounded-full bg-gradient-to-r from-emerald-600/15 to-transparent blur-3xl opacity-50" />
-
       {/* Top Navigation Bar */}
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-[#08090d]/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5">
           <Link href="/portfolio" className="flex items-center gap-3 shrink-0 mr-4 sm:mr-8 group">
             <BrandMark size="sm" className="group-hover:scale-105 transition-transform" />
             <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-1.5">
-                CrazyTech <span className="text-cyan-400 font-mono text-xs font-bold">ENTERPRISES</span>
+              <span className="text-base sm:text-lg font-extrabold tracking-tight text-white flex items-center gap-1.5">
+                CrazyTech <span className="text-zinc-400 font-mono text-xs font-semibold">STUDIO</span>
               </span>
-              <span className="text-[9px] font-mono tracking-widest text-slate-400 uppercase">
-                Software & App Engineering
+              <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase">
+                Software &amp; App Engineering
               </span>
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-xs font-bold text-slate-300">
-            <a href="#showcase" className="hover:text-cyan-400 transition-colors">
-              Templates & Case Studies
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-xs font-medium text-zinc-400">
+            <a href="#showcase" className="hover:text-white transition-colors">
+              Showcase Templates
             </a>
-            <a href="#services" className="hover:text-cyan-400 transition-colors">
-              Engineering Services
+            <a href="#services" className="hover:text-white transition-colors">
+              Capabilities
             </a>
-            <a href="#process" className="hover:text-cyan-400 transition-colors">
-              Architecture & Process
+            <a href="#process" className="hover:text-white transition-colors">
+              Engineering Process
             </a>
-            <a href="#estimator" className="hover:text-cyan-400 transition-colors">
+            <a href="#estimator" className="hover:text-white transition-colors">
               Scope Estimator
             </a>
-            <a href="#contact" className="hover:text-cyan-400 transition-colors">
-              Contact & RFP
+            <a href="#contact" className="hover:text-white transition-colors">
+              Contact &amp; RFP
             </a>
           </nav>
 
@@ -128,17 +123,17 @@ export function PortfolioView() {
               href="https://wa.me/233507904981"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-950/30 hover:bg-emerald-900/40 px-3 py-2 text-xs font-bold text-emerald-400 transition-colors"
+              className="hidden sm:flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors"
             >
-              <MessageCircle className="h-3.5 w-3.5" />
+              <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
               <span>+233 50 790 4981</span>
             </a>
 
             <a
               href="#estimator"
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 px-4 py-2 text-xs font-black text-slate-950 shadow-md shadow-cyan-500/20 transition-all active:scale-95"
+              className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-bold text-zinc-950 shadow-sm transition-all active:scale-95"
             >
-              <Sparkles className="h-3.5 w-3.5" />
+              <Sparkles className="h-3.5 w-3.5 text-zinc-950" />
               <span>Start Project</span>
             </a>
           </div>
@@ -146,23 +141,23 @@ export function PortfolioView() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-16 sm:pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-20 sm:pt-28 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl text-center">
           {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs font-bold text-cyan-300 mb-6 backdrop-blur-md">
-            <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span>High-Impact Engineering & Custom Software Solutions</span>
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-6 backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>High-Impact Engineering &amp; Custom Software Solutions</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.08]">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.08]">
             We Engineer High-Impact{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-indigo-400 to-pink-500 bg-clip-text text-transparent">
-              Software, Mobile Apps & Platforms
+            <span className="bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+              Software, Mobile Apps &amp; Platforms
             </span>{" "}
             That Scale.
           </h1>
 
-          <p className="mx-auto mt-6 max-w-3xl text-base sm:text-xl text-slate-300 leading-relaxed font-normal">
+          <p className="mx-auto mt-6 max-w-3xl text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
             From high-throughput telecommunication gateways and enterprise ERP suites to consumer mobile apps and 60fps headless commerce — CrazyTech delivers mission-critical software built for speed, security, and conversion.
           </p>
 
@@ -170,7 +165,7 @@ export function PortfolioView() {
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <a
               href="#showcase"
-              className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 px-7 py-4 font-black text-sm text-slate-950 shadow-xl shadow-cyan-500/20 transition-all hover:-translate-y-0.5 active:scale-95"
+              className="flex items-center gap-2 rounded-xl bg-white hover:bg-zinc-200 px-7 py-3.5 font-bold text-sm text-zinc-950 shadow-[0_0_24px_rgba(255,255,255,0.14)] transition-all hover:-translate-y-0.5 active:scale-95"
             >
               <span>Explore 6 Showcase Templates</span>
               <ArrowRight className="h-4 w-4" />
@@ -178,9 +173,9 @@ export function PortfolioView() {
 
             <a
               href="#estimator"
-              className="flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 hover:border-slate-600 px-6 py-4 font-bold text-sm text-slate-200 transition-all hover:-translate-y-0.5"
+              className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20 px-6 py-3.5 font-medium text-sm text-zinc-200 transition-all hover:-translate-y-0.5"
             >
-              <Sliders className="h-4 w-4 text-cyan-400" />
+              <Sliders className="h-4 w-4 text-zinc-400" />
               <span>Calculate Project Scope</span>
             </a>
 
@@ -188,7 +183,7 @@ export function PortfolioView() {
               href="https://wa.me/233507904981"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-2xl border border-emerald-500/40 bg-emerald-950/30 hover:bg-emerald-900/40 px-6 py-4 font-bold text-sm text-emerald-400 transition-all hover:-translate-y-0.5"
+              className="flex items-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.08] hover:bg-emerald-500/15 px-6 py-3.5 font-medium text-sm text-emerald-300 transition-all hover:-translate-y-0.5"
             >
               <MessageCircle className="h-4 w-4" />
               <span>WhatsApp Consultation</span>
@@ -196,42 +191,42 @@ export function PortfolioView() {
           </div>
 
           {/* Key Metrics Ticker */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 rounded-3xl border border-slate-800 bg-slate-900/50 p-5 sm:p-6 backdrop-blur-xl">
-            <div className="text-center p-2">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-cyan-400">
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-4 sm:p-5 backdrop-blur-xl">
+            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 99.99%
               </span>
-              <span className="text-xs text-slate-400 font-medium">System Uptime SLA</span>
+              <span className="text-xs text-zinc-400 font-medium mt-1 block">System Uptime SLA</span>
             </div>
 
-            <div className="text-center p-2">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-indigo-400">
+            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 GHS 4.2M+
               </span>
-              <span className="text-xs text-slate-400 font-medium">Automated FinTech Volume</span>
+              <span className="text-xs text-zinc-400 font-medium mt-1 block">Automated FinTech Volume</span>
             </div>
 
-            <div className="text-center p-2">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-pink-400">
+            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 &lt;120ms
               </span>
-              <span className="text-xs text-slate-400 font-medium">API Microservice Latency</span>
+              <span className="text-xs text-zinc-400 font-medium mt-1 block">API Microservice Latency</span>
             </div>
 
-            <div className="text-center p-2">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-emerald-400">
+            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 50+ Systems
               </span>
-              <span className="text-xs text-slate-400 font-medium">Enterprise Deployments</span>
+              <span className="text-xs text-zinc-400 font-medium mt-1 block">Enterprise Deployments</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Tech Stack Marquee / Floating Badges */}
-      <section className="relative py-8 border-y border-slate-800/80 bg-slate-950/60 overflow-hidden">
+      <section className="relative py-8 border-y border-white/[0.06] bg-[#090a0f] overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 text-center mb-4">
-          <span className="text-[11px] font-mono uppercase tracking-widest text-slate-500">
+          <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500">
             Engineered with Modern Industry-Standard Technologies
           </span>
         </div>
@@ -256,9 +251,9 @@ export function PortfolioView() {
             ].map((tech) => (
               <span
                 key={tech}
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/70 px-4 py-2 text-xs font-mono font-bold text-slate-300 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-mono font-medium text-zinc-300 shadow-sm"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
                 {tech}
               </span>
             ))}
@@ -286,9 +281,9 @@ export function PortfolioView() {
             ].map((tech) => (
               <span
                 key={`dup-${tech}`}
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/70 px-4 py-2 text-xs font-mono font-bold text-slate-300 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-mono font-medium text-zinc-300 shadow-sm"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-zinc-500" />
                 {tech}
               </span>
             ))}
@@ -296,19 +291,19 @@ export function PortfolioView() {
         </div>
       </section>
 
-      {/* 4 High-Quality Showcase Templates Section */}
-      <section id="showcase" className="relative scroll-mt-24 py-20 px-4 sm:px-6 lg:px-8">
+      {/* 6 High-Quality Showcase Templates Section */}
+      <section id="showcase" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Section Header */}
           <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs font-bold text-cyan-300 mb-3">
-              <Layers className="h-4 w-4" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
+              <Layers className="h-4 w-4 text-zinc-400" />
               <span>Interactive Production-Grade Showcases</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Six High-Caliber Architecture Templates
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-400">
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
               Test-drive actual interactive components engineered by CrazyTech. Switch device framing, trigger simulated API dispatches, inspect metrics, and clone any template for your venture.
             </p>
 
@@ -329,10 +324,10 @@ export function PortfolioView() {
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
+                  className={`rounded-xl px-4 py-2 text-xs font-medium transition-all ${
                     selectedCategory === cat
-                      ? "bg-cyan-500 text-slate-950 font-black shadow-lg shadow-cyan-500/20"
-                      : "border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:border-slate-700"
+                      ? "bg-white text-zinc-950 font-bold shadow-md"
+                      : "border border-white/[0.08] bg-white/[0.03] text-zinc-400 hover:text-white hover:border-white/20"
                   }`}
                 >
                   {cat}
@@ -349,42 +344,42 @@ export function PortfolioView() {
               return (
                 <div
                   key={template.id}
-                  className="rounded-3xl border border-slate-800/90 bg-gradient-to-b from-slate-900/70 to-slate-950 p-6 sm:p-8 lg:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden group"
+                  className="rounded-3xl border border-white/[0.08] bg-[#0c0e14]/90 p-6 sm:p-8 lg:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden group"
                 >
                   {/* Subtle Background Glow */}
                   <div
-                    className="absolute -top-32 -right-32 h-80 w-80 rounded-full blur-3xl opacity-20 pointer-events-none transition-opacity group-hover:opacity-35"
+                    className="absolute -top-32 -right-32 h-80 w-80 rounded-full blur-3xl opacity-10 pointer-events-none transition-opacity group-hover:opacity-20"
                     style={{ backgroundColor: template.accentColor }}
                   />
 
                   {/* Top Bar: Template Number, Title & Device Switcher */}
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-800/80 mb-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-white/[0.08] mb-6">
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-3">
-                        <span className="font-mono text-sm font-black text-cyan-400">
+                        <span className="font-mono text-xs font-bold text-zinc-400 tracking-wider">
                           TEMPLATE {template.number}
                         </span>
                         <span
-                          className={`rounded-full px-3 py-0.5 text-xs font-bold border ${template.badgeBg}`}
+                          className={`rounded-full px-3 py-0.5 text-xs font-medium border ${template.badgeBg}`}
                         >
                           {template.badge}
                         </span>
                       </div>
-                      <h3 className="text-2xl sm:text-3xl font-black text-white">{template.title}</h3>
-                      <p className="text-xs sm:text-sm text-slate-400 font-medium">
+                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{template.title}</h3>
+                      <p className="text-xs sm:text-sm text-zinc-400 font-normal">
                         {template.tagline}
                       </p>
                     </div>
 
                     {/* View Switcher: Desktop vs Tablet vs Mobile */}
-                    <div className="flex items-center gap-1.5 rounded-2xl border border-slate-800 bg-slate-950/80 p-1.5 self-start lg:self-auto">
+                    <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1 self-start lg:self-auto">
                       <button
                         type="button"
                         onClick={() => setTemplateDevice(template.id, "desktop")}
-                        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition-all ${
+                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                           currentDevice === "desktop"
-                            ? "bg-cyan-500 text-slate-950"
-                            : "text-slate-400 hover:text-white"
+                            ? "bg-white text-zinc-950 shadow-sm"
+                            : "text-zinc-400 hover:text-white"
                         }`}
                       >
                         <Monitor className="h-3.5 w-3.5" />
@@ -394,10 +389,10 @@ export function PortfolioView() {
                       <button
                         type="button"
                         onClick={() => setTemplateDevice(template.id, "tablet")}
-                        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition-all ${
+                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                           currentDevice === "tablet"
-                            ? "bg-cyan-500 text-slate-950"
-                            : "text-slate-400 hover:text-white"
+                            ? "bg-white text-zinc-950 shadow-sm"
+                            : "text-zinc-400 hover:text-white"
                         }`}
                       >
                         <Tablet className="h-3.5 w-3.5" />
@@ -407,10 +402,10 @@ export function PortfolioView() {
                       <button
                         type="button"
                         onClick={() => setTemplateDevice(template.id, "mobile")}
-                        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition-all ${
+                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                           currentDevice === "mobile"
-                            ? "bg-cyan-500 text-slate-950"
-                            : "text-slate-400 hover:text-white"
+                            ? "bg-white text-zinc-950 shadow-sm"
+                            : "text-zinc-400 hover:text-white"
                         }`}
                       >
                         <Smartphone className="h-3.5 w-3.5" />
@@ -431,23 +426,23 @@ export function PortfolioView() {
                       }`}
                     >
                       {/* Browser / Frame Chrome */}
-                      <div className="rounded-t-2xl border-t border-x border-slate-800 bg-slate-900/90 px-4 py-2.5 flex items-center justify-between">
+                      <div className="rounded-t-2xl border-t border-x border-white/10 bg-[#12141c] px-4 py-2.5 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="h-3 w-3 rounded-full bg-rose-500/80 inline-block" />
-                          <span className="h-3 w-3 rounded-full bg-amber-500/80 inline-block" />
-                          <span className="h-3 w-3 rounded-full bg-emerald-500/80 inline-block" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
                         </div>
-                        <div className="rounded-lg bg-slate-950 px-3 py-1 text-[11px] font-mono text-slate-400 border border-slate-800/80 max-w-[280px] truncate">
+                        <div className="rounded-lg bg-[#08090d] px-3 py-1 text-[11px] font-mono text-zinc-400 border border-white/[0.06] max-w-[280px] truncate">
                           https://demo.crazytechent.com/{template.id}
                         </div>
-                        <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
+                        <div className="text-[10px] text-zinc-400 font-mono flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           <span>Interactive</span>
                         </div>
                       </div>
 
                       {/* Live Embedded Prototype Component */}
-                      <div className="rounded-b-2xl border-b border-x border-slate-800 bg-slate-950/60 p-2 sm:p-4">
+                      <div className="rounded-b-2xl border-b border-x border-white/10 bg-[#08090d]/80 p-2 sm:p-4">
                         {template.previewType === "fintech" && <NexusPayMockup device={currentDevice} />}
                         {template.previewType === "restaurant" && <RestaurantMockup device={currentDevice} />}
                         {template.previewType === "wallet" && <WalletMobileMockup device={currentDevice} />}
@@ -459,22 +454,22 @@ export function PortfolioView() {
                   </div>
 
                   {/* Template Meta, Stats & Action Row */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center border-t border-slate-800/80 pt-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center border-t border-white/[0.08] pt-6">
                     {/* Performance Stats Pills */}
                     <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {template.stats.map((s) => (
                         <div
                           key={s.label}
-                          className="rounded-xl border border-slate-800 bg-slate-950/70 p-3"
+                          className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3"
                         >
-                          <span className="block text-lg font-black font-mono text-cyan-300">
+                          <span className="block text-lg font-black font-mono text-white">
                             {s.value}
                           </span>
-                          <span className="block text-[11px] font-semibold text-slate-300">
+                          <span className="block text-[11px] font-medium text-zinc-300">
                             {s.label}
                           </span>
                           {s.hint && (
-                            <span className="block text-[9px] text-slate-500 truncate mt-0.5">
+                            <span className="block text-[9px] text-zinc-500 truncate mt-0.5 font-mono">
                               {s.hint}
                             </span>
                           )}
@@ -487,16 +482,16 @@ export function PortfolioView() {
                       <button
                         type="button"
                         onClick={() => setActiveModalTemplate(template)}
-                        className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-cyan-500/40 bg-cyan-950/30 hover:bg-cyan-900/40 py-2.5 px-4 text-xs font-bold text-cyan-300 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20 py-2.5 px-4 text-xs font-semibold text-zinc-200 transition-colors"
                       >
-                        <Layers className="h-4 w-4" />
-                        <span>Inspect Full Case Study & Tech Specs</span>
+                        <Layers className="h-4 w-4 text-zinc-400" />
+                        <span>Inspect Full Specs</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleRequestQuote(template.title)}
-                        className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 py-2.5 px-4 text-xs font-bold text-slate-950 shadow-md shadow-cyan-500/20 transition-all"
+                        className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-zinc-200 py-2.5 px-4 text-xs font-bold text-zinc-950 shadow-sm transition-all"
                       >
                         <span>Build Similar Platform</span>
                         <ArrowRight className="h-4 w-4" />
@@ -514,17 +509,17 @@ export function PortfolioView() {
       <ServicesSection onSelectService={handleSelectService} />
 
       {/* Engineering Process & Architecture Section */}
-      <section id="process" className="relative scroll-mt-24 py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800/80 bg-slate-950/70">
+      <section id="process" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] bg-[#090a0f]">
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-xs font-bold text-violet-300 mb-3">
-              <Cpu className="h-4 w-4" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
+              <Cpu className="h-4 w-4 text-zinc-400" />
               <span>The CrazyTech Standard</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Our 4-Stage Rapid Delivery Blueprint
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-400">
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
               How we turn complex enterprise requirements into production-ready software in 2 to 4 weeks.
             </p>
           </div>
@@ -558,19 +553,19 @@ export function PortfolioView() {
             ].map((p) => (
               <div
                 key={p.step}
-                className="rounded-3xl border border-slate-800 bg-slate-900/50 p-6 flex flex-col justify-between"
+                className="rounded-2xl border border-white/[0.07] bg-[#0c0e14] p-6 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-2xl font-black text-cyan-400">{p.step}</span>
-                    <span className="rounded-full bg-slate-800 px-2.5 py-1 text-[10px] font-bold text-slate-300">
+                    <span className="font-mono text-2xl font-black text-white">{p.step}</span>
+                    <span className="rounded-full bg-white/[0.05] border border-white/[0.08] px-2.5 py-1 text-[10px] font-mono text-zinc-300">
                       {p.badge}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{p.title}</h3>
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{p.desc}</p>
+                  <h3 className="text-base font-bold text-white mb-2">{p.title}</h3>
+                  <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-normal">{p.desc}</p>
                 </div>
-                <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
                   <CheckCircle2 className="h-4 w-4" />
                   <span>Guaranteed Deliverable</span>
                 </div>
@@ -581,14 +576,14 @@ export function PortfolioView() {
       </section>
 
       {/* Verified Client Testimonials */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/30">
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
         <div className="mx-auto max-w-6xl">
           <div className="text-center mb-14">
-            <span className="text-xs font-mono uppercase tracking-widest text-cyan-400 font-bold block mb-2">
+            <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-bold block mb-2">
               Verified Client Trust
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-white">
-              Trusted by FinTech Founders & Business Leaders
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+              Trusted by FinTech Founders &amp; Business Leaders
             </h2>
           </div>
 
@@ -618,23 +613,23 @@ export function PortfolioView() {
             ].map((t) => (
               <div
                 key={t.author}
-                className="rounded-3xl border border-slate-800 bg-slate-900/60 p-6 flex flex-col justify-between space-y-4"
+                className="rounded-2xl border border-white/[0.07] bg-[#0c0e14] p-6 flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
                   <div className="flex text-amber-400">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400" />
+                      <Star key={i} className="h-3.5 w-3.5 fill-amber-400" />
                     ))}
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed italic">
+                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed italic">
                     &ldquo;{t.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className="border-t border-slate-800 pt-4">
+                <div className="border-t border-white/[0.06] pt-4">
                   <span className="block text-xs font-bold text-white">{t.author}</span>
-                  <span className="block text-[11px] text-slate-400">{t.role}</span>
-                  <span className="inline-block mt-2 rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-mono font-bold text-emerald-400 border border-emerald-500/20">
+                  <span className="block text-[11px] text-zinc-400">{t.role}</span>
+                  <span className="inline-block mt-2 rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-mono font-medium text-emerald-400 border border-emerald-500/20">
                     {t.metric}
                   </span>
                 </div>
@@ -651,43 +646,43 @@ export function PortfolioView() {
       <ContactRfpSection prefillService={estimatorPrefill} />
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-12 px-4 sm:px-6 lg:px-8 text-xs text-slate-400">
+      <footer className="border-t border-white/[0.06] bg-[#06070a] py-12 px-4 sm:px-6 lg:px-8 text-xs text-zinc-400">
         <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div className="flex items-center gap-3">
             <BrandMark size="sm" />
             <div>
               <span className="font-bold text-white">CrazyTech Enterprises</span>
-              <p className="text-[11px] text-slate-500">
-                High-Impact Software Engineering & Next-Gen Digital Systems
+              <p className="text-[11px] text-zinc-500">
+                High-Impact Software Engineering &amp; Next-Gen Digital Systems
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6 font-semibold">
-            <a href="#showcase" className="hover:text-cyan-400">
+          <div className="flex flex-wrap justify-center gap-6 font-medium">
+            <a href="#showcase" className="hover:text-white transition-colors">
               Templates
             </a>
-            <a href="#services" className="hover:text-cyan-400">
-              Services
+            <a href="#services" className="hover:text-white transition-colors">
+              Capabilities
             </a>
-            <a href="#estimator" className="hover:text-cyan-400">
+            <a href="#estimator" className="hover:text-white transition-colors">
               Estimator
             </a>
-            <a href="#contact" className="hover:text-cyan-400">
+            <a href="#contact" className="hover:text-white transition-colors">
               Contact
             </a>
             <a
               href="https://wa.me/233507904981"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-emerald-400"
+              className="text-emerald-400 hover:text-emerald-300 transition-colors"
             >
               WhatsApp (+233 50 790 4981)
             </a>
           </div>
 
-          <div className="text-[11px] text-slate-500">
-            © {new Date().getFullYear()} CrazyTech Enterprises. All rights reserved.
+          <div className="text-[11px] text-zinc-500">
+            &copy; {new Date().getFullYear()} CrazyTech Enterprises. All rights reserved.
           </div>
         </div>
       </footer>
