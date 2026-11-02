@@ -945,41 +945,23 @@ export function StorefrontPortal({
               const fee = Math.round(bundlePrice * 0.02 * 100) / 100;
               const total = Math.round((bundlePrice + fee) * 100) / 100;
               return (
-                <>
-                  <div className="rounded-2xl bg-slate-50 p-3.5 border border-slate-100 flex items-center justify-between">
-                    <div>
-                      <div className="text-base font-black text-slate-900 leading-tight">
-                        {selectedProduct.gbAmount}GB Data Plan
-                      </div>
-                      <div className="text-[11px] text-slate-500 font-medium">
-                        {selectedProduct.validity || "90 Days Validity · Never Expires"}
-                      </div>
+                <div className="rounded-2xl bg-slate-50 p-3.5 border border-slate-100 flex items-center justify-between">
+                  <div>
+                    <div className="text-base font-black text-slate-900 leading-tight">
+                      {selectedProduct.gbAmount}GB Data Plan
                     </div>
-
-                    <div className="text-right">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase block">Subtotal</span>
-                      <span className="text-lg font-black text-slate-900 font-mono">
-                        GH₵{bundlePrice.toFixed(2)}
-                      </span>
+                    <div className="text-[11px] text-slate-500 font-medium">
+                      {selectedProduct.validity || "90 Days Validity · Never Expires"}
                     </div>
                   </div>
 
-                  {/* Price Breakdown Telemetry */}
-                  <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-xs space-y-1.5 font-mono">
-                    <div className="flex justify-between text-slate-500">
-                      <span>Bundle Value</span>
-                      <span className="font-bold text-slate-900">GH₵{bundlePrice.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-slate-500">
-                      <span>MoMo Gateway Clearance (2%)</span>
-                      <span className="font-bold text-slate-900">+GH₵{fee.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between font-black text-slate-900 pt-1.5 border-t border-slate-200 text-sm">
-                      <span className="uppercase text-[11px] text-slate-500">Total Settlement Due</span>
-                      <span className="text-[#1a56db] text-base">GH₵{total.toFixed(2)}</span>
-                    </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Subtotal</span>
+                    <span className="text-lg font-black text-slate-900 font-mono">
+                      GH₵{bundlePrice.toFixed(2)}
+                    </span>
                   </div>
-                </>
+                </div>
               );
             })()}
 
@@ -1026,6 +1008,29 @@ export function StorefrontPortal({
                   className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-[#1a56db] focus:ring-2 focus:ring-[#1a56db]/20 outline-none transition"
                 />
               </div>
+
+              {/* Price Breakdown Telemetry (Below Inputs) */}
+              {(() => {
+                const bundlePrice = selectedProduct.price;
+                const fee = Math.round(bundlePrice * 0.02 * 100) / 100;
+                const total = Math.round((bundlePrice + fee) * 100) / 100;
+                return (
+                  <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-xs space-y-1.5 font-mono">
+                    <div className="flex justify-between text-slate-500">
+                      <span>Bundle Value</span>
+                      <span className="font-bold text-slate-900">GH₵{bundlePrice.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-slate-500">
+                      <span>MoMo Gateway Clearance (2%)</span>
+                      <span className="font-bold text-slate-900">+GH₵{fee.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between font-black text-slate-900 pt-1.5 border-t border-slate-200 text-sm">
+                      <span className="uppercase text-[11px] text-slate-500">Total Settlement Due</span>
+                      <span className="text-[#1a56db] text-base">GH₵{total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {checkoutError && (
                 <div className="rounded-xl bg-rose-50 border border-rose-200 p-2.5 text-xs text-rose-700 flex items-start gap-1.5">
