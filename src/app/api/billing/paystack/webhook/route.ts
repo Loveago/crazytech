@@ -132,7 +132,12 @@ export async function POST(request: NextRequest) {
     const feePesewas = Math.round(depositPesewas * 0.02);
     const chargedWithFeePesewas = depositPesewas + feePesewas;
     const isAmountMatch = (amt?: number) =>
-      typeof amt === "number" && (amt === chargedWithFeePesewas || amt === depositPesewas);
+      typeof amt === "number" && (
+        amt === chargedWithFeePesewas ||
+        amt === depositPesewas ||
+        Math.abs(amt - chargedWithFeePesewas) <= 2 ||
+        Math.abs(amt - depositPesewas) <= 2
+      );
 
     const eventData = event.data as {
       status?: string;

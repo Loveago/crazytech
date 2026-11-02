@@ -41,16 +41,17 @@ export function PricingEditor({
   const [productList, setProductList] = React.useState<Prod[]>(products);
   const byId = React.useMemo(() => new Map(productList.map((p) => [p.packageId, p])), [productList]);
 
-  const [prices, setPrices] = React.useState<Record<string, string>>(() =>
-    Object.fromEntries(
+  const [prices, setPrices] = React.useState<Record<string, string>>(() => {
+    const prodMap = new Map(products.map((p) => [p.packageId, p]));
+    return Object.fromEntries(
       packages.map((p) => [
         p.id,
-        byId.get(p.id)?.sellingPrice != null
-          ? byId.get(p.id)!.sellingPrice.toFixed(2)
+        prodMap.get(p.id)?.sellingPrice != null
+          ? prodMap.get(p.id)!.sellingPrice.toFixed(2)
           : p.cost.toFixed(2),
       ])
-    )
-  );
+    );
+  });
 
   const [savingId, setSavingId] = React.useState<string | null>(null);
   const [togglingId, setTogglingId] = React.useState<string | null>(null);
@@ -68,46 +69,58 @@ export function PricingEditor({
 
   React.useEffect(() => {
     setProductList(products);
-    const map = new Map(products.map((p) => [p.packageId, p]));
+  }, [products]);
+
+  // Only initialize prices for newly added packages that don't already have an entry
+  // to avoid overwriting values while the user is actively typing or editing.
+  React.useEffect(() => {
     setPrices((prev) => {
-      const next: Record<string, string> = { ...prev };
+      let changed = false;
+      const next = { ...prev };
+      const prodMap = new Map(products.map((p) => [p.packageId, p]));
       for (const pkg of packages) {
-        const prod = map.get(pkg.id);
-        if (prod) {
-          next[pkg.id] = prod.sellingPrice.toFixed(2);
-        } else if (!next[pkg.id]) {
-          next[pkg.id] = pkg.cost.toFixed(2);
+        if (next[pkg.id] === undefined) {
+          const prod = prodMap.get(pkg.id);
+          next[pkg.id] =
+            prod?.sellingPrice != null
+              ? prod.sellingPrice.toFixed(2)
+              : pkg.cost.toFixed(2);
+          changed = true;
         }
       }
-      return next;
+      return changed ? next : prev;
     });
-  }, [products, packages]);
+  }, [packages, products]);
 
-  // Non-blocking auto-sync on mount
+  // Refresh data explicitly after bulk operations
   const refreshData = React.useCallback(async () => {
     try {
       const res = await fetch("/api/storefront/products");
       if (!res.ok) return;
       const data = await res.json();
-      if (Array.isArray(data.packages)) {
-        setPackageList(data.packages);
+      const newPackages: Pkg[] = Array.isArray(data.packages) ? data.packages : [];
+      const newProducts: Prod[] = Array.isArray(data.products)
+        ? data.products.map((p: any) => ({
+            packageId: p.packageId,
+            sellingPrice: p.sellingPrice / 100,
+            isActive: p.isActive,
+          }))
+        : [];
+
+      if (newPackages.length > 0) {
+        setPackageList(newPackages);
       }
-      if (Array.isArray(data.products)) {
-        const prods: Prod[] = data.products.map((p: any) => ({
-          packageId: p.packageId,
-          sellingPrice: p.sellingPrice / 100,
-          isActive: p.isActive,
-        }));
-        setProductList(prods);
-        const pkgs = (data.packages as Pkg[]) || packageList;
-        const pMap = new Map(prods.map((p) => [p.packageId, p]));
+      if (newProducts.length > 0) {
+        setProductList(newProducts);
+        const pMap = new Map(newProducts.map((p) => [p.packageId, p]));
         setPrices((prev) => {
           const next: Record<string, string> = { ...prev };
+          const pkgs = newPackages.length > 0 ? newPackages : packages;
           for (const pkg of pkgs) {
             const match = pMap.get(pkg.id);
             if (match) {
               next[pkg.id] = match.sellingPrice.toFixed(2);
-            } else if (!next[pkg.id]) {
+            } else if (next[pkg.id] === undefined) {
               next[pkg.id] = pkg.cost.toFixed(2);
             }
           }
@@ -117,11 +130,7 @@ export function PricingEditor({
     } catch {
       // non-blocking
     }
-  }, [packageList]);
-
-  React.useEffect(() => {
-    refreshData();
-  }, [refreshData]);
+  }, [packages]);
 
   const visible = React.useMemo(() => {
     return [...packageList]
@@ -379,14 +388,20 @@ export function PricingEditor({
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {visible.map((p) => {
           const prod = byId.get(p.id);
-          const price = parseFloat(prices[p.id] || "0");
-          const markup = prod || price > 0 ? (price || prod?.sellingPrice || 0) - p.cost : null;
+          const rawPrice = prices[p.id];
+          const hasInput = rawPrice !== undefined && rawPrice.trim() !== "";
+          const priceNum = hasInput ? parseFloat(rawPrice) : NaN;
+          const markup = !isNaN(priceNum)
+            ? priceNum - p.cost
+            : prod
+            ? prod.sellingPrice - p.cost
+            : null;
           return (
             <ProductCard
               key={p.id}
               pkg={p}
               prod={prod}
-              price={prices[p.id]}
+              price={prices[p.id] ?? ""}
               onPriceChange={(v) => setPrices((s) => ({ ...s, [p.id]: v }))}
               onSave={() => savePrice(p.id)}
               onToggleActive={() => prod && toggleActive(p.id, !prod.isActive)}
@@ -474,7 +489,7 @@ function ProductCard({
         <div className="relative flex-1">
           <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-mono text-xs font-bold text-slate-400 dark:text-slate-500">GHS</span>
           <input
-            value={price}
+            value={price ?? ""}
             onChange={(e) => onPriceChange(e.target.value)}
             placeholder="0.00"
             inputMode="decimal"

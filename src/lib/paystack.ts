@@ -243,7 +243,9 @@ export async function verifyAndSettlePaystackTopup(
 
   const isAmountValid =
     verification.amount === chargedWithFeePesewas ||
-    verification.amount === depositPesewas;
+    verification.amount === depositPesewas ||
+    Math.abs(verification.amount - chargedWithFeePesewas) <= 2 ||
+    Math.abs(verification.amount - depositPesewas) <= 2;
 
   if (
     verification.status === "success" &&

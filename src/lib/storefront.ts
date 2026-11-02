@@ -514,7 +514,10 @@ export async function settleStorefrontPayment(
   const isAmountValid =
     Boolean(input.paystackAmount) &&
     input.paystackAmount > 0 &&
-    (input.paystackAmount === expectedWithFee || input.paystackAmount === row.sellingPrice);
+    (input.paystackAmount === expectedWithFee ||
+     input.paystackAmount === row.sellingPrice ||
+     Math.abs(input.paystackAmount - expectedWithFee) <= 2 ||
+     Math.abs(input.paystackAmount - row.sellingPrice) <= 2);
 
   if (!isAmountValid) {
     return { settled: false, reason: "Invalid payment amount or amount mismatch" };

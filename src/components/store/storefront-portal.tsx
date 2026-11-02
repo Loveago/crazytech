@@ -174,14 +174,16 @@ export function StorefrontPortal({
     setCheckingOut(true);
     setCheckoutError("");
 
+    const cleanEmail = email.trim().toLowerCase();
+
     try {
       const res = await fetch(`/api/store/${storefront.slug}/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           packageId: selectedProduct.packageId,
-          phoneNumber: cleanPhone,
-          customerEmail: email.trim() || undefined,
+          customerPhone: cleanPhone,
+          customerEmail: cleanEmail || undefined,
         }),
       });
 
@@ -193,7 +195,7 @@ export function StorefrontPortal({
       // Save customer info in localStorage for future convenience
       try {
         localStorage.setItem("storefront_customer_phone", cleanPhone);
-        if (email.trim()) localStorage.setItem("storefront_customer_email", email.trim());
+        if (cleanEmail) localStorage.setItem("storefront_customer_email", cleanEmail);
       } catch {}
 
       if (data.authorizationUrl) {
@@ -938,23 +940,48 @@ export function StorefrontPortal({
             </div>
 
             {/* Selected Bundle Summary */}
-            <div className="rounded-2xl bg-slate-50 p-3.5 border border-slate-100 flex items-center justify-between">
-              <div>
-                <div className="text-base font-black text-slate-900 leading-tight">
-                  {selectedProduct.gbAmount}GB Data Plan
-                </div>
-                <div className="text-[11px] text-slate-500 font-medium">
-                  {selectedProduct.validity || "90 Days Validity · Never Expires"}
-                </div>
-              </div>
+            {(() => {
+              const bundlePrice = selectedProduct.price;
+              const fee = Math.round(bundlePrice * 0.02 * 100) / 100;
+              const total = Math.round((bundlePrice + fee) * 100) / 100;
+              return (
+                <>
+                  <div className="rounded-2xl bg-slate-50 p-3.5 border border-slate-100 flex items-center justify-between">
+                    <div>
+                      <div className="text-base font-black text-slate-900 leading-tight">
+                        {selectedProduct.gbAmount}GB Data Plan
+                      </div>
+                      <div className="text-[11px] text-slate-500 font-medium">
+                        {selectedProduct.validity || "90 Days Validity · Never Expires"}
+                      </div>
+                    </div>
 
-              <div className="text-right">
-                <span className="text-[10px] font-bold text-slate-400 uppercase block">Total</span>
-                <span className="text-lg font-black text-[#1a56db] font-mono">
-                  GH₵{selectedProduct.price.toFixed(2)}
-                </span>
-              </div>
-            </div>
+                    <div className="text-right">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase block">Subtotal</span>
+                      <span className="text-lg font-black text-slate-900 font-mono">
+                        GH₵{bundlePrice.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Price Breakdown Telemetry */}
+                  <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 text-xs space-y-1.5 font-mono">
+                    <div className="flex justify-between text-slate-500">
+                      <span>Bundle Value</span>
+                      <span className="font-bold text-slate-900">GH₵{bundlePrice.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-slate-500">
+                      <span>MoMo Gateway Clearance (2%)</span>
+                      <span className="font-bold text-slate-900">+GH₵{fee.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between font-black text-slate-900 pt-1.5 border-t border-slate-200 text-sm">
+                      <span className="uppercase text-[11px] text-slate-500">Total Settlement Due</span>
+                      <span className="text-[#1a56db] text-base">GH₵{total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
 
             {/* Checkout Form */}
             <form onSubmit={handleProceedCheckout} className="space-y-3.5">
@@ -1008,23 +1035,30 @@ export function StorefrontPortal({
               )}
 
               {/* Pay Button */}
-              <button
-                type="submit"
-                disabled={checkingOut}
-                className="w-full py-3 bg-[#f59e0b] hover:bg-[#d97706] text-white font-extrabold text-sm rounded-xl shadow-md shadow-amber-500/20 transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-              >
-                {checkingOut ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Connecting MoMo...</span>
-                  </>
-                ) : (
-                  <>
-                    <Lock className="h-4 w-4" />
-                    <span>Pay GH₵{selectedProduct.price.toFixed(2)} via MoMo</span>
-                  </>
-                )}
-              </button>
+              {(() => {
+                const bundlePrice = selectedProduct.price;
+                const fee = Math.round(bundlePrice * 0.02 * 100) / 100;
+                const total = Math.round((bundlePrice + fee) * 100) / 100;
+                return (
+                  <button
+                    type="submit"
+                    disabled={checkingOut}
+                    className="w-full py-3 bg-[#f59e0b] hover:bg-[#d97706] text-white font-extrabold text-sm rounded-xl shadow-md shadow-amber-500/20 transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    {checkingOut ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span>Connecting MoMo...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="h-4 w-4" />
+                        <span>Pay GH₵{total.toFixed(2)} via MoMo</span>
+                      </>
+                    )}
+                  </button>
+                );
+              })()}
 
               {/* Security Footnote */}
               <div className="text-center pt-1 space-y-1">

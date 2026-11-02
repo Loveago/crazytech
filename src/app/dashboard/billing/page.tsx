@@ -320,7 +320,7 @@ export default function BillingPage() {
               </div>
               <div className="flex justify-between text-slate-500 dark:text-slate-400 text-[11px]">
                 <span>Gateway MoMo Processing (2%):</span>
-                <span>₵{fee.toFixed(2)}</span>
+                <span>+₵{fee.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-slate-900 dark:text-white pt-1 border-t border-slate-200 dark:border-white/5">
                 <span>Total Due on Paystack:</span>
@@ -342,7 +342,7 @@ export default function BillingPage() {
               ) : (
                 <>
                   <Zap className="h-4 w-4 fill-[#041d14]" />
-                  <span>Deposit ₵{totalDue.toFixed(2)} via MoMo / Card</span>
+                  <span>Pay ₵{totalDue.toFixed(2)} via MoMo / Card (Credit ₵{numAmount.toFixed(2)})</span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
