@@ -188,6 +188,9 @@ npx tsx prisma/seed.ts
 # Build Next.js application for production
 NODE_OPTIONS="--max-old-space-size=2048" npm run build
 
+# Ensure Nginx (www-data) has read access to static build chunks
+sudo chmod -R o+rX /var/www/crazytech/.next
+
 
 ================================================================================
 8. STEP 7: CONFIGURE PM2 PROCESS MANAGER

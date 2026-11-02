@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 
@@ -11,9 +11,38 @@ export default function ErrorBoundary({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const [reloading, setReloading] = useState(false);
+
+  const isChunkError =
+    error?.name === "ChunkLoadError" ||
+    error?.message?.toLowerCase().includes("failed to load chunk") ||
+    error?.message?.toLowerCase().includes("loading chunk") ||
+    error?.message?.toLowerCase().includes("loading css chunk");
+
   useEffect(() => {
     console.error("Application error:", error);
-  }, [error]);
+
+    // Auto-recover from chunk loading errors caused by new production builds/deployments
+    if (isChunkError && typeof window !== "undefined") {
+      const now = Date.now();
+      const lastReload = Number(sessionStorage.getItem("ct_chunk_reload_time") || 0);
+      // Auto-reload once within a 15-second window to prevent infinite loops
+      if (now - lastReload > 15000) {
+        sessionStorage.setItem("ct_chunk_reload_time", String(now));
+        setReloading(true);
+        window.location.reload();
+      }
+    }
+  }, [error, isChunkError]);
+
+  const handleRetry = () => {
+    if (isChunkError && typeof window !== "undefined") {
+      setReloading(true);
+      window.location.reload();
+    } else {
+      reset();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#060b13] text-slate-100 flex flex-col justify-center items-center p-6 selection:bg-[#00df82] selection:text-[#041d14]">
@@ -23,9 +52,13 @@ export default function ErrorBoundary({
         </div>
 
         <div className="space-y-2">
-          <h2 className="text-xl font-black text-white">Something went wrong</h2>
+          <h2 className="text-xl font-black text-white">
+            {isChunkError ? "Platform Update Detected" : "Something went wrong"}
+          </h2>
           <p className="text-xs text-slate-400 leading-relaxed">
-            {error?.message || "An unexpected error occurred while rendering this page."}
+            {isChunkError
+              ? "A fresh build of CrazyTech was deployed. Reloading will sync your browser with the latest platform assets."
+              : error?.message || "An unexpected error occurred while rendering this page."}
           </p>
           {error?.digest && (
             <p className="text-[10px] font-mono text-slate-500">Error Digest: {error.digest}</p>
@@ -34,18 +67,19 @@ export default function ErrorBoundary({
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
           <button
-            onClick={() => reset()}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#00df82] px-5 py-2.5 text-xs font-black text-[#041d14] hover:bg-[#00c572] transition"
+            onClick={handleRetry}
+            disabled={reloading}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#00df82] px-5 py-2.5 text-xs font-black text-[#041d14] hover:bg-[#00c572] transition cursor-pointer"
           >
-            <RefreshCw className="h-3.5 w-3.5" />
-            <span>Try Again</span>
+            <RefreshCw className={`h-3.5 w-3.5 ${reloading ? "animate-spin" : ""}`} />
+            <span>{reloading ? "Reloading..." : isChunkError ? "Reload Page" : "Try Again"}</span>
           </button>
           <Link
-            href="/login"
+            href="/"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-[#162740] bg-[#070d18] px-5 py-2.5 text-xs font-bold text-slate-300 hover:text-white hover:bg-[#111e33] transition"
           >
             <Home className="h-3.5 w-3.5" />
-            <span>Go to Login</span>
+            <span>Return Home</span>
           </Link>
         </div>
       </div>
