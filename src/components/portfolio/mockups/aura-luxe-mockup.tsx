@@ -96,33 +96,33 @@ export function AuraLuxeMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-pink-500/30 bg-slate-950/90 p-4 sm:p-6 text-slate-100 shadow-2xl backdrop-blur-xl transition-all overflow-hidden">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all overflow-hidden">
       {/* Top Header */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-pink-500/20 pb-4">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-pink-500/20 border border-pink-500/40 text-pink-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">Aura Luxe Headless Experience</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-pink-500/20 px-2 py-0.5 text-[10px] font-semibold text-pink-300 border border-pink-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-pink-400 animate-pulse" /> 60 FPS Fluid
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-zinc-300 border border-white/10">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> 60 FPS Fluid
               </span>
             </div>
-            <p className="text-xs text-slate-400">0.4s Largest Contentful Paint with sub-second checkout</p>
+            <p className="text-xs text-zinc-400">0.4s Largest Contentful Paint with sub-second checkout</p>
           </div>
         </div>
 
         {/* View Cart Button */}
         <button
           onClick={() => setCartOpen((prev) => !prev)}
-          className="relative flex items-center gap-2 rounded-xl border border-pink-500/30 bg-slate-900/90 hover:bg-slate-800 px-3.5 py-2 text-xs font-bold text-pink-300 transition-all shadow-md"
+          className="relative flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] px-3.5 py-2 text-xs font-semibold text-zinc-200 transition-all shadow-sm"
         >
           <ShoppingBag className="h-4 w-4" />
           <span>Shopping Bag</span>
           {cartCount > 0 && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-pink-500 text-[10px] font-extrabold text-slate-950">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[10px] font-extrabold text-zinc-950">
               {cartCount}
             </span>
           )}
@@ -247,7 +247,7 @@ export function AuraLuxeMockup({
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-400 hover:to-rose-500 py-3 px-4 font-bold text-sm text-slate-950 shadow-lg shadow-pink-500/25 transition-all active:scale-[0.99]"
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-zinc-200 py-3 px-4 font-bold text-sm text-zinc-950 shadow-md transition-all active:scale-[0.99]"
             >
               <ShoppingBag className="h-4 w-4" />
               <span>Add to Bag — GHS {subtotal.toLocaleString()}</span>
@@ -258,17 +258,17 @@ export function AuraLuxeMockup({
 
       {/* Slide-Out Bag Modal / Drawer Simulation */}
       {cartOpen && (
-        <div className="absolute inset-0 z-30 flex justify-end bg-slate-950/80 backdrop-blur-md transition-all">
-          <div className="w-full max-w-md h-full bg-slate-900 border-l border-pink-500/30 p-5 flex flex-col justify-between shadow-2xl">
+        <div className="absolute inset-0 z-30 flex justify-end bg-black/80 backdrop-blur-md transition-all">
+          <div className="w-full max-w-md h-full bg-[#10121a] border-l border-white/10 p-5 flex flex-col justify-between shadow-2xl">
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
                 <span className="font-bold text-sm text-white flex items-center gap-2">
-                  <ShoppingBag className="h-4 w-4 text-pink-400" /> Your Shopping Bag ({cartCount})
+                  <ShoppingBag className="h-4 w-4 text-zinc-300" /> Your Shopping Bag ({cartCount})
                 </span>
                 <button
                   type="button"
                   onClick={() => setCartOpen(false)}
-                  className="text-xs text-slate-400 hover:text-white p-1"
+                  className="text-xs text-zinc-400 hover:text-white p-1"
                 >
                   ✕ Close
                 </button>

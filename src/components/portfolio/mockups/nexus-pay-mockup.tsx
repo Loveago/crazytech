@@ -107,36 +107,36 @@ export function NexusPayMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-cyan-500/30 bg-slate-950/90 p-4 sm:p-6 text-slate-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Top Header / Status bar */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-cyan-500/20 pb-4">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
             <Zap className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">NexusPay Telecom Gateway</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold text-emerald-400 border border-emerald-500/30">
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-zinc-300 border border-white/10">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live v3.4
               </span>
             </div>
-            <p className="text-xs text-slate-400">Sub-second direct carrier automated dispatch</p>
+            <p className="text-xs text-zinc-400">Sub-second direct carrier automated dispatch</p>
           </div>
         </div>
 
         {/* Live Balance Card */}
-        <div className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/80 px-3.5 py-2">
+        <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-[#08090d] px-3.5 py-2">
           <div className="text-right">
-            <span className="block text-[10px] uppercase font-bold tracking-wider text-slate-400">Merchant Balance</span>
-            <span className="font-mono text-base font-extrabold text-cyan-300">
+            <span className="block text-[10px] uppercase font-bold tracking-wider text-zinc-400">Merchant Balance</span>
+            <span className="font-mono text-base font-extrabold text-white">
               GHS {balance.toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </span>
           </div>
           <button
             onClick={() => setBalance((prev) => prev + 500)}
             title="Simulate quick wallet top-up"
-            className="rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 p-1.5 transition-colors border border-cyan-500/30"
+            className="rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-zinc-300 p-1.5 transition-colors border border-white/10"
           >
             <RefreshCw className="h-3.5 w-3.5" />
           </button>
@@ -146,12 +146,12 @@ export function NexusPayMockup({
       <div className={`grid grid-cols-1 ${isMobileFrame ? "" : "lg:grid-cols-12"} gap-5`}>
         {/* Left Interactive Dispatch Column */}
         <div className={`${isMobileFrame ? "w-full" : "lg:col-span-7"} space-y-4`}>
-          <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4">
+          <div className="rounded-xl border border-white/[0.08] bg-[#090a0f] p-4">
             <div className="flex items-center justify-between mb-3">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                <Signal className="h-3.5 w-3.5 text-cyan-400" /> 1. Select Network Carrier
+              <label className="text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
+                <Signal className="h-3.5 w-3.5 text-zinc-400" /> 1. Select Network Carrier
               </label>
-              <span className="text-[11px] text-cyan-400 font-mono">Instant API Route</span>
+              <span className="text-[11px] text-zinc-400 font-mono">Instant API Route</span>
             </div>
 
             <div className="grid grid-cols-3 gap-2">
@@ -163,11 +163,11 @@ export function NexusPayMockup({
                   className={`flex flex-col items-center justify-center py-2.5 px-3 rounded-lg border text-xs font-bold transition-all ${
                     network === net
                       ? net === "MTN"
-                        ? "border-amber-400 bg-amber-400/15 text-amber-300 shadow-md shadow-amber-500/10"
+                        ? "border-amber-400/60 bg-amber-400/15 text-amber-300 shadow-md shadow-amber-500/10"
                         : net === "Telecel"
-                        ? "border-rose-500 bg-rose-500/15 text-rose-300 shadow-md shadow-rose-500/10"
-                        : "border-blue-500 bg-blue-500/15 text-blue-300 shadow-md shadow-blue-500/10"
-                      : "border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                        ? "border-rose-500/60 bg-rose-500/15 text-rose-300 shadow-md shadow-rose-500/10"
+                        : "border-blue-500/60 bg-blue-500/15 text-blue-300 shadow-md shadow-blue-500/10"
+                      : "border-white/[0.08] bg-[#0d0f15] text-zinc-400 hover:border-white/20 hover:text-white"
                   }`}
                 >
                   <span className="font-extrabold">{net}</span>
@@ -177,12 +177,12 @@ export function NexusPayMockup({
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 space-y-3">
+          <div className="rounded-xl border border-white/[0.08] bg-[#090a0f] p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                <Sliders className="h-3.5 w-3.5 text-cyan-400" /> 2. Choose Bundle Package
+              <label className="text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
+                <Sliders className="h-3.5 w-3.5 text-zinc-400" /> 2. Choose Bundle Package
               </label>
-              <span className="text-[11px] text-slate-400 font-mono">Non-Expiry</span>
+              <span className="text-[11px] text-zinc-400 font-mono">Non-Expiry</span>
             </div>
 
             <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
@@ -193,18 +193,18 @@ export function NexusPayMockup({
                   onClick={() => setSelectedSize(b.size)}
                   className={`flex flex-col items-center py-2 px-1 rounded-lg border text-center transition-all ${
                     selectedSize === b.size
-                      ? "border-cyan-400 bg-cyan-500/20 text-cyan-200 font-bold shadow-sm shadow-cyan-500/20"
-                      : "border-slate-800 bg-slate-950/50 text-slate-400 hover:border-slate-700 hover:text-slate-300"
+                      ? "border-white/40 bg-white/[0.1] text-white font-bold shadow-sm"
+                      : "border-white/[0.08] bg-[#0d0f15] text-zinc-400 hover:border-white/20 hover:text-zinc-200"
                   }`}
                 >
                   <span className="text-xs font-semibold">{b.size}</span>
-                  <span className="text-[10px] font-mono text-slate-400">GHS {b.price}</span>
+                  <span className="text-[10px] font-mono text-zinc-400">GHS {b.price}</span>
                 </button>
               ))}
             </div>
 
             <div className="pt-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5 block">
+              <label className="text-xs font-bold uppercase tracking-wider text-zinc-300 mb-1.5 block">
                 3. Recipient Phone (MSISDN)
               </label>
               <div className="relative">
@@ -213,7 +213,7 @@ export function NexusPayMockup({
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
                   placeholder="024 000 0000"
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3.5 py-2.5 text-sm font-mono text-cyan-200 placeholder-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                  className="w-full rounded-lg border border-white/10 bg-[#0d0f15] px-3.5 py-2.5 text-sm font-mono text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
                 />
                 <span className="absolute right-3 top-2.5 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                   Verified Route
@@ -228,23 +228,23 @@ export function NexusPayMockup({
               disabled={isDispatching}
               className={`w-full relative flex items-center justify-center gap-2 rounded-xl py-3 px-4 font-bold text-sm transition-all duration-300 ${
                 dispatchSuccess
-                  ? "bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/25"
-                  : "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 shadow-lg shadow-cyan-500/20 active:scale-[0.99]"
+                  ? "bg-emerald-500 text-zinc-950 shadow-lg shadow-emerald-500/25"
+                  : "bg-white hover:bg-zinc-200 text-zinc-950 shadow-md active:scale-[0.99]"
               }`}
             >
               {isDispatching ? (
                 <>
-                  <RefreshCw className="h-4 w-4 animate-spin text-slate-950" />
+                  <RefreshCw className="h-4 w-4 animate-spin text-zinc-950" />
                   <span>Executing Gateway API...</span>
                 </>
               ) : dispatchSuccess ? (
                 <>
-                  <CheckCircle2 className="h-4 w-4 text-slate-950" />
+                  <CheckCircle2 className="h-4 w-4 text-zinc-950" />
                   <span>Dispatched in 1.14s! Received</span>
                 </>
               ) : (
                 <>
-                  <Send className="h-4 w-4 text-slate-950" />
+                  <Send className="h-4 w-4 text-zinc-950" />
                   <span>Simulate Instant Dispatch ({selectedSize})</span>
                 </>
               )}
@@ -254,10 +254,10 @@ export function NexusPayMockup({
 
         {/* Right Live Stream / Metrics Column */}
         <div className={`${isMobileFrame ? "w-full" : "lg:col-span-5"} space-y-4`}>
-          <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4">
-            <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                <Activity className="h-3.5 w-3.5 text-cyan-400" /> Real-Time Gateway Feed
+          <div className="rounded-xl border border-white/[0.08] bg-[#090a0f] p-4">
+            <div className="flex items-center justify-between mb-3 border-b border-white/[0.08] pb-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5">
+                <Activity className="h-3.5 w-3.5 text-zinc-400" /> Real-Time Gateway Feed
               </span>
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
             </div>
@@ -266,7 +266,7 @@ export function NexusPayMockup({
               {transactions.map((tx) => (
                 <div
                   key={tx.id}
-                  className="flex items-center justify-between rounded-lg border border-slate-800/60 bg-slate-950/70 p-2.5 transition-all hover:border-cyan-500/30"
+                  className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-[#0d0f15] p-2.5 transition-all hover:border-white/20"
                 >
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
@@ -281,9 +281,9 @@ export function NexusPayMockup({
                       >
                         {tx.network}
                       </span>
-                      <span className="text-slate-200 font-semibold">{tx.bundle}</span>
+                      <span className="text-zinc-200 font-semibold">{tx.bundle}</span>
                     </div>
-                    <div className="text-[11px] text-slate-400 flex items-center gap-2">
+                    <div className="text-[11px] text-zinc-400 flex items-center gap-2">
                       <span>{tx.recipient}</span>
                       <span>•</span>
                       <span>{tx.time}</span>
@@ -291,7 +291,7 @@ export function NexusPayMockup({
                   </div>
 
                   <div className="text-right">
-                    <span className="block font-bold text-cyan-300">GHS {tx.amount.toFixed(2)}</span>
+                    <span className="block font-bold text-white">GHS {tx.amount.toFixed(2)}</span>
                     <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400">
                       <CheckCircle2 className="h-3 w-3" /> {tx.status}
                     </span>
@@ -301,12 +301,12 @@ export function NexusPayMockup({
             </div>
           </div>
 
-          <div className="rounded-xl border border-cyan-500/20 bg-cyan-950/20 p-3.5 flex items-center justify-between text-xs">
+          <div className="rounded-xl border border-white/[0.08] bg-[#0d0f15] p-3.5 flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-cyan-400 shrink-0" />
-              <span className="text-slate-300">Closed-Loop Carrier Reconciliation</span>
+              <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
+              <span className="text-zinc-300">Closed-Loop Carrier Reconciliation</span>
             </div>
-            <span className="font-mono font-bold text-cyan-300">99.99% Guaranteed</span>
+            <span className="font-mono font-bold text-white">99.99% Guaranteed</span>
           </div>
         </div>
       </div>

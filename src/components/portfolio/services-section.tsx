@@ -36,8 +36,8 @@ const SERVICES: ServiceCard[] = [
     subtitle: "Custom Business Management & Automation Suites",
     badge: "Core Engineering",
     icon: Laptop,
-    accentColor: "from-indigo-500 to-blue-600",
-    badgeClass: "bg-indigo-500/15 text-indigo-400 border-indigo-500/30",
+    accentColor: "bg-white/[0.05] text-white border-white/10",
+    badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
     description:
       "Bespoke software systems engineered to replace clunky legacy workflows. We build integrated ERPs, school/hospital suites, POS retail networks, and multi-branch distributed inventory databases.",
     deliverables: [
@@ -56,8 +56,8 @@ const SERVICES: ServiceCard[] = [
     subtitle: "Fluid, Native & Cross-Platform Experiences",
     badge: "High Demand",
     icon: Smartphone,
-    accentColor: "from-emerald-500 to-teal-600",
-    badgeClass: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+    accentColor: "bg-white/[0.05] text-white border-white/10",
+    badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
     description:
       "Stunning mobile apps published directly to the Apple App Store and Google Play Store. Built for smooth 60fps animations, offline-first reliability, biometric security, and push notifications.",
     deliverables: [
@@ -76,8 +76,8 @@ const SERVICES: ServiceCard[] = [
     subtitle: "Blazing-Fast Web Applications & Cloud Portals",
     badge: "Ultra-Fast",
     icon: Globe2,
-    accentColor: "from-cyan-500 to-blue-500",
-    badgeClass: "bg-cyan-500/15 text-cyan-400 border-cyan-500/30",
+    accentColor: "bg-white/[0.05] text-white border-white/10",
+    badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
     description:
       "High-converting cloud applications and digital storefronts engineered on Next.js 16 and React 19. Designed for sub-second page loads, SEO domination, and frictionless buyer conversion.",
     deliverables: [
@@ -96,8 +96,8 @@ const SERVICES: ServiceCard[] = [
     subtitle: "Automated Carrier Dispatch & Wallet Systems",
     badge: "Flagship Capability",
     icon: Zap,
-    accentColor: "from-amber-500 to-orange-600",
-    badgeClass: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+    accentColor: "bg-white/[0.05] text-white border-white/10",
+    badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
     description:
       "Industrial-grade telecommunication and financial aggregation systems. We integrate direct MTN, Telecel, and AT carrier APIs with Paystack, Hubtel, and Mobile Money webhooks.",
     deliverables: [
@@ -116,8 +116,8 @@ const SERVICES: ServiceCard[] = [
     subtitle: "Hardened Ubuntu Servers, Nginx & 24/7 PM2",
     badge: "Infrastructure",
     icon: Server,
-    accentColor: "from-violet-500 to-purple-600",
-    badgeClass: "bg-violet-500/15 text-violet-400 border-violet-500/30",
+    accentColor: "bg-white/[0.05] text-white border-white/10",
+    badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
     description:
       "Rock-solid deployment architecture built for zero-downtime scalability. From single multi-tenant VPS deployments to Kubernetes microservices, automated backups, and SSL certbots.",
     deliverables: [
@@ -136,8 +136,8 @@ const SERVICES: ServiceCard[] = [
     subtitle: "Conversion-Focused Interfaces & Micro-Interactions",
     badge: "Creative Power",
     icon: Palette,
-    accentColor: "from-pink-500 to-rose-600",
-    badgeClass: "bg-pink-500/15 text-pink-400 border-pink-500/30",
+    accentColor: "bg-white/[0.05] text-white border-white/10",
+    badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
     description:
       "Award-winning aesthetic polish that converts casual visitors into loyal high-ticket clients. Fluid 60fps micro-animations, glassmorphism, responsive tactile physics, and cohesive design systems.",
     deliverables: [
@@ -154,18 +154,18 @@ const SERVICES: ServiceCard[] = [
 
 export function ServicesSection({ onSelectService }: { onSelectService: (serviceTitle: string) => void }) {
   return (
-    <section id="services" className="relative scroll-mt-24 py-16 px-4 sm:px-6 lg:px-8">
+    <section id="services" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
       <div className="mx-auto max-w-7xl">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-bold text-indigo-300 mb-3">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
+            <Sparkles className="h-4 w-4 text-zinc-400" />
             <span>Comprehensive Digital Engineering Solutions</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
             What We Build at CrazyTech Enterprises
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-400">
+          <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
             From consumer mobile apps to high-throughput telecommunication gateways and enterprise cloud suites, we handle every layer of the engineering lifecycle.
           </p>
         </div>
@@ -177,35 +177,35 @@ export function ServicesSection({ onSelectService }: { onSelectService: (service
             return (
               <div
                 key={s.id}
-                className="group relative flex flex-col justify-between rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-7 backdrop-blur-md transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/90 hover:shadow-2xl hover:shadow-cyan-500/5 hover:-translate-y-1"
+                className="group relative flex flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#0c0e14] p-6 sm:p-7 backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-[#10121a] hover:shadow-2xl hover:-translate-y-1"
               >
                 <div>
                   <div className="flex items-center justify-between mb-5">
                     <div
-                      className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${s.accentColor} text-slate-950 shadow-md group-hover:scale-110 transition-transform`}
+                      className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.05] border border-white/10 text-white shadow-md group-hover:scale-105 group-hover:bg-white/[0.08] transition-all"
                     >
-                      <Icon className="h-6 w-6 stroke-[2.2]" />
+                      <Icon className="h-6 w-6 stroke-[2]" />
                     </div>
-                    <span className={`rounded-full px-3 py-1 text-[11px] font-bold border ${s.badgeClass}`}>
+                    <span className="rounded-full px-3 py-1 text-[11px] font-mono text-zinc-300 bg-white/[0.04] border border-white/10">
                       {s.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-extrabold text-white group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-xl font-bold text-white group-hover:text-white transition-colors">
                     {s.title}
                   </h3>
-                  <p className="text-xs font-semibold text-slate-400 mt-1 mb-3">{s.subtitle}</p>
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-5">
+                  <p className="text-xs font-medium text-zinc-400 mt-1 mb-3">{s.subtitle}</p>
+                  <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-5 font-normal">
                     {s.description}
                   </p>
 
                   {/* Deliverables List */}
-                  <div className="space-y-2 border-t border-slate-800/80 pt-4 mb-5">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-2">
+                  <div className="space-y-2 border-t border-white/[0.07] pt-4 mb-5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-400 block mb-2">
                       Key Capabilities Included:
                     </span>
                     {s.deliverables.map((item) => (
-                      <div key={item} className="flex items-start gap-2 text-xs text-slate-300">
+                      <div key={item} className="flex items-start gap-2 text-xs text-zinc-300">
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </div>
@@ -214,12 +214,12 @@ export function ServicesSection({ onSelectService }: { onSelectService: (service
                 </div>
 
                 {/* Footer action and Tech tags */}
-                <div className="border-t border-slate-800/80 pt-4 space-y-3">
+                <div className="border-t border-white/[0.07] pt-4 space-y-3">
                   <div className="flex flex-wrap gap-1.5">
                     {s.techTags.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-md border border-slate-800 bg-slate-950 px-2 py-0.5 text-[10px] font-mono text-slate-400"
+                        className="rounded-md border border-white/[0.08] bg-[#08090d] px-2 py-0.5 text-[10px] font-mono text-zinc-400"
                       >
                         {tech}
                       </span>
@@ -229,7 +229,7 @@ export function ServicesSection({ onSelectService }: { onSelectService: (service
                   <button
                     type="button"
                     onClick={() => onSelectService(s.title)}
-                    className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-cyan-500 hover:text-slate-950 hover:border-cyan-400 py-2.5 px-4 text-xs font-bold text-slate-200 transition-all group-hover:border-slate-600"
+                    className="w-full flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white hover:text-zinc-950 hover:border-white py-2.5 px-4 text-xs font-semibold text-zinc-200 transition-all"
                   >
                     <span>Start {s.title.split(" ")[0]} Project</span>
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />

@@ -151,33 +151,33 @@ export function RestaurantMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-amber-500/30 bg-slate-950/90 p-4 sm:p-6 text-slate-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Header with Mode Switcher (Delivery vs Dine-In Table QR) */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-amber-500/20 pb-4">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-amber-400">
             <UtensilsCrossed className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">Savoria Gourmet Dining Engine</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-300 border border-amber-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" /> POS & Kitchen Live
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300 border border-amber-500/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" /> POS &amp; Kitchen Live
               </span>
             </div>
-            <p className="text-xs text-slate-400">Instant digital ordering, table QR & automated kitchen tickets</p>
+            <p className="text-xs text-zinc-400">Instant digital ordering, table QR &amp; automated kitchen tickets</p>
           </div>
         </div>
 
         {/* Fulfillment Mode Toggle */}
-        <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-900/90 p-1">
+        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
           <button
             type="button"
             onClick={() => setOrderType("delivery")}
-            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
               orderType === "delivery"
-                ? "bg-amber-500 text-slate-950 shadow-sm shadow-amber-500/20"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-white text-zinc-950 shadow-sm"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
             <Bike className="h-3.5 w-3.5" />
@@ -187,10 +187,10 @@ export function RestaurantMockup({
           <button
             type="button"
             onClick={() => setOrderType("dinein")}
-            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
               orderType === "dinein"
-                ? "bg-amber-500 text-slate-950 shadow-sm shadow-amber-500/20"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-white text-zinc-950 shadow-sm"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
             <QrCode className="h-3.5 w-3.5" />
@@ -209,10 +209,10 @@ export function RestaurantMockup({
                 key={cat}
                 type="button"
                 onClick={() => setActiveCategory(cat)}
-                className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-all border ${
+                className={`rounded-xl px-3 py-1.5 text-xs font-medium transition-all border ${
                   activeCategory === cat
-                    ? "border-amber-400 bg-amber-500/20 text-amber-300"
-                    : "border-slate-800 bg-slate-900 text-slate-400 hover:text-slate-200"
+                    ? "border-white/30 bg-white/[0.08] text-white"
+                    : "border-white/[0.08] bg-[#090a0f] text-zinc-400 hover:text-white"
                 }`}
               >
                 {cat}
@@ -370,8 +370,8 @@ export function RestaurantMockup({
               disabled={isPlacingOrder || cart.length === 0}
               className={`w-full mt-4 flex items-center justify-center gap-2 rounded-xl py-2.5 font-bold text-xs transition-all ${
                 isPlacingOrder
-                  ? "bg-amber-500 text-slate-950 animate-pulse"
-                  : "bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 shadow-md shadow-amber-500/20"
+                  ? "bg-amber-400 text-zinc-950 animate-pulse"
+                  : "bg-white hover:bg-zinc-200 text-zinc-950 shadow-sm active:scale-[0.99]"
               }`}
             >
               {isPlacingOrder ? (

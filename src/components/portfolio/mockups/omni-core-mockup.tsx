@@ -39,26 +39,26 @@ export function OmniCoreMockup({
   ];
 
   return (
-    <div className="relative w-full rounded-2xl border border-indigo-500/30 bg-slate-950/90 p-4 sm:p-6 text-slate-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Top Bar with Role Switcher & System Telemetry */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-indigo-500/20 pb-4">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
             <Building2 className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">OmniCore Enterprise Suite</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] font-semibold text-indigo-300 border border-indigo-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" /> Cluster Healthy
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-zinc-300 border border-white/10">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Cluster Healthy
               </span>
             </div>
-            <p className="text-xs text-slate-400">Multi-tenant distributed state & telemetry hub</p>
+            <p className="text-xs text-zinc-400">Multi-tenant distributed state &amp; telemetry hub</p>
           </div>
         </div>
 
         {/* RBAC Role Switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-900/90 p-1">
+        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
           {(["Super Admin", "Branch Lead", "Auditor"] as const).map((role) => (
             <button
               key={role}
@@ -66,8 +66,8 @@ export function OmniCoreMockup({
               onClick={() => setActiveRole(role)}
               className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
                 activeRole === role
-                  ? "bg-indigo-600 text-white shadow-sm shadow-indigo-500/20"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-white text-zinc-950 shadow-sm"
+                  : "text-zinc-400 hover:text-white"
               }`}
             >
               {role}

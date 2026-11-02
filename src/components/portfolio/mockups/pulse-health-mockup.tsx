@@ -68,26 +68,26 @@ export function PulseHealthMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-emerald-500/30 bg-slate-950/90 p-4 sm:p-6 text-slate-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Header */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/20 pb-4">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-emerald-400">
             <HeartPulse className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">PulseHealth Mobile Suite</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold text-emerald-300 border border-emerald-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> iOS & Android
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300 border border-emerald-500/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> iOS &amp; Android
               </span>
             </div>
-            <p className="text-xs text-slate-400">Cross-platform clinical telemedicine & biometric sync</p>
+            <p className="text-xs text-zinc-400">Cross-platform clinical telemedicine &amp; biometric sync</p>
           </div>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-900/90 p-1">
+        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
           {[
             { id: "consult", label: "Consult", icon: UserCheck },
             { id: "schedule", label: "Booking", icon: Calendar },
@@ -102,8 +102,8 @@ export function PulseHealthMockup({
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
                   activeTab === tab.id
-                    ? "bg-emerald-600 text-slate-950 font-bold shadow-sm shadow-emerald-500/20"
-                    : "text-slate-400 hover:text-slate-200"
+                    ? "bg-white text-zinc-950 shadow-sm"
+                    : "text-zinc-400 hover:text-white"
                 }`}
               >
                 <Icon className="h-3 w-3" />
@@ -115,7 +115,7 @@ export function PulseHealthMockup({
       </div>
 
       {/* Interactive Mobile Device Frame */}
-      <div className="mx-auto max-w-sm rounded-[36px] border-4 border-slate-800 bg-slate-950 p-3 shadow-2xl shadow-emerald-500/10">
+      <div className="mx-auto max-w-sm rounded-[36px] border-4 border-zinc-800 bg-[#08090d] p-3 shadow-2xl">
         {/* Dynamic Island / Bezel Top */}
         <div className="mb-3 flex items-center justify-between px-3 text-[10px] font-mono text-slate-400">
           <span>09:41</span>
