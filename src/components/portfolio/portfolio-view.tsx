@@ -29,6 +29,8 @@ import { BrandMark, BrandLogo } from "@/components/brand-logo";
 import { InteractiveCanvasBg } from "./interactive-canvas-bg";
 import { SHOWCASE_TEMPLATES, TemplateData } from "./templates-data";
 import { NexusPayMockup } from "./mockups/nexus-pay-mockup";
+import { RestaurantMockup } from "./mockups/restaurant-mockup";
+import { WalletMobileMockup } from "./mockups/wallet-mobile-mockup";
 import { OmniCoreMockup } from "./mockups/omni-core-mockup";
 import { AuraLuxeMockup } from "./mockups/aura-luxe-mockup";
 import { PulseHealthMockup } from "./mockups/pulse-health-mockup";
@@ -46,6 +48,8 @@ export function PortfolioView() {
   // Device view switcher state per template
   const [deviceViews, setDeviceViews] = useState<Record<string, "desktop" | "tablet" | "mobile">>({
     "nexus-pay": "desktop",
+    "savoria-restaurant": "desktop",
+    "apex-wallet": "mobile",
     "omni-core": "desktop",
     "aura-luxe": "desktop",
     "pulse-health": "mobile",
@@ -168,7 +172,7 @@ export function PortfolioView() {
               href="#showcase"
               className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 px-7 py-4 font-black text-sm text-slate-950 shadow-xl shadow-cyan-500/20 transition-all hover:-translate-y-0.5 active:scale-95"
             >
-              <span>Explore 4 Showcase Templates</span>
+              <span>Explore 6 Showcase Templates</span>
               <ArrowRight className="h-4 w-4" />
             </a>
 
@@ -302,7 +306,7 @@ export function PortfolioView() {
               <span>Interactive Production-Grade Showcases</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-              Four High-Caliber Architecture Templates
+              Six High-Caliber Architecture Templates
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-slate-400">
               Test-drive actual interactive components engineered by CrazyTech. Switch device framing, trigger simulated API dispatches, inspect metrics, and clone any template for your venture.
@@ -310,22 +314,30 @@ export function PortfolioView() {
 
             {/* Category Filter Pills */}
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-              {(["All", "FinTech & Telecom", "Enterprise SaaS", "E-Commerce", "Mobile Apps"] as const).map(
-                (cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
-                      selectedCategory === cat
-                        ? "bg-cyan-500 text-slate-950 font-black shadow-lg shadow-cyan-500/20"
-                        : "border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:border-slate-700"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                )
-              )}
+              {(
+                [
+                  "All",
+                  "FinTech & Telecom",
+                  "Restaurants & Food",
+                  "Mobile Wallets",
+                  "Enterprise SaaS",
+                  "E-Commerce",
+                  "Mobile Apps",
+                ] as const
+              ).map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`rounded-xl px-4 py-2 text-xs font-bold transition-all ${
+                    selectedCategory === cat
+                      ? "bg-cyan-500 text-slate-950 font-black shadow-lg shadow-cyan-500/20"
+                      : "border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:border-slate-700"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -436,10 +448,12 @@ export function PortfolioView() {
 
                       {/* Live Embedded Prototype Component */}
                       <div className="rounded-b-2xl border-b border-x border-slate-800 bg-slate-950/60 p-2 sm:p-4">
-                        {template.previewType === "fintech" && <NexusPayMockup />}
-                        {template.previewType === "erp" && <OmniCoreMockup />}
-                        {template.previewType === "ecommerce" && <AuraLuxeMockup />}
-                        {template.previewType === "health" && <PulseHealthMockup />}
+                        {template.previewType === "fintech" && <NexusPayMockup device={currentDevice} />}
+                        {template.previewType === "restaurant" && <RestaurantMockup device={currentDevice} />}
+                        {template.previewType === "wallet" && <WalletMobileMockup device={currentDevice} />}
+                        {template.previewType === "erp" && <OmniCoreMockup device={currentDevice} />}
+                        {template.previewType === "ecommerce" && <AuraLuxeMockup device={currentDevice} />}
+                        {template.previewType === "health" && <PulseHealthMockup device={currentDevice} />}
                       </div>
                     </div>
                   </div>

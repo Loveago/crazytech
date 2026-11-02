@@ -17,6 +17,8 @@ import {
   Sparkles,
   CheckCircle2,
   Globe2,
+  UtensilsCrossed,
+  Wallet,
 } from "lucide-react";
 
 export interface TemplateData {
@@ -24,7 +26,13 @@ export interface TemplateData {
   number: string;
   title: string;
   badge: string;
-  category: "FinTech & Telecom" | "Enterprise SaaS" | "E-Commerce" | "Mobile Apps";
+  category:
+    | "FinTech & Telecom"
+    | "Enterprise SaaS"
+    | "E-Commerce"
+    | "Mobile Apps"
+    | "Restaurants & Food"
+    | "Mobile Wallets";
   tagline: string;
   description: string;
   longDescription: string;
@@ -38,7 +46,7 @@ export interface TemplateData {
   keyFeatures: string[];
   architecturePoints: { title: string; desc: string }[];
   lighthouseScores: { performance: number; accessibility: number; bestPractices: number; seo: number };
-  previewType: "fintech" | "erp" | "ecommerce" | "health";
+  previewType: "fintech" | "erp" | "ecommerce" | "health" | "restaurant" | "wallet";
 }
 
 export const SHOWCASE_TEMPLATES: TemplateData[] = [
@@ -104,8 +112,128 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     previewType: "fintech",
   },
   {
-    id: "omni-core",
+    id: "savoria-restaurant",
     number: "02",
+    title: "Savoria Gourmet Dining & Culinary Commerce",
+    badge: "Restaurant, POS & Cloud Kitchen",
+    category: "Restaurants & Food",
+    tagline: "Omnichannel Restaurant Shopping, Table QR Orders & Real-Time Kitchen Telemetry",
+    description:
+      "A culinary digital commerce platform connecting diners to instant table QR menus, real-time kitchen POS printing, delivery logistics, and MoMo/Card instant checkout.",
+    longDescription:
+      "Engineered for high-end restaurants, multi-location bistros, and ghost kitchens. Savoria streamlines customer ordering with interactive dish customizers (portion sizing, heat ratings, side add-ons), integrated tip distribution, and real-time live kitchen display system (KDS) progression telemetry.",
+    accentColor: "#f59e0b",
+    glowColor: "rgba(245, 158, 11, 0.35)",
+    badgeBg: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+    badgeBorder: "border-amber-500/40",
+    gradientBg: "from-amber-500/20 via-orange-500/10 to-transparent",
+    stats: [
+      { label: "Table Turnaround", value: "+38%", hint: "Faster table ordering & billing" },
+      { label: "Kitchen Sync", value: "<1.2s", hint: "From click to kitchen printer ticket" },
+      { label: "Average Check Size", value: "+26%", hint: "Via intelligent upsells & add-ons" },
+      { label: "POS Reliability", value: "99.98%", hint: "Offline fallback resilience" },
+    ],
+    techStack: [
+      "Next.js 16",
+      "React 19",
+      "WebSocket KDS",
+      "Paystack & MoMo",
+      "PostgreSQL",
+      "ESC/POS Thermal Printing",
+      "Tailwind CSS v4",
+    ],
+    keyFeatures: [
+      "Instant dual fulfillment: Delivery GPS tracking or Dine-in Table QR contactless orders",
+      "Interactive dish customizer with real-time portion sizing, spice scale, and gourmet add-ons",
+      "Automated Kitchen Display System (KDS) with live 4-stage cooking progression updates",
+      "Integrated staff gratuity / tip calculator and split-bill payment capabilities",
+      "Instant automated thermal receipt printing and digital SMS/WhatsApp order confirmations",
+    ],
+    architecturePoints: [
+      {
+        title: "Sub-Second WebSocket POS Link",
+        desc: "Orders placed by guests trigger kitchen display tickets in under 500ms over encrypted WebSockets.",
+      },
+      {
+        title: "Dynamic Table QR Context",
+        desc: "QR codes encode table identifiers, allowing diners to re-order and settle bills without waiting for waitstaff.",
+      },
+      {
+        title: "Multi-Zone Kitchen Routing",
+        desc: "Automatically splits beverage items to the bar and hot dishes to the chef grill stations.",
+      },
+    ],
+    lighthouseScores: {
+      performance: 100,
+      accessibility: 100,
+      bestPractices: 100,
+      seo: 99,
+    },
+    previewType: "restaurant",
+  },
+  {
+    id: "apex-wallet",
+    number: "03",
+    title: "ApexPay Neo-Wallet & Virtual Card Suite",
+    badge: "Neo-Banking & Mobile Wallets",
+    category: "Mobile Wallets",
+    tagline: "Cross-Platform Digital Banking, 3D Virtual Cards & Instant P2P Settlement",
+    description:
+      "A next-generation mobile fintech neo-wallet featuring 3D interactive virtual debit cards, biometric FaceID authorization, multi-currency wallets, and instant zero-fee P2P transfers.",
+    longDescription:
+      "Crafted to provide a banking experience rivaling modern global neo-banks like Revolut and Cash App. Users can spin up virtual Visa/Mastercard cards on demand, freeze cards with a tap, switch between GHS, USD, and GBP with real-time FX conversions, and execute sub-second P2P transfers to any mobile money wallet.",
+    accentColor: "#a855f7",
+    glowColor: "rgba(168, 85, 247, 0.35)",
+    badgeBg: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+    badgeBorder: "border-purple-500/40",
+    gradientBg: "from-purple-500/20 via-pink-500/10 to-transparent",
+    stats: [
+      { label: "P2P Settlement", value: "<1.0s", hint: "Instant wallet-to-wallet transfer" },
+      { label: "Card Generation", value: "Instant", hint: "Dynamic 3D virtual Visa card" },
+      { label: "Fraud Protection", value: "Bank-Grade", hint: "Dynamic CVV & Biometric FaceID" },
+      { label: "User Retention", value: "94.2%", hint: "High recurring financial activity" },
+    ],
+    techStack: [
+      "React Native",
+      "Flutter Bridge",
+      "Node.js Microservices",
+      "PCI-DSS Virtual Cards",
+      "Biometric Touch/FaceID",
+      "PostgreSQL",
+      "Redis Ledger",
+    ],
+    keyFeatures: [
+      "Interactive 3D virtual debit card with live flip to reveal CVV and 1-tap card freeze protection",
+      "Multi-currency financial ledger supporting GHS, USD, and GBP with automated rate locks",
+      "Instant P2P send to phone contacts with simulated biometric FaceID confirmation",
+      "Seamless Mobile Money (MTN, Telecel, AT) top-ups and bank wire integrations",
+      "Real-time expense categorization and visual analytics for personal spending",
+    ],
+    architecturePoints: [
+      {
+        title: "Atomic Dual-Entry Ledger",
+        desc: "Financial transfers execute within double-entry PostgreSQL transactions guaranteeing zero balance discrepancy.",
+      },
+      {
+        title: "Dynamic Tokenized CVV",
+        desc: "Card security codes regenerate on a timed cryptographic rotation to prevent replay attacks.",
+      },
+      {
+        title: "Encrypted Hardware KeyStore",
+        desc: "Biometric authentication hooks into native iOS Secure Enclave and Android Hardware KeyMaster.",
+      },
+    ],
+    lighthouseScores: {
+      performance: 99,
+      accessibility: 100,
+      bestPractices: 100,
+      seo: 98,
+    },
+    previewType: "wallet",
+  },
+  {
+    id: "omni-core",
+    number: "04",
     title: "OmniCore Enterprise Cloud ERP & SaaS",
     badge: "Enterprise Operations & SaaS",
     category: "Enterprise SaaS",
@@ -166,7 +294,7 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
   },
   {
     id: "aura-luxe",
-    number: "03",
+    number: "05",
     title: "Aura Luxe Next-Gen Headless E-Commerce",
     badge: "Modern Web Platform & D2C",
     category: "E-Commerce",
@@ -227,7 +355,7 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
   },
   {
     id: "pulse-health",
-    number: "04",
+    number: "06",
     title: "PulseHealth AI Telemedicine & Mobile Suite",
     badge: "Cross-Platform Mobile App (iOS / Android)",
     category: "Mobile Apps",
@@ -237,7 +365,7 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     longDescription:
       "Engineered to transform modern healthcare delivery across mobile devices. Patients can filter verified medical specialists by specialty, schedule real-time consultation slots with immediate SMS/WhatsApp reminders, view live biometric telemetry, and present tamper-proof cryptographic QR prescriptions at local pharmacies.",
     accentColor: "#10b981",
-    glowColor: "rgba(16, 185, 129, 0.35)",
+    glowColor: "rgba(168, 85, 247, 0.35)",
     badgeBg: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
     badgeBorder: "border-emerald-500/40",
     gradientBg: "from-emerald-500/20 via-teal-500/10 to-transparent",

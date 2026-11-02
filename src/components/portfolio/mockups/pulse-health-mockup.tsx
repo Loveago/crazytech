@@ -17,7 +17,13 @@ import {
   Battery,
 } from "lucide-react";
 
-export function PulseHealthMockup({ isCompact = false }: { isCompact?: boolean }) {
+export function PulseHealthMockup({
+  device = "mobile",
+  isCompact = false,
+}: {
+  device?: "desktop" | "tablet" | "mobile";
+  isCompact?: boolean;
+}) {
   const [activeTab, setActiveTab] = useState<"consult" | "schedule" | "vitals" | "rx">("consult");
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("Cardiology");
   const [selectedDate, setSelectedDate] = useState<string>("Today, 3:30 PM");

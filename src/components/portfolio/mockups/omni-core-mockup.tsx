@@ -18,10 +18,17 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-export function OmniCoreMockup({ isCompact = false }: { isCompact?: boolean }) {
+export function OmniCoreMockup({
+  device = "desktop",
+  isCompact = false,
+}: {
+  device?: "desktop" | "tablet" | "mobile";
+  isCompact?: boolean;
+}) {
   const [activeRole, setActiveRole] = useState<"Super Admin" | "Branch Lead" | "Auditor">("Super Admin");
   const [pipelineStep, setPipelineStep] = useState<number>(3);
   const [timeframe, setTimeframe] = useState<"24h" | "7d" | "30d">("7d");
+  const isMobileFrame = device === "mobile";
 
   const steps = [
     { id: 1, name: "Intake", count: 18, status: "completed" },
@@ -155,9 +162,9 @@ export function OmniCoreMockup({ isCompact = false }: { isCompact?: boolean }) {
       </div>
 
       {/* Visual Chart Bars & Live Audit Log */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className={`grid grid-cols-1 ${isMobileFrame ? "" : "md:grid-cols-12"} gap-4`}>
         {/* Weekly Velocity bars */}
-        <div className="md:col-span-7 rounded-xl border border-slate-800/80 bg-slate-900/60 p-4">
+        <div className={`${isMobileFrame ? "w-full" : "md:col-span-7"} rounded-xl border border-slate-800/80 bg-slate-900/60 p-4`}>
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Weekly Resource Allocation
@@ -204,7 +211,7 @@ export function OmniCoreMockup({ isCompact = false }: { isCompact?: boolean }) {
         </div>
 
         {/* Live Immutable Audit Stream */}
-        <div className="md:col-span-5 rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 space-y-2.5">
+        <div className={`${isMobileFrame ? "w-full" : "md:col-span-5"} rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 space-y-2.5`}>
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5 text-indigo-400" /> Immutable Event Audit

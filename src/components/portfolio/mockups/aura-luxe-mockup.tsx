@@ -24,7 +24,13 @@ interface Variant {
   sku: string;
 }
 
-export function AuraLuxeMockup({ isCompact = false }: { isCompact?: boolean }) {
+export function AuraLuxeMockup({
+  device = "desktop",
+  isCompact = false,
+}: {
+  device?: "desktop" | "tablet" | "mobile";
+  isCompact?: boolean;
+}) {
   const variants: Variant[] = [
     {
       name: "Void Obsidian",
@@ -123,9 +129,9 @@ export function AuraLuxeMockup({ isCompact = false }: { isCompact?: boolean }) {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+      <div className={`grid grid-cols-1 ${device === "mobile" ? "" : "lg:grid-cols-12"} gap-6 items-center`}>
         {/* Product Visual Showcase with Ambient Lighting */}
-        <div className="lg:col-span-6 relative flex items-center justify-center">
+        <div className={`${device === "mobile" ? "w-full" : "lg:col-span-6"} relative flex items-center justify-center`}>
           <div
             className="absolute inset-0 rounded-3xl blur-3xl opacity-30 transition-all duration-700 pointer-events-none"
             style={{ backgroundColor: activeVariant.colorHex }}
@@ -182,7 +188,7 @@ export function AuraLuxeMockup({ isCompact = false }: { isCompact?: boolean }) {
         </div>
 
         {/* Product Details & Fast Cart Trigger */}
-        <div className="lg:col-span-6 space-y-4">
+        <div className={`${device === "mobile" ? "w-full" : "lg:col-span-6"} space-y-4`}>
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-[10px] font-bold uppercase tracking-wider text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">

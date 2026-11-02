@@ -27,13 +27,20 @@ interface Transaction {
   status: "Delivered" | "Processing";
 }
 
-export function NexusPayMockup({ isCompact = false }: { isCompact?: boolean }) {
+export function NexusPayMockup({
+  device = "desktop",
+  isCompact = false,
+}: {
+  device?: "desktop" | "tablet" | "mobile";
+  isCompact?: boolean;
+}) {
   const [balance, setBalance] = useState<number>(14850.0);
   const [network, setNetwork] = useState<"MTN" | "Telecel" | "AT">("MTN");
   const [selectedSize, setSelectedSize] = useState<string>("10GB");
   const [recipient, setRecipient] = useState<string>("054 892 1042");
   const [isDispatching, setIsDispatching] = useState<boolean>(false);
   const [dispatchSuccess, setDispatchSuccess] = useState<boolean>(false);
+  const isMobileFrame = device === "mobile";
 
   const [transactions, setTransactions] = useState<Transaction[]>([
     {
@@ -136,9 +143,9 @@ export function NexusPayMockup({ isCompact = false }: { isCompact?: boolean }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className={`grid grid-cols-1 ${isMobileFrame ? "" : "lg:grid-cols-12"} gap-5`}>
         {/* Left Interactive Dispatch Column */}
-        <div className="lg:col-span-7 space-y-4">
+        <div className={`${isMobileFrame ? "w-full" : "lg:col-span-7"} space-y-4`}>
           <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4">
             <div className="flex items-center justify-between mb-3">
               <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
@@ -246,7 +253,7 @@ export function NexusPayMockup({ isCompact = false }: { isCompact?: boolean }) {
         </div>
 
         {/* Right Live Stream / Metrics Column */}
-        <div className="lg:col-span-5 space-y-4">
+        <div className={`${isMobileFrame ? "w-full" : "lg:col-span-5"} space-y-4`}>
           <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4">
             <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">

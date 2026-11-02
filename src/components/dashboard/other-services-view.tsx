@@ -283,7 +283,7 @@ export function OtherServicesView() {
               className="inline-flex items-center gap-2 rounded-2xl border border-cyan-400/40 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 px-4 py-3 text-xs sm:text-sm font-black backdrop-blur-md transition-all active:scale-95"
             >
               <Sparkles className="h-4 w-4 text-cyan-400" />
-              <span>Explore 4 Showcase Templates</span>
+              <span>Explore 6 Showcase Templates</span>
               <ExternalLink className="h-3.5 w-3.5" />
             </Link>
 
