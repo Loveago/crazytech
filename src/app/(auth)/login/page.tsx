@@ -245,7 +245,7 @@ export default function LoginPage() {
                 href="/register"
                 className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
               >
-                Sign up with invite code
+                Sign up
               </Link>
             </div>
             <div>
