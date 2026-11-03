@@ -121,6 +121,17 @@ export async function POST(
       }),
     });
 
+    // If order was fulfilled via Tskconnect, forward dispute to provider
+    if (order.providerReference?.startsWith("TSKCONNECT:")) {
+      const { forwardNotReceivedToProvider } = await import("@/lib/provider-apis/router");
+      forwardNotReceivedToProvider(order.id, {
+        reason,
+        note: message || undefined,
+      }).catch((err) => {
+        console.warn("[StoreTrackReport] Failed to forward dispute to provider:", err);
+      });
+    }
+
     return NextResponse.json({
       success: true,
       report: {

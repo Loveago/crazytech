@@ -43,3 +43,43 @@ export interface NumberVerificationResult {
   invalidNumbers: string[];
   raw?: unknown;
 }
+
+export type TskconnectDisputeStatus =
+  | "pending_resolution"
+  | "confirmed_sent"
+  | "resolved"
+  | "refunded";
+
+export interface TskconnectNotReceivedParams {
+  reason?: string;
+  note?: string;
+  message?: string;
+  entryNumber?: string;
+  entryId?: string | number;
+}
+
+export interface TskconnectEvidenceData {
+  type?: string;
+  url?: string;
+  proofImage?: string;
+  carrierReference?: string;
+  note?: string;
+  deliveredAt?: string;
+  uploadedAt?: string;
+  [key: string]: any;
+}
+
+export interface TskconnectDisputeData {
+  reportId?: string;
+  orderId?: string;
+  reference?: string | null;
+  status: TskconnectDisputeStatus | string;
+  reason?: string | null;
+  message?: string | null;
+  evidence?: string | TskconnectEvidenceData | null;
+  carrierReference?: string | null;
+  adminResponse?: string | null;
+  createdAt?: string;
+  resolvedAt?: string | null;
+  [key: string]: any;
+}

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/auth";
-import { syncTskconnectOrder, syncBigwindataOrder, syncGhconnectOrder, syncBigwinTelecelOrder } from "@/lib/provider-apis/router";
+import { syncTskconnectOrder, syncTskconnectDispute, syncBigwindataOrder, syncGhconnectOrder, syncBigwinTelecelOrder } from "@/lib/provider-apis/router";
 import { handleRouteError } from "@/lib/api-helpers";
 
 export async function POST(request: NextRequest) {
@@ -48,10 +48,32 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Sync active Not Received delivery reports with Tskconnect
+    const activeReports = await prisma.deliveryReport.findMany({
+      where: {
+        status: { in: ["UNDER_REVIEW", "OPEN", "INVESTIGATING"] },
+        order: { providerReference: { startsWith: "TSKCONNECT:" } },
+      },
+      include: {
+        order: { select: { id: true, providerReference: true, externalReference: true } },
+      },
+      take: 20,
+    });
+
+    let reportsSynced = 0;
+    for (const report of activeReports) {
+      if (report.order) {
+        const syncDisputeRes = await syncTskconnectDispute(report.order, report.id);
+        if (syncDisputeRes.updated) reportsSynced++;
+      }
+    }
+
     return NextResponse.json({
       success: true,
       checked,
       updated,
+      reportsChecked: activeReports.length,
+      reportsSynced,
       results,
     });
   } catch (err) {

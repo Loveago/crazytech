@@ -5,8 +5,9 @@ import { deliveryReportActionSchema } from "@/lib/validation";
 import { changeOrderStatus } from "@/lib/orders";
 import { recordAudit } from "@/lib/audit";
 import { handleRouteError, apiError } from "@/lib/api-helpers";
-import { deliveryReportCode } from "@/lib/types";
+import { deliveryReportCode, toExternalDisputeStatus } from "@/lib/types";
 import { parseOrderCode } from "@/lib/utils";
+import { dispatchWebhookEvent } from "@/lib/webhooks";
 
 /** Timeline event types mirrored by the report UI (§13). */
 const EVENT_FOR_ACTION: Record<string, string> = {
@@ -142,7 +143,18 @@ export async function PATCH(request: NextRequest) {
 
     const report = await prisma.deliveryReport.findUnique({
       where: { id: input.reportId },
-      include: { order: { select: { id: true, status: true } } },
+      include: {
+        order: {
+          select: {
+            id: true,
+            status: true,
+            phoneNumber: true,
+            network: true,
+            externalReference: true,
+            userId: true,
+          },
+        },
+      },
     });
     if (!report) return apiError(404, "Report not found");
 
@@ -277,6 +289,34 @@ export async function PATCH(request: NextRequest) {
         responseAdded: input.action === "ADD_RESPONSE" || undefined,
       }),
     });
+
+    // Dispatch webhook notifications if dispute status changed
+    const webhookEvent =
+      updated.status === "CONFIRM_SENT" || updated.status === "DELIVERED"
+        ? "report.not_received.confirmed_sent"
+        : updated.status === "RESOLVED" || updated.status === "REFUNDED"
+        ? "report.not_received.resolved"
+        : null;
+
+    if (webhookEvent && report.order?.userId) {
+      dispatchWebhookEvent(
+        report.order.userId,
+        webhookEvent,
+        {
+          reportId: deliveryReportCode(updated.seq),
+          orderId: `API-${report.orderId}`,
+          reference: report.order.externalReference || null,
+          recipient: report.order.phoneNumber,
+          network: report.order.network,
+          status: toExternalDisputeStatus(updated.status),
+          internalStatus: updated.status,
+          adminResponse: updated.adminResponse || null,
+          evidence: updated.proofImage ? `/api/reports/not-received/${updated.id}/proof` : null,
+          resolvedAt: updated.resolvedAt?.toISOString() || null,
+        },
+        report.orderId
+      ).catch(() => {});
+    }
 
     return NextResponse.json({ ok: true, report: updated, orderUpdated });
   } catch (err) {

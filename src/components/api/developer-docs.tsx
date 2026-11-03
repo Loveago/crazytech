@@ -650,6 +650,44 @@ function verifyCrazyTechWebhook(rawBody, signatureHeader, timestampHeader, secre
                 <td className="py-2.5 font-sans text-slate-600 dark:text-slate-400">Paginated order history with search and filters</td>
               </tr>
               <tr>
+                <td className="py-2.5 font-bold text-blue-600">POST</td>
+                <td className="py-2.5 font-semibold text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-2">
+                    <span>/v1/orders/:id/not-received</span>
+                    {onOpenPlayground && (
+                      <button
+                        type="button"
+                        onClick={() => onOpenPlayground("post-not-received")}
+                        className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 transition hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:hover:bg-blue-900/60"
+                      >
+                        Playground ↗
+                      </button>
+                    )}
+                  </div>
+                </td>
+                <td className="py-2.5 text-slate-500">orders:create</td>
+                <td className="py-2.5 font-sans text-slate-600 dark:text-slate-400">Submit a customer 'Not Received' dispute report within 24h of delivery</td>
+              </tr>
+              <tr>
+                <td className="py-2.5 font-bold text-emerald-600">GET</td>
+                <td className="py-2.5 font-semibold text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-2">
+                    <span>/v1/orders/:id/not-received</span>
+                    {onOpenPlayground && (
+                      <button
+                        type="button"
+                        onClick={() => onOpenPlayground("get-not-received")}
+                        className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 transition hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 dark:hover:bg-blue-900/60"
+                      >
+                        Playground ↗
+                      </button>
+                    )}
+                  </div>
+                </td>
+                <td className="py-2.5 text-slate-500">orders:read</td>
+                <td className="py-2.5 font-sans text-slate-600 dark:text-slate-400">Retrieve dispute status (pending_resolution, confirmed_sent, resolved, refunded) & carrier evidence</td>
+              </tr>
+              <tr>
                 <td className="py-2.5 font-bold text-emerald-600">GET</td>
                 <td className="py-2.5 font-semibold text-slate-800 dark:text-slate-200">/v1/balance</td>
                 <td className="py-2.5 text-slate-500">balance:read</td>
@@ -819,6 +857,87 @@ function verifyCrazyTechWebhook(rawBody, signatureHeader, timestampHeader, secre
   "requestId": "req_a1b2c3d4"
 }`}
           </pre>
+        </div>
+      </div>
+
+      {/* Dispute & Delivery Investigation (Not Received) */}
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+          <div>
+            <h3 className="text-base font-bold">Dispute & Delivery Investigation (Not Received)</h3>
+            <p className="mt-1 text-xs text-slate-500">
+              Submit dispute reports within 24 hours of delivery and retrieve carrier fulfillment evidence.
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1.5 self-start rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-700 dark:border-sky-500/20 dark:bg-sky-500/10 dark:text-sky-400">
+            24h Window Enforcement
+          </span>
+        </div>
+
+        <div className="mt-4 space-y-4">
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Standard Dispute Statuses</h4>
+            <div className="mt-2 grid grid-cols-1 gap-2.5 sm:grid-cols-4 text-xs">
+              <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-3 dark:border-amber-500/20 dark:bg-amber-500/5">
+                <span className="font-mono font-bold text-amber-600 dark:text-amber-400">pending_resolution</span>
+                <p className="mt-1 text-slate-500 dark:text-slate-400">Dispute is open and actively undergoing carrier investigation.</p>
+              </div>
+              <div className="rounded-xl border border-sky-200 bg-sky-50/50 p-3 dark:border-sky-500/20 dark:bg-sky-500/5">
+                <span className="font-mono font-bold text-sky-600 dark:text-sky-400">confirmed_sent</span>
+                <p className="mt-1 text-slate-500 dark:text-slate-400">Carrier reconfirmed delivery with transmission proof or re-sent.</p>
+              </div>
+              <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-3 dark:border-emerald-500/20 dark:bg-emerald-500/5">
+                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">resolved</span>
+                <p className="mt-1 text-slate-500 dark:text-slate-400">Dispute successfully resolved with carrier confirmation.</p>
+              </div>
+              <div className="rounded-xl border border-purple-200 bg-purple-50/50 p-3 dark:border-purple-500/20 dark:bg-purple-500/5">
+                <span className="font-mono font-bold text-purple-600 dark:text-purple-400">refunded</span>
+                <p className="mt-1 text-slate-500 dark:text-slate-400">Dispute confirmed undelivered; funds automatically credited.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Submit Dispute (POST /v1/orders/:id/not-received)</h4>
+            <pre className="mt-2 overflow-x-auto rounded-xl bg-slate-950 p-4 font-mono text-xs text-slate-200">
+{`curl -X POST "${ordersEndpoint}/API-839201/not-received" \\
+  -H "Authorization: Bearer ct_live_xxxxxxxxxxxxxxxxxxxxxxxx" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "reason": "Data not received",
+    "message": "Recipient reports no data bundle credited after 2 hours"
+  }'`}
+            </pre>
+          </div>
+
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Query Dispute & Evidence (GET /v1/orders/:id/not-received)</h4>
+            <pre className="mt-2 overflow-x-auto rounded-xl bg-slate-950 p-4 font-mono text-xs text-slate-200">
+{`{
+  "success": true,
+  "data": {
+    "reportId": "NR-00185",
+    "orderId": "API-839201",
+    "reference": "ORD-SHOP-88190",
+    "recipient": "0241234567",
+    "network": "MTN",
+    "status": "confirmed_sent",
+    "reason": "Data not received",
+    "adminResponse": "Carrier reconfirmed bundle credit delivered to subscriber SIM",
+    "evidence": {
+      "url": "https://crazytech.net/api/reports/not-received/rep_abc123/proof",
+      "mimeType": "image/png",
+      "uploadedAt": "2026-10-24T10:15:00.000Z",
+      "note": "Carrier delivery confirmation slip attached"
+    },
+    "evidenceUrl": "https://crazytech.net/api/reports/not-received/rep_abc123/proof",
+    "createdAt": "2026-10-24T09:30:00.000Z",
+    "resolvedAt": "2026-10-24T10:15:00.000Z"
+  },
+  "requestId": "req_nr_88201"
+}`}
+            </pre>
+          </div>
         </div>
       </div>
 

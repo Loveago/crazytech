@@ -74,6 +74,39 @@ export const EXPORT_BATCH_STATUSES: ExportBatchStatus[] = [
 
 export type DeliveryReportStatus = "OPEN" | "UNDER_REVIEW" | "INVESTIGATING" | "DELIVERED" | "RESOLVED" | "REFUNDED" | "CONFIRM_SENT" | "REJECTED";
 
+/** Standard dispute statuses specified by TSKCONNECT Developer API specification (§5). */
+export type ExternalDisputeStatus = "pending_resolution" | "confirmed_sent" | "resolved" | "refunded";
+
+/**
+ * Maps internal DeliveryReport status to the standardized Developer API dispute status:
+ * - OPEN / UNDER_REVIEW / INVESTIGATING -> "pending_resolution"
+ * - CONFIRM_SENT / DELIVERED           -> "confirmed_sent"
+ * - RESOLVED / REJECTED                -> "resolved"
+ * - REFUNDED                           -> "refunded"
+ */
+export function toExternalDisputeStatus(status: DeliveryReportStatus | string): ExternalDisputeStatus {
+  const upper = (status || "").trim().toUpperCase();
+  if (upper === "CONFIRM_SENT" || upper === "DELIVERED") return "confirmed_sent";
+  if (upper === "REFUNDED") return "refunded";
+  if (upper === "RESOLVED" || upper === "REJECTED") return "resolved";
+  return "pending_resolution";
+}
+
+/**
+ * Maps external dispute status to the internal DeliveryReport status:
+ * - "pending_resolution" -> "UNDER_REVIEW"
+ * - "confirmed_sent"     -> "CONFIRM_SENT"
+ * - "resolved"           -> "RESOLVED"
+ * - "refunded"           -> "REFUNDED"
+ */
+export function fromExternalDisputeStatus(status: string): DeliveryReportStatus {
+  const lower = (status || "").trim().toLowerCase();
+  if (lower === "confirmed_sent" || lower === "delivered") return "CONFIRM_SENT";
+  if (lower === "refunded") return "REFUNDED";
+  if (lower === "resolved") return "RESOLVED";
+  return "UNDER_REVIEW";
+}
+
 export const DELIVERY_REPORT_STATUSES: DeliveryReportStatus[] = [
   "OPEN",
   "UNDER_REVIEW",

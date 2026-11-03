@@ -1,6 +1,21 @@
 import crypto from "crypto";
-import type { TskconnectConfig, TskconnectPackage, NumberVerificationResult } from "./types";
+import type {
+  TskconnectConfig,
+  TskconnectPackage,
+  NumberVerificationResult,
+  TskconnectDisputeStatus,
+  TskconnectNotReceivedParams,
+  TskconnectDisputeData,
+  TskconnectEvidenceData,
+} from "./types";
 import { normalizeGhanaPhoneNumber } from "@/lib/phone-utils";
+
+export type {
+  TskconnectDisputeStatus,
+  TskconnectNotReceivedParams,
+  TskconnectDisputeData,
+  TskconnectEvidenceData,
+};
 
 export const DEFAULT_TSKCONNECT_BASE_URL = "https://tsk05.net/v1";
 
@@ -118,6 +133,46 @@ export function mapTskconnectStatus(
     return "PROCESSING";
   }
   return "PENDING";
+}
+
+/**
+ * Maps Tskconnect dispute status to internal DeliveryReport status:
+ * - "pending_resolution" -> "UNDER_REVIEW"
+ * - "confirmed_sent"     -> "CONFIRM_SENT"
+ * - "resolved"           -> "RESOLVED"
+ * - "refunded"           -> "REFUNDED"
+ */
+export function mapTskconnectDisputeStatus(
+  disputeStatus?: string | null
+): "UNDER_REVIEW" | "CONFIRM_SENT" | "RESOLVED" | "REFUNDED" {
+  const s = (disputeStatus || "").trim().toLowerCase();
+  if (["confirmed_sent", "confirm_sent", "delivered", "report.not_received.confirmed_sent"].includes(s)) {
+    return "CONFIRM_SENT";
+  }
+  if (["refunded", "refund"].includes(s)) {
+    return "REFUNDED";
+  }
+  if (["resolved", "report.not_received.resolved"].includes(s)) {
+    return "RESOLVED";
+  }
+  return "UNDER_REVIEW";
+}
+
+/**
+ * Maps internal DeliveryReport status to Tskconnect dispute status string:
+ * - CONFIRM_SENT / DELIVERED -> "confirmed_sent"
+ * - REFUNDED                 -> "refunded"
+ * - RESOLVED / REJECTED      -> "resolved"
+ * - other                    -> "pending_resolution"
+ */
+export function mapInternalToTskconnectDisputeStatus(
+  internalStatus?: string | null
+): TskconnectDisputeStatus {
+  const s = (internalStatus || "").trim().toUpperCase();
+  if (s === "CONFIRM_SENT" || s === "DELIVERED") return "confirmed_sent";
+  if (s === "REFUNDED") return "refunded";
+  if (s === "RESOLVED" || s === "REJECTED") return "resolved";
+  return "pending_resolution";
 }
 
 /**
@@ -496,6 +551,44 @@ export class TskconnectClient {
       method: "POST",
       body: JSON.stringify({ orderIds: orderIds.slice(0, 100) }),
     });
+  }
+
+  /**
+   * Submits a customer 'Not Received' dispute report for an order or batch entry within 24 hours of delivery.
+   * POST /v1/orders/:id/not-received
+   */
+  async submitNotReceived(
+    orderId: string,
+    params: TskconnectNotReceivedParams = {}
+  ): Promise<{
+    success: boolean;
+    data: TskconnectDisputeData;
+    requestId: string;
+  }> {
+    return this.request<{
+      success: boolean;
+      data: TskconnectDisputeData;
+      requestId: string;
+    }>(`/orders/${encodeURIComponent(orderId)}/not-received`, {
+      method: "POST",
+      body: JSON.stringify(params),
+    });
+  }
+
+  /**
+   * Retrieves dispute report status (pending_resolution, confirmed_sent, resolved, refunded) and evidence.
+   * GET /v1/orders/:id/not-received
+   */
+  async getNotReceived(orderId: string): Promise<{
+    success: boolean;
+    data: TskconnectDisputeData;
+    requestId: string;
+  }> {
+    return this.request<{
+      success: boolean;
+      data: TskconnectDisputeData;
+      requestId: string;
+    }>(`/orders/${encodeURIComponent(orderId)}/not-received`);
   }
 
   /**

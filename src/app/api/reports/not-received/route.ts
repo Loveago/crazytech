@@ -271,6 +271,17 @@ export async function POST(request: NextRequest) {
       newValue: JSON.stringify({ orderId: order.id, seq, reason: input.reason }),
     });
 
+    // If order was fulfilled via Tskconnect, forward dispute to provider
+    if (order.providerReference?.startsWith("TSKCONNECT:")) {
+      const { forwardNotReceivedToProvider } = await import("@/lib/provider-apis/router");
+      forwardNotReceivedToProvider(order.id, {
+        reason: input.reason,
+        note: input.message || undefined,
+      }).catch((err) => {
+        console.warn("[NotReceived] Failed to forward dispute to provider:", err);
+      });
+    }
+
     return NextResponse.json(
       { report: { ...report, code: deliveryReportCode(report.seq) } },
       { status: 201 }

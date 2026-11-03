@@ -594,6 +594,72 @@ export const openApiSpec = {
         },
       },
     },
+    "/orders/{id}/not-received": {
+      post: {
+        summary: "Submit Not Received Dispute Report",
+        description:
+          "Submits a customer 'Not Received' dispute report for an order or batch entry within 24 hours of delivery. " +
+          "Requires scope `orders:create`.\n\n" +
+          "**Statuses**: `pending_resolution`, `confirmed_sent`, `resolved`, `refunded`.\n\n" +
+          "**Webhooks**: `report.not_received.submitted`, `report.not_received.confirmed_sent`, `report.not_received.resolved`.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "The order ID (e.g. API-839201) or batch code (e.g. API-CF-BATCH-000185)",
+          },
+        ],
+        requestBody: {
+          required: false,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  reason: { type: "string", example: "Data not received" },
+                  message: { type: "string", example: "Customer states data was not credited" },
+                  note: { type: "string", example: "Customer states data was not credited" },
+                  entryId: { type: "string", example: "101" },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "201": {
+            description: "Dispute report created successfully",
+            content: { "application/json": { schema: { $ref: "#/components/schemas/ApiResponseSuccess" } } },
+          },
+          "400": { content: { "application/json": { schema: { $ref: "#/components/schemas/ApiResponseError" } } } },
+          "404": { content: { "application/json": { schema: { $ref: "#/components/schemas/ApiResponseError" } } } },
+          "409": { content: { "application/json": { schema: { $ref: "#/components/schemas/ApiResponseError" } } } },
+        },
+      },
+      get: {
+        summary: "Get Not Received Dispute Status & Evidence",
+        description:
+          "Retrieves dispute report status (pending_resolution, confirmed_sent, resolved, refunded) and carrier evidence. " +
+          "Requires scope `orders:read`.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "The order ID, e.g. API-839201 or 839201",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "Dispute report details and evidence",
+            content: { "application/json": { schema: { $ref: "#/components/schemas/ApiResponseSuccess" } } },
+          },
+          "404": { content: { "application/json": { schema: { $ref: "#/components/schemas/ApiResponseError" } } } },
+        },
+      },
+    },
     "/orders/reference/{reference}": {
       get: {
         summary: "Get Order by External Reference",

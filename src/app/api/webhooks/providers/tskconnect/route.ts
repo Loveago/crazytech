@@ -3,8 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { changeOrderStatus } from "@/lib/orders";
 import { recordOrderApiLog } from "@/lib/order-api-logs";
 import { getProviderRoutingConfig, normalizePhoneLast9 } from "@/lib/provider-apis/router";
-import { TskconnectClient, mapTskconnectStatus } from "@/lib/provider-apis/tskconnect";
+import { TskconnectClient, mapTskconnectStatus, mapTskconnectDisputeStatus } from "@/lib/provider-apis/tskconnect";
 import { parseOrderCode } from "@/lib/utils";
+import { deliveryReportCode, toExternalDisputeStatus } from "@/lib/types";
+import { dispatchWebhookEvent } from "@/lib/webhooks";
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
@@ -87,9 +89,174 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const targetStatus = mapTskconnectStatus(rawStatus);
+    const isReportEvent =
+      event.startsWith("report.not_received.") ||
+      event.includes("not_received") ||
+      ["pending_resolution", "confirmed_sent"].includes(String(rawStatus).toLowerCase());
 
     let updatedCount = 0;
+
+    if (isReportEvent) {
+      // Process Not Received dispute event (§5/§6)
+      const disputeStatus = mapTskconnectDisputeStatus(rawStatus || event);
+      const evidenceRaw = data?.evidence || data?.proof || data?.evidenceUrl || data?.proofUrl || data?.carrierReceipt;
+      let evidenceUrl: string | null = null;
+      if (typeof evidenceRaw === "string") {
+        evidenceUrl = evidenceRaw;
+      } else if (evidenceRaw && typeof evidenceRaw === "object") {
+        evidenceUrl = evidenceRaw.url || evidenceRaw.proofImage || null;
+      }
+
+      const carrierNote = data?.adminResponse || data?.carrierNote || data?.note || data?.message;
+
+      for (const ord of orders) {
+        let report = await prisma.deliveryReport.findFirst({
+          where: { orderId: ord.id },
+          orderBy: { createdAt: "desc" },
+        });
+
+        if (!report) {
+          const max = await prisma.deliveryReport.aggregate({ _max: { seq: true } });
+          const seq = (max._max.seq ?? 0) + 1;
+          report = await prisma.deliveryReport.create({
+            data: {
+              orderId: ord.id,
+              seq,
+              userId: ord.userId,
+              status: disputeStatus,
+              reason: data?.reason || "Data not received (Dispute reported via provider)",
+              message: carrierNote || null,
+              events: {
+                create: {
+                  type: "SUBMITTED",
+                  message: `Dispute report filed via Tskconnect webhook (${event})`,
+                  actorLabel: "Tskconnect Webhook",
+                },
+              },
+            },
+          });
+        }
+
+        const updateData: any = {};
+        const eventsToCreate: any[] = [];
+
+        if (disputeStatus && disputeStatus !== report.status) {
+          updateData.status = disputeStatus;
+          if (disputeStatus === "CONFIRM_SENT" || disputeStatus === "RESOLVED" || disputeStatus === "REFUNDED") {
+            updateData.resolvedAt = data?.resolvedAt ? new Date(data.resolvedAt) : new Date();
+            updateData.resolvedBy = "Tskconnect Webhook";
+          }
+          eventsToCreate.push({
+            reportId: report.id,
+            type: disputeStatus === "CONFIRM_SENT" ? "CONFIRM_SENT" : disputeStatus,
+            message: `Provider status updated via webhook: ${disputeStatus}`,
+            actorLabel: "Tskconnect Webhook",
+          });
+        }
+
+        if (carrierNote && !report.adminResponse) {
+          updateData.adminResponse = carrierNote;
+          updateData.respondedAt = new Date();
+          updateData.respondedBy = "Tskconnect Carrier";
+          eventsToCreate.push({
+            reportId: report.id,
+            type: "RESPONSE_ADDED",
+            message: `Carrier response added: ${carrierNote}`,
+            actorLabel: "Tskconnect Webhook",
+          });
+        }
+
+        if (evidenceUrl && !report.proofImage) {
+          updateData.proofImage = evidenceUrl;
+          updateData.proofImageMime = evidenceUrl.endsWith(".png") ? "image/png" : "image/jpeg";
+          updateData.proofImageUploadedAt = new Date();
+          updateData.proofImageUploadedBy = "Tskconnect Carrier Evidence";
+          eventsToCreate.push({
+            reportId: report.id,
+            type: "EVIDENCE_UPLOADED",
+            message: `Carrier delivery evidence attached: ${data?.carrierReference || "Delivery confirmed"}`,
+            actorLabel: "Tskconnect Webhook",
+          });
+        }
+
+        if (Object.keys(updateData).length > 0) {
+          await prisma.$transaction(async (tx) => {
+            await tx.deliveryReport.update({
+              where: { id: report!.id },
+              data: updateData,
+            });
+            for (const ev of eventsToCreate) {
+              await tx.deliveryReportEvent.create({ data: ev });
+            }
+          });
+          updatedCount++;
+        }
+
+        // If dispute resolved as REFUNDED, mark order as FAILED with refund
+        if (disputeStatus === "REFUNDED" && ord.status !== "FAILED" && ord.status !== "REFUNDED") {
+          await changeOrderStatus(
+            ord.id,
+            "FAILED",
+            `Tskconnect dispute closed with refund: ${carrierNote || "Dispute resolved by provider refund"}`,
+            { id: "system", label: "Tskconnect Webhook" },
+            { force: true }
+          );
+        }
+
+        // Dispatch outbound webhook to merchant
+        const outboundEvent =
+          event === "report.not_received.confirmed_sent" || disputeStatus === "CONFIRM_SENT"
+            ? "report.not_received.confirmed_sent"
+            : event === "report.not_received.resolved" || disputeStatus === "RESOLVED" || disputeStatus === "REFUNDED"
+            ? "report.not_received.resolved"
+            : "report.not_received.submitted";
+
+        await dispatchWebhookEvent(
+          ord.userId,
+          outboundEvent,
+          {
+            reportId: deliveryReportCode(report.seq),
+            orderId: `API-${ord.id}`,
+            reference: ord.externalReference || null,
+            recipient: ord.phoneNumber,
+            network: ord.network,
+            status: toExternalDisputeStatus(disputeStatus),
+            internalStatus: disputeStatus,
+            evidence: evidenceUrl,
+            adminResponse: carrierNote || report.adminResponse || null,
+            updatedAt: new Date().toISOString(),
+          },
+          ord.id
+        );
+
+        // Record Order API Log
+        await recordOrderApiLog({
+          orderId: ord.id,
+          provider: "TSKCONNECT",
+          action: `WEBHOOK_${(event || "REPORT_NOT_RECEIVED").toUpperCase().replace(/\./g, "_")}`,
+          endpoint: "/api/webhooks/providers/tskconnect",
+          method: "POST",
+          requestPayload: payload,
+          responsePayload: { success: true, disputeStatus, event },
+          statusCode: 200,
+          success: true,
+          providerReference: ord.providerReference || (orderId ? `TSKCONNECT:${orderId}` : null),
+          durationMs: Date.now() - startTime,
+        });
+      }
+
+      return NextResponse.json({
+        success: true,
+        event,
+        type: "dispute_report",
+        matchedOrders: orders.length,
+        updatedReports: updatedCount,
+        disputeStatus,
+      });
+    }
+
+    const targetStatus = mapTskconnectStatus(rawStatus);
+
     for (const ord of orders) {
       if (ord.status !== targetStatus && ["SUCCESS", "FAILED", "PROCESSING", "CANCELLED"].includes(targetStatus)) {
         const reason =

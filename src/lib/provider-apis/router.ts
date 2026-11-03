@@ -10,6 +10,7 @@ import {
   resolveTskconnectPackageId,
   generateTskconnectReference,
   mapTskconnectStatus,
+  mapTskconnectDisputeStatus,
 } from "./tskconnect";
 import type { ProviderRoutingConfig, ProviderType, ProviderDispatchResult, TskconnectConfig } from "./types";
 
@@ -531,6 +532,215 @@ export async function syncTskconnectOrder(
       durationMs,
     });
     return { changed: false, error: err?.message || "Sync failed" };
+  }
+}
+
+/**
+ * Forwards a Not Received dispute report to Tskconnect for an order fulfilled via Tskconnect.
+ * Calls POST /v1/orders/:id/not-received on Tskconnect.
+ */
+export async function forwardNotReceivedToProvider(
+  orderId: number,
+  params: { reason?: string; note?: string; entryId?: string | number } = {}
+): Promise<{ success: boolean; data?: any; error?: string }> {
+  try {
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    if (!order) return { success: false, error: "Order not found" };
+
+    const config = await getProviderRoutingConfig();
+    if (!config.tskconnect.enabled || !config.tskconnect.apiKey) {
+      return { success: false, error: "Tskconnect integration disabled" };
+    }
+
+    const rawRef = order.providerReference?.replace(/^TSKCONNECT:/, "").trim();
+    const queryKey = rawRef || order.externalReference;
+    if (!queryKey) {
+      return { success: false, error: "No providerReference or externalReference on order" };
+    }
+
+    const client = new TskconnectClient(config.tskconnect);
+    const startTime = Date.now();
+    try {
+      const res = await client.submitNotReceived(queryKey, {
+        reason: params.reason,
+        note: params.note,
+        message: params.note,
+        entryId: params.entryId,
+      });
+
+      await recordOrderApiLog({
+        orderId: order.id,
+        provider: "TSKCONNECT",
+        action: "NOT_RECEIVED",
+        endpoint: `${config.tskconnect.baseUrl || DEFAULT_TSKCONNECT_BASE_URL}/orders/${encodeURIComponent(queryKey)}/not-received`,
+        method: "POST",
+        requestPayload: { orderId: queryKey, ...params },
+        responsePayload: res,
+        statusCode: 200,
+        success: true,
+        providerReference: order.providerReference || `TSKCONNECT:${queryKey}`,
+        durationMs: Date.now() - startTime,
+      });
+
+      return { success: true, data: res.data };
+    } catch (err: any) {
+      await recordOrderApiLog({
+        orderId: order.id,
+        provider: "TSKCONNECT",
+        action: "NOT_RECEIVED",
+        endpoint: `${config.tskconnect.baseUrl || DEFAULT_TSKCONNECT_BASE_URL}/orders/${encodeURIComponent(queryKey)}/not-received`,
+        method: "POST",
+        requestPayload: { orderId: queryKey, ...params },
+        responsePayload: err?.rawResponse || { error: err?.message },
+        statusCode: err?.status || 500,
+        success: false,
+        errorMessage: err?.message,
+        providerReference: order.providerReference || `TSKCONNECT:${queryKey}`,
+        durationMs: Date.now() - startTime,
+      });
+
+      return { success: false, error: err?.message || "Failed to submit dispute to provider" };
+    }
+  } catch (err: any) {
+    return { success: false, error: err?.message || "Unexpected error forwarding dispute" };
+  }
+}
+
+/**
+ * Syncs the dispute status and evidence from Tskconnect for an order.
+ * Calls GET /v1/orders/:id/not-received on Tskconnect.
+ */
+export async function syncTskconnectDispute(
+  orderIdOrRecord: number | { id: number; providerReference: string | null; externalReference?: string | null },
+  reportId?: string
+): Promise<{ updated: boolean; status?: string; evidence?: any; error?: string }> {
+  try {
+    const orderId = typeof orderIdOrRecord === "number" ? orderIdOrRecord : orderIdOrRecord.id;
+    const order = typeof orderIdOrRecord === "number"
+      ? await prisma.order.findUnique({ where: { id: orderId } })
+      : orderIdOrRecord;
+
+    if (!order) return { updated: false, error: "Order not found" };
+
+    const config = await getProviderRoutingConfig();
+    if (!config.tskconnect.enabled || !config.tskconnect.apiKey) {
+      return { updated: false, error: "Tskconnect integration disabled" };
+    }
+
+    const rawRef = order.providerReference?.replace(/^TSKCONNECT:/, "").trim();
+    const queryKey = rawRef || order.externalReference;
+    if (!queryKey) {
+      return { updated: false, error: "No providerReference or externalReference on order" };
+    }
+
+    const client = new TskconnectClient(config.tskconnect);
+    const startTime = Date.now();
+    try {
+      const res = await client.getNotReceived(queryKey);
+      const dispute = res.data;
+      if (!dispute) return { updated: false };
+
+      const report = reportId
+        ? await prisma.deliveryReport.findUnique({ where: { id: reportId } })
+        : await prisma.deliveryReport.findFirst({
+            where: { orderId: order.id },
+            orderBy: { createdAt: "desc" },
+          });
+
+      if (!report) return { updated: false, error: "Report not found" };
+
+      const targetStatus = mapTskconnectDisputeStatus(dispute.status);
+      const updateData: any = {};
+      const eventsToCreate: any[] = [];
+
+      if (targetStatus && targetStatus !== report.status) {
+        updateData.status = targetStatus;
+        if (targetStatus === "RESOLVED" || targetStatus === "CONFIRM_SENT" || targetStatus === "REFUNDED") {
+          updateData.resolvedAt = dispute.resolvedAt ? new Date(dispute.resolvedAt) : new Date();
+          updateData.resolvedBy = "Tskconnect Provider Sync";
+        }
+        eventsToCreate.push({
+          reportId: report.id,
+          type: targetStatus === "CONFIRM_SENT" ? "CONFIRM_SENT" : targetStatus,
+          message: `Provider status updated to ${dispute.status}`,
+          actorLabel: "Tskconnect Sync",
+        });
+      }
+
+      if (dispute.adminResponse && !report.adminResponse) {
+        updateData.adminResponse = dispute.adminResponse;
+        updateData.respondedAt = new Date();
+        updateData.respondedBy = "Tskconnect Provider";
+      }
+
+      // Evidence handling
+      let evidenceUrl: string | null = null;
+      if (typeof dispute.evidence === "string") {
+        evidenceUrl = dispute.evidence;
+      } else if (dispute.evidence && typeof dispute.evidence === "object") {
+        evidenceUrl = dispute.evidence.url || dispute.evidence.proofImage || null;
+      }
+
+      if (evidenceUrl && !report.proofImage) {
+        updateData.proofImage = evidenceUrl;
+        updateData.proofImageMime = evidenceUrl.endsWith(".png") ? "image/png" : "image/jpeg";
+        updateData.proofImageUploadedAt = new Date();
+        updateData.proofImageUploadedBy = "Tskconnect Carrier Evidence";
+        eventsToCreate.push({
+          reportId: report.id,
+          type: "EVIDENCE_UPLOADED",
+          message: "Carrier delivery evidence provided",
+          actorLabel: "Tskconnect Carrier",
+        });
+      }
+
+      if (Object.keys(updateData).length > 0) {
+        await prisma.$transaction(async (tx) => {
+          await tx.deliveryReport.update({
+            where: { id: report.id },
+            data: updateData,
+          });
+          for (const ev of eventsToCreate) {
+            await tx.deliveryReportEvent.create({ data: ev });
+          }
+        });
+
+        await recordOrderApiLog({
+          orderId: order.id,
+          provider: "TSKCONNECT",
+          action: "SYNC_ORDER",
+          endpoint: `${config.tskconnect.baseUrl || DEFAULT_TSKCONNECT_BASE_URL}/orders/${encodeURIComponent(queryKey)}/not-received`,
+          method: "GET",
+          responsePayload: res,
+          statusCode: 200,
+          success: true,
+          providerReference: order.providerReference || `TSKCONNECT:${queryKey}`,
+          durationMs: Date.now() - startTime,
+        });
+
+        return { updated: true, status: targetStatus, evidence: evidenceUrl };
+      }
+
+      return { updated: false, status: targetStatus };
+    } catch (err: any) {
+      await recordOrderApiLog({
+        orderId: order.id,
+        provider: "TSKCONNECT",
+        action: "SYNC_ORDER",
+        endpoint: `${config.tskconnect.baseUrl || DEFAULT_TSKCONNECT_BASE_URL}/orders/${encodeURIComponent(queryKey)}/not-received`,
+        method: "GET",
+        responsePayload: err?.rawResponse || { error: err?.message },
+        statusCode: err?.status || 500,
+        success: false,
+        errorMessage: err?.message,
+        providerReference: order.providerReference || `TSKCONNECT:${queryKey}`,
+        durationMs: Date.now() - startTime,
+      });
+
+      return { updated: false, error: err?.message || "Failed to query dispute status" };
+    }
+  } catch (err: any) {
+    return { updated: false, error: err?.message || "Unexpected error syncing dispute" };
   }
 }
 

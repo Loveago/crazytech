@@ -239,6 +239,35 @@ const PLAYGROUND_ENDPOINTS: PlaygroundEndpoint[] = [
     defaultBody: "",
   },
   {
+    id: "post-not-received",
+    name: "POST /v1/orders/:id/not-received (Report Dispute)",
+    category: "Orders & Fulfillment",
+    method: "POST",
+    path: "/v1/orders/1/not-received",
+    hasBody: true,
+    scope: "orders:create",
+    description: "Submit a customer 'Not Received' dispute report within 24 hours of delivery.",
+    defaultBody: JSON.stringify(
+      {
+        reason: "Data not received",
+        message: "Customer says they have not received bundle SMS or data credit after 2 hours.",
+      },
+      null,
+      2
+    ),
+  },
+  {
+    id: "get-not-received",
+    name: "GET /v1/orders/:id/not-received (Dispute & Evidence)",
+    category: "Orders & Fulfillment",
+    method: "GET",
+    path: "/v1/orders/1/not-received",
+    hasBody: false,
+    scope: "orders:read",
+    description: "Retrieve dispute report status (pending_resolution, confirmed_sent, resolved, refunded) and carrier evidence.",
+    defaultBody: "",
+  },
+  {
     id: "get-balance",
     name: "GET /v1/balance (Account Balance)",
     category: "Wallet & Balance",

@@ -2,11 +2,15 @@ import { createHmac } from "crypto";
 import { prisma } from "@/lib/prisma";
 
 export const WEBHOOK_EVENTS = [
+  "order.accepted",
   "order.created",
   "order.processing",
   "order.completed",
   "order.failed",
   "order.cancelled",
+  "report.not_received.submitted",
+  "report.not_received.confirmed_sent",
+  "report.not_received.resolved",
 ] as const;
 
 export type WebhookEvent = typeof WEBHOOK_EVENTS[number];
