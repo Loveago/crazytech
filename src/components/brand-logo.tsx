@@ -14,8 +14,9 @@ export interface BrandProps {
 }
 
 /**
- * CrazyTech High-Energy Monogram Mark
- * Electric multi-hue "C" energy arc and precision chrome "T" element with a luminous cyan spark node.
+ * Crazy Tech Enterprise Futuristic Monogram Mark
+ * Precision chrome-beveled octagonal "C" with glowing electric cyan circuit traces & terminals,
+ * interlocking with a central chrome "T" with conduit glow and razor dagger tip.
  */
 export function BrandMark({
   className,
@@ -51,7 +52,7 @@ export function BrandMark({
         className
       )}
       style={{ width: px, height: px, maxWidth: "100%" }}
-      aria-label="CrazyTech"
+      aria-label="Crazy Tech Enterprise"
     >
       <svg
         viewBox="0 0 100 100"
@@ -63,68 +64,174 @@ export function BrandMark({
         style={{ width: px, height: px, maxWidth: "100%" }}
       >
         <defs>
-          <linearGradient id="ctBrandRim" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#a855f7" stopOpacity="0.8" />
-          </linearGradient>
-          <linearGradient id="ctBrandArc" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#38bdf8" />
-            <stop offset="35%" stopColor="#6366f1" />
-            <stop offset="70%" stopColor="#8b5cf6" />
-            <stop offset="100%" stopColor="#ec4899" />
-          </linearGradient>
-          <linearGradient id="ctBrandT" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#ffffff" />
+          {/* Dark Obsidian Canvas Gradient */}
+          <radialGradient id="ctBrandBgGrad" cx="50%" cy="48%" r="56%">
+            <stop offset="0%" stopColor="#182230" />
+            <stop offset="55%" stopColor="#101622" />
+            <stop offset="100%" stopColor="#080c14" />
+          </radialGradient>
+
+          {/* Chrome Metallic Highlight */}
+          <linearGradient id="ctBrandChrome" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#f8fafc" />
+            <stop offset="25%" stopColor="#94a3b8" />
+            <stop offset="50%" stopColor="#ffffff" />
+            <stop offset="75%" stopColor="#64748b" />
             <stop offset="100%" stopColor="#cbd5e1" />
           </linearGradient>
-          <radialGradient id="ctBrandGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#6366f1" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+
+          {/* Bevel specular rim */}
+          <linearGradient id="ctBrandBevelLight" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity={0.95} />
+            <stop offset="100%" stopColor="#64748b" stopOpacity={0.3} />
+          </linearGradient>
+
+          {/* Electric Cyan Circuit Glow */}
+          <linearGradient id="ctBrandCyanGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#00f2fe" />
+            <stop offset="50%" stopColor="#00d2ff" />
+            <stop offset="100%" stopColor="#38bdf8" />
+          </linearGradient>
+
+          {/* Ambient Core Glow */}
+          <radialGradient id="ctBrandCoreGlow" cx="50%" cy="46%" r="42%">
+            <stop offset="0%" stopColor="#00e5ff" stopOpacity={0.25} />
+            <stop offset="100%" stopColor="#00e5ff" stopOpacity={0} />
           </radialGradient>
+
+          {/* Subtle Outer Rim Border */}
+          <linearGradient id="ctBrandRimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" stopOpacity={0.6} />
+            <stop offset="50%" stopColor="#1e293b" stopOpacity={0.4} />
+            <stop offset="100%" stopColor="#00f2fe" stopOpacity={0.5} />
+          </linearGradient>
+
+          <filter id="ctNeonGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="0.65" result="glow" />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
-        {/* Squircle Badge Container */}
-        <rect width="100" height="100" rx="24" className="fill-[#070b14]" />
-        <rect x="1" y="1" width="98" height="98" rx="23" stroke="url(#ctBrandRim)" strokeWidth="1.5" />
-        <circle cx="50" cy="50" r="38" fill="url(#ctBrandGlow)" />
+        {/* Squircle Canvas Badge */}
+        <rect width="100" height="100" rx="22" fill="url(#ctBrandBgGrad)" />
+        <rect x="1" y="1" width="98" height="98" rx="21" stroke="url(#ctBrandRimGrad)" strokeWidth="1.2" />
+        <circle cx="50" cy="46" r="36" fill="url(#ctBrandCoreGlow)" />
 
-        {/* "C" Arc: Electric Multi-Hue Energy Curve */}
+        {/* Outer Faceted C Shape with Chrome Bevel */}
         <path
-          d="M 75 25 A 34 34 0 1 0 75 75"
+          d="M 64 19
+             L 36 19
+             L 19 36
+             L 19 62
+             L 36 79
+             L 58 79
+             L 73 64
+             L 64 55
+             L 54 65
+             L 40 65
+             L 32 57
+             L 32 41
+             L 40 33
+             L 59 33
+             L 64 26
+             Z"
+          fill="#121824"
+          stroke="url(#ctBrandChrome)"
+          strokeWidth="2.6"
+          strokeLinejoin="round"
+        />
+
+        {/* Chrome Specular Inner Rim */}
+        <path
+          d="M 62 20.5 L 36.5 20.5 L 20.5 36.5 L 20.5 61.5 L 36.5 77.5 L 57.5 77.5 L 71 64"
           fill="none"
-          stroke="url(#ctBrandArc)"
-          strokeWidth="12"
+          stroke="url(#ctBrandBevelLight)"
+          strokeWidth="1"
           strokeLinecap="round"
         />
 
-        {/* "T" Element: Refined Chrome/Silver with Precision Geometry */}
+        {/* Glowing Cyan Circuit Traces inside C */}
+        <g filter="url(#ctNeonGlow)">
+          <path
+            d="M 60 26 L 39 26 L 26 39 L 26 59 L 38 71 L 53 71 L 67 60"
+            fill="none"
+            stroke="url(#ctBrandCyanGlow)"
+            strokeWidth="1.8"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+
+          {/* Cyan Circuit Nodes / Terminals */}
+          <circle cx="60" cy="26" r="2.2" fill="#00f2fe" />
+          <circle cx="60" cy="26" r="1.1" fill="#ffffff" />
+
+          <circle cx="48" cy="26" r="1.6" fill="#00f2fe" />
+          <circle cx="48" cy="26" r="0.8" fill="#ffffff" />
+
+          <circle cx="31" cy="34" r="1.6" fill="#00f2fe" />
+
+          <circle cx="26" cy="49" r="2" fill="#00f2fe" />
+          <circle cx="26" cy="49" r="1" fill="#ffffff" />
+
+          <circle cx="31" cy="64" r="1.6" fill="#00f2fe" />
+
+          <circle cx="48" cy="71" r="1.6" fill="#00f2fe" />
+          <circle cx="48" cy="71" r="0.8" fill="#ffffff" />
+
+          <circle cx="67" cy="60" r="2.2" fill="#00f2fe" />
+          <circle cx="67" cy="60" r="1.1" fill="#ffffff" />
+        </g>
+
+        {/* Central T Symbol (Metallic Chrome with Dagger Point) */}
+        {/* Top Crossbar of T */}
         <path
-          d="M 42 38 L 84 38"
-          fill="none"
-          stroke="url(#ctBrandT)"
-          strokeWidth="10"
-          strokeLinecap="round"
-        />
-        <path
-          d="M 63 38 L 63 68"
-          fill="none"
-          stroke="url(#ctBrandT)"
-          strokeWidth="10"
-          strokeLinecap="round"
+          d="M 42 34
+             L 75 34
+             L 69 41
+             L 54 41
+             L 42 34 Z"
+          fill="#121824"
+          stroke="url(#ctBrandChrome)"
+          strokeWidth="2.2"
+          strokeLinejoin="round"
         />
 
-        {/* Electric Cyan Pulse Node */}
-        <circle cx="63" cy="38" r="6" fill="#06b6d4" fillOpacity="0.4" />
-        <circle cx="63" cy="38" r="4.2" fill="#22d3ee" />
-        <circle cx="63" cy="38" r="1.8" fill="#ffffff" />
+        {/* Crossbar Cyan Circuit Trace */}
+        <g filter="url(#ctNeonGlow)">
+          <path d="M 46 37.5 L 68 37.5" fill="none" stroke="url(#ctBrandCyanGlow)" strokeWidth="1.4" strokeLinecap="round" />
+          <circle cx="67" cy="37.5" r="1.6" fill="#00f2fe" />
+          <circle cx="67" cy="37.5" r="0.8" fill="#ffffff" />
+        </g>
+
+        {/* Vertical Dagger Stem of T */}
+        <path
+          d="M 47 41
+             L 53 41
+             L 53 73
+             L 50 85
+             L 47 73
+             Z"
+          fill="#121824"
+          stroke="url(#ctBrandChrome)"
+          strokeWidth="2.2"
+          strokeLinejoin="round"
+        />
+
+        {/* Glowing Cyan Conduit Beam down the center of T */}
+        <g filter="url(#ctNeonGlow)">
+          <line x1="50" y1="41" x2="50" y2="78" stroke="url(#ctBrandCyanGlow)" strokeWidth="2" strokeLinecap="round" />
+          <line x1="50" y1="41" x2="50" y2="77" stroke="#ffffff" strokeWidth="0.8" strokeLinecap="round" />
+        </g>
       </svg>
     </div>
   );
 }
 
 /**
- * Full Horizontal Brand Logo (Freestanding Mark + "CrazyTech" + "HIGH-SPEED TELECOM & AUTOMATION")
+ * Full Horizontal Brand Logo (Freestanding Mark + "CrazyTech Enterprise" + Tagline)
  */
 export function BrandLogo({
   className,
@@ -170,7 +277,7 @@ export function BrandLogo({
           </span>
           <span
             className={cn(
-              "ml-0.5 font-black tracking-[-0.035em] bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent",
+              "ml-0.5 font-black tracking-[-0.035em] bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 bg-clip-text text-transparent",
               textSize
             )}
           >
@@ -180,12 +287,12 @@ export function BrandLogo({
         {showTagline && (
           <span
             className={cn(
-              "mt-0.5 font-bold uppercase tracking-[0.05em] sm:tracking-[0.14em] text-indigo-600 dark:text-indigo-400 block truncate max-w-[140px] xs:max-w-[170px] sm:max-w-none leading-none",
+              "mt-0.5 font-bold uppercase tracking-[0.08em] sm:tracking-[0.16em] text-cyan-600 dark:text-cyan-400 block truncate max-w-[140px] xs:max-w-[170px] sm:max-w-none leading-none",
               taglineSize,
               taglineClassName
             )}
           >
-            Telecom &amp; Automation
+            ENTERPRISE
           </span>
         )}
       </div>

@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "CrazyTech — Empowering Digital Connectivity",
+  title: "CrazyTech Enterprise — Empowering Digital Connectivity",
   description:
     "Ghana's high-performance data bundle distribution platform for MTN, Telecel, and AirtelTigo.",
   icons: {
