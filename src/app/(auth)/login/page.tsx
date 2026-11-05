@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { loginSchema, type LoginInput } from "@/lib/validation";
 import { BrandMark } from "@/components/brand-logo";
@@ -18,8 +18,12 @@ import {
   KeyRound,
 } from "lucide-react";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const sessionExpired = searchParams.get("session_expired") === "1";
+  const nextParam = searchParams.get("next");
+
   const { toast } = useToast();
   const [serverError, setServerError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +35,17 @@ export default function LoginPage() {
   const [devOtp, setDevOtp] = useState<string | null>(null);
   const [otpCode, setOtpCode] = useState<string>("");
   const [verifyingOtp, setVerifyingOtp] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (sessionExpired) {
+      // Clear legacy/stale client cookies
+      document.cookie = "crazytech_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      document.cookie = "commontech_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      document.cookie = "mycedinet_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      document.cookie = "tskconnect_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+    }
+  }, [sessionExpired]);
 
   const {
     register,
@@ -68,8 +83,8 @@ export default function LoginPage() {
       }
 
       toast("Signed in successfully", "success");
-      router.push("/dashboard");
-      router.refresh();
+      const destination = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard";
+      window.location.href = destination;
     } catch {
       setServerError("An unexpected connection error occurred. Please try again.");
     }
@@ -93,8 +108,8 @@ export default function LoginPage() {
         return;
       }
       toast("Signed in successfully", "success");
-      router.push("/dashboard");
-      router.refresh();
+      const destination = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard";
+      window.location.href = destination;
     } finally {
       setVerifyingOtp(false);
     }
@@ -120,6 +135,13 @@ export default function LoginPage() {
 
         {/* Login Form Card */}
         <div className="rounded-3xl border border-slate-200 dark:border-[#14233a] bg-white dark:bg-[#0a1220]/90 backdrop-blur-xl p-6 sm:p-7 shadow-xl space-y-5">
+          {sessionExpired && !serverError && (
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-300 flex items-center gap-2">
+              <span>⚠️</span>
+              <span>Your session has expired or was reset. Please sign in again.</span>
+            </div>
+          )}
+
           {serverError && (
             <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-600 dark:text-rose-300">
               {serverError}
@@ -307,5 +329,19 @@ export default function LoginPage() {
         </footer>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#f3f6fa] dark:bg-[#060b13] flex items-center justify-center">
+          <Spinner className="h-8 w-8 text-indigo-500" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

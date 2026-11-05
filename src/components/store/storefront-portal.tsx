@@ -171,10 +171,15 @@ export function StorefrontPortal({
       return;
     }
 
+    const cleanEmail = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!cleanEmail || !emailRegex.test(cleanEmail)) {
+      setCheckoutError("Please enter a valid email address for your payment receipt.");
+      return;
+    }
+
     setCheckingOut(true);
     setCheckoutError("");
-
-    const cleanEmail = email.trim().toLowerCase();
 
     try {
       const res = await fetch(`/api/store/${storefront.slug}/checkout`, {
@@ -183,7 +188,7 @@ export function StorefrontPortal({
         body: JSON.stringify({
           packageId: selectedProduct.packageId,
           customerPhone: cleanPhone,
-          customerEmail: cleanEmail || undefined,
+          customerEmail: cleanEmail,
         }),
       });
 
@@ -734,6 +739,7 @@ export function StorefrontPortal({
                 {trackResult.map((ord: any) => {
                   const isDelivered =
                     ord.status === "COMPLETED" || ord.status === "DELIVERED";
+                  const isCompleted = isDelivered;
                   const isProcessing =
                     ord.status === "PROCESSING" || ord.status === "PENDING";
                   const isFailed = ord.status === "FAILED";
@@ -745,7 +751,7 @@ export function StorefrontPortal({
                     >
                       <div className="flex items-center justify-between text-xs">
                         <span className="font-mono font-bold text-slate-900">
-                          {ord.package?.name || `${ord.network} ${ord.gbAmount}GB`}
+                          {ord.package?.name || ord.packageName || `${ord.network || ""} ${ord.size || (ord.gbAmount ? `${ord.gbAmount}GB` : "")}`.trim()}
                         </span>
                         <span
                           className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
@@ -760,9 +766,9 @@ export function StorefrontPortal({
                         </span>
                       </div>
 
-                      <div className="text-[11px] text-slate-500 font-mono flex items-center justify-between">
-                        <span>Recipient: {ord.phoneNumber}</span>
-                        <span>₵{ord.price?.toFixed(2) || "—"}</span>
+                      <div className="text-[11px] text-slate-600 font-mono flex items-center justify-between">
+                        <span>Recipient: {ord.phoneNumber || ord.phone || ord.recipient || "—"}</span>
+                        <span className="font-bold">₵{typeof (ord.price ?? ord.amount) === "number" ? (ord.price ?? ord.amount).toFixed(2) : (ord.price || ord.amount || "—")}</span>
                       </div>
 
                       <div className="text-[10px] text-slate-400">
@@ -773,7 +779,48 @@ export function StorefrontPortal({
                         })}
                       </div>
 
+                      {/* Not Received / Dispute Status */}
+                      {ord.deliveryReport && (
+                        <div className="rounded-xl border border-sky-200 bg-sky-50/80 p-2.5 text-xs space-y-1 mt-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-sky-900">
+                              Report {ord.deliveryReport.code}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-200/80 text-sky-800">
+                              {ord.deliveryReport.status}
+                            </span>
+                          </div>
+                          {ord.deliveryReport.adminResponse && (
+                            <p className="text-[11px] text-sky-800 font-medium pt-0.5">
+                              {ord.deliveryReport.adminResponse}
+                            </p>
+                          )}
+                          <div className="pt-1 flex justify-end">
+                            <Link
+                              href={`/store/${storefront.slug}/track?query=${encodeURIComponent(ord.reference || ord.phoneNumber || ord.phone || "")}`}
+                              className="text-[11px] font-bold text-sky-700 hover:text-sky-900 hover:underline inline-flex items-center gap-1"
+                            >
+                              <span>View Full Report &amp; Evidence</span>
+                              <span>→</span>
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Not Received Help Button */}
+                      {!ord.deliveryReport && isCompleted && (
+                        <div className="pt-1 flex items-center justify-between">
+                          <span className="text-[10px] text-slate-400">Not received your data?</span>
+                          <Link
+                            href={`/store/${storefront.slug}/track?query=${encodeURIComponent(ord.reference || ord.phoneNumber || ord.phone || "")}`}
+                            className="text-[11px] font-bold text-amber-600 hover:text-amber-700 hover:underline flex items-center gap-1"
+                          >
+                            <span>Report Issue</span>
+                            <span>→</span>
+                          </Link>
+                        </div>
+                      )}
+
                       {isProcessing && (
                         <div className="pt-1 flex justify-end">
                           <a
@@ -997,11 +1044,14 @@ export function StorefrontPortal({
               {/* Customer Email */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
-                  <span>Email Address</span>
-                  <span className="text-[10px] font-normal text-slate-400">Optional (for receipt)</span>
+                  <span>
+                    Email Address <span className="text-rose-500">*</span>
+                  </span>
+                  <span className="text-[10px] font-medium text-slate-500">For Paystack receipt</span>
                 </label>
                 <input
                   type="email"
+                  required
                   placeholder="your-email@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

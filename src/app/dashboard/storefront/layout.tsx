@@ -15,7 +15,7 @@ export default async function StorefrontLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?session_expired=1");
 
   if (!canAccessStorefront(user.role)) {
     return (

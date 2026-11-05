@@ -100,10 +100,10 @@ export function toExternalDisputeStatus(status: DeliveryReportStatus | string): 
  * - "refunded"           -> "REFUNDED"
  */
 export function fromExternalDisputeStatus(status: string): DeliveryReportStatus {
-  const lower = (status || "").trim().toLowerCase();
-  if (lower === "confirmed_sent" || lower === "delivered") return "CONFIRM_SENT";
-  if (lower === "refunded") return "REFUNDED";
-  if (lower === "resolved") return "RESOLVED";
+  const lower = (status || "").trim().toLowerCase().replace(/[\s_-]+/g, "_");
+  if (lower === "confirmed_sent" || lower === "confirm_sent" || lower === "delivered") return "CONFIRM_SENT";
+  if (lower === "refunded" || lower === "refund") return "REFUNDED";
+  if (lower === "resolved" || lower === "rejected" || lower === "closed") return "RESOLVED";
   return "UNDER_REVIEW";
 }
 

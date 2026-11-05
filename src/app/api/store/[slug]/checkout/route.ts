@@ -104,10 +104,7 @@ export async function POST(
     const seq = await prisma.$transaction(async (tx) => nextStorefrontSeq(tx, "storefrontOrder"));
     const paymentReference = generateStorefrontOrderCode();
 
-    const customerEmail =
-      input.customerEmail && input.customerEmail.trim()
-        ? input.customerEmail.trim().toLowerCase()
-        : `${input.customerPhone}@customer.mycedishop.com`;
+    const customerEmail = input.customerEmail.trim().toLowerCase();
 
     const row = await prisma.storefrontOrder.create({
       data: {

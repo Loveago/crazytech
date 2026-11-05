@@ -636,8 +636,20 @@ export async function syncTskconnectDispute(
     const client = new TskconnectClient(config.tskconnect);
     const startTime = Date.now();
     try {
-      const res = await client.getNotReceived(queryKey);
-      const dispute = res.data;
+      let res: any;
+      try {
+        res = await client.getNotReceived(queryKey);
+      } catch (firstErr: any) {
+        // If queryKey had a prefix like TSK-238228, retry with pure numeric ID e.g. 238228
+        const stripped = queryKey.replace(/^[A-Z0-9]+-/, "").trim();
+        if (stripped && stripped !== queryKey) {
+          res = await client.getNotReceived(stripped);
+        } else {
+          throw firstErr;
+        }
+      }
+
+      const dispute = res?.data;
       if (!dispute) return { updated: false };
 
       const report = reportId
@@ -649,7 +661,8 @@ export async function syncTskconnectDispute(
 
       if (!report) return { updated: false, error: "Report not found" };
 
-      const targetStatus = mapTskconnectDisputeStatus(dispute.status);
+      const rawStatus = dispute.internalStatus || dispute.status;
+      const targetStatus = mapTskconnectDisputeStatus(rawStatus);
       const updateData: any = {};
       const eventsToCreate: any[] = [];
 
@@ -657,20 +670,21 @@ export async function syncTskconnectDispute(
         updateData.status = targetStatus;
         if (targetStatus === "RESOLVED" || targetStatus === "CONFIRM_SENT" || targetStatus === "REFUNDED") {
           updateData.resolvedAt = dispute.resolvedAt ? new Date(dispute.resolvedAt) : new Date();
-          updateData.resolvedBy = "Tskconnect Provider Sync";
+          updateData.resolvedBy = "TSK05";
         }
         eventsToCreate.push({
           reportId: report.id,
           type: targetStatus === "CONFIRM_SENT" ? "CONFIRM_SENT" : targetStatus,
-          message: `Provider status updated to ${dispute.status}`,
-          actorLabel: "Tskconnect Sync",
+          message: `Provider status updated to ${targetStatus}`,
+          actorLabel: "TSK05",
         });
       }
 
-      if (dispute.adminResponse && !report.adminResponse) {
-        updateData.adminResponse = dispute.adminResponse;
-        updateData.respondedAt = new Date();
-        updateData.respondedBy = "Tskconnect Provider";
+      const carrierResponse = dispute.adminResponse || dispute.carrierNote || dispute.note || dispute.message;
+      if (carrierResponse && !report.adminResponse) {
+        updateData.adminResponse = carrierResponse;
+        updateData.respondedAt = dispute.respondedAt ? new Date(dispute.respondedAt) : new Date();
+        updateData.respondedBy = "TSK05";
       }
 
       // Evidence handling
@@ -680,17 +694,25 @@ export async function syncTskconnectDispute(
       } else if (dispute.evidence && typeof dispute.evidence === "object") {
         evidenceUrl = dispute.evidence.url || dispute.evidence.proofImage || null;
       }
+      if (!evidenceUrl && dispute.evidenceUrl) {
+        evidenceUrl = dispute.evidenceUrl;
+      }
 
-      if (evidenceUrl && !report.proofImage) {
+      if (evidenceUrl && typeof evidenceUrl === "string" && evidenceUrl.startsWith("/")) {
+        const base = (config.tskconnect.baseUrl || DEFAULT_TSKCONNECT_BASE_URL).replace(/\/v1\/?$/, "");
+        evidenceUrl = `${base}${evidenceUrl}`;
+      }
+
+      if (evidenceUrl && (!report.proofImage || report.proofImage !== evidenceUrl)) {
         updateData.proofImage = evidenceUrl;
         updateData.proofImageMime = evidenceUrl.endsWith(".png") ? "image/png" : "image/jpeg";
-        updateData.proofImageUploadedAt = new Date();
-        updateData.proofImageUploadedBy = "Tskconnect Carrier Evidence";
+        updateData.proofImageUploadedAt = dispute.proofImageUploadedAt ? new Date(dispute.proofImageUploadedAt) : new Date();
+        updateData.proofImageUploadedBy = "TSK05";
         eventsToCreate.push({
           reportId: report.id,
           type: "EVIDENCE_UPLOADED",
           message: "Carrier delivery evidence provided",
-          actorLabel: "Tskconnect Carrier",
+          actorLabel: "TSK05",
         });
       }
 

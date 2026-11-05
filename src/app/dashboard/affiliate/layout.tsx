@@ -9,7 +9,7 @@ export default async function AffiliateDashboardLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?session_expired=1");
 
   // Sub-agents do NOT have access to the affiliate network page
   if (user.referredById) {

@@ -445,6 +445,13 @@ export default function OrdersPage() {
             <Layers className="h-3.5 w-3.5" />
             <span>Batches Archive</span>
           </button>
+          <Link
+            href="/dashboard/not-received"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 transition whitespace-nowrap shrink-0 text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300 hover:bg-amber-500/10"
+          >
+            <FileWarning className="h-3.5 w-3.5" />
+            <span>Not Received Reports</span>
+          </Link>
         </div>
 
         {/* Search box — full width on mobile */}

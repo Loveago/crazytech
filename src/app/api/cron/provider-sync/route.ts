@@ -61,10 +61,38 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Poll active Not Received disputes fulfilled via Tskconnect
+    let reportsUpdated = 0;
+    try {
+      const activeReports = await prisma.deliveryReport.findMany({
+        where: {
+          status: { in: ["UNDER_REVIEW", "OPEN", "INVESTIGATING"] },
+          order: { providerReference: { startsWith: "TSKCONNECT:" } },
+        },
+        include: {
+          order: { select: { id: true, providerReference: true, externalReference: true } },
+        },
+        take: 10,
+      });
+
+      if (activeReports.length > 0) {
+        const { syncTskconnectDispute } = await import("@/lib/provider-apis/router");
+        for (const rep of activeReports) {
+          if (rep.order) {
+            const syncRes = await syncTskconnectDispute(rep.order, rep.id);
+            if (syncRes.updated) reportsUpdated++;
+          }
+        }
+      }
+    } catch (repErr: any) {
+      errors.push(`Reports poll: ${repErr?.message || "error"}`);
+    }
+
     return NextResponse.json({
       success: true,
       checked,
       updated,
+      reportsUpdated,
       errors: errors.slice(0, 5),
     });
   } catch (err: any) {

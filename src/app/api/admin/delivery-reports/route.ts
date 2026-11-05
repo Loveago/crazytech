@@ -63,6 +63,28 @@ export async function GET(request: NextRequest) {
       ];
     }
 
+    // Auto-sync active Tskconnect disputes for staff view
+    try {
+      const activeTskDisputes = await prisma.deliveryReport.findMany({
+        where: {
+          status: { in: ["OPEN", "UNDER_REVIEW", "INVESTIGATING"] },
+          order: { providerReference: { startsWith: "TSKCONNECT:" } },
+        },
+        include: {
+          order: { select: { id: true, providerReference: true, externalReference: true } },
+        },
+        take: 5,
+      });
+      if (activeTskDisputes.length > 0) {
+        const { syncTskconnectDispute } = await import("@/lib/provider-apis/router");
+        await Promise.allSettled(
+          activeTskDisputes.map((r) => syncTskconnectDispute(r.order, r.id))
+        );
+      }
+    } catch (syncErr) {
+      console.warn("[AdminDeliveryReports] Auto-sync warning:", syncErr);
+    }
+
     const [data, total, byStatus] = await Promise.all([
       prisma.deliveryReport.findMany({
         where,

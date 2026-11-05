@@ -31,9 +31,12 @@ export async function GET(
     // If proofImage is a remote URL, fetch and stream it or redirect
     if (report.proofImage.startsWith("http://") || report.proofImage.startsWith("https://")) {
       try {
-        const remoteRes = await fetch(report.proofImage, {
-          headers: { "User-Agent": "MyCediNet/1.0" },
-        });
+        const config = await import("@/lib/provider-apis/router").then((m) => m.getProviderRoutingConfig());
+        const headers: Record<string, string> = { "User-Agent": "CrazyTech/1.0" };
+        if (config.tskconnect.apiKey && report.proofImage.includes("tsk05")) {
+          headers["Authorization"] = `Bearer ${config.tskconnect.apiKey}`;
+        }
+        const remoteRes = await fetch(report.proofImage, { headers });
         if (remoteRes.ok) {
           const contentType = remoteRes.headers.get("content-type") || report.proofImageMime || "image/jpeg";
           const arrayBuf = await remoteRes.arrayBuffer();

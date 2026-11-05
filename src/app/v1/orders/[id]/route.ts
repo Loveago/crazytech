@@ -105,19 +105,19 @@ export async function GET(
       return formatApiSuccess(payload, requestId, 200, authContext.rateLimit);
     }
 
-    // 2. Parse single order ID: e.g. "API-839201", "CLK-839201" or "839201"
-    const cleanId = upperId.replace(/^(API|CLK)-/, "").trim();
+    // 2. Parse single order ID: e.g. "API-839201", "TSK-839201", "CLK-839201" or "839201"
+    const cleanId = upperId.replace(/^[A-Z0-9]+-/, "").trim();
     const numericId = parseInt(cleanId, 10);
-
-    if (isNaN(numericId) || numericId <= 0) {
-      throw new ApiError("INVALID_REQUEST", "Invalid order ID format. Example: API-12345 or API-CF-BATCH-000185", 400);
-    }
 
     const order = await prisma.order.findFirst({
       where: {
-        id: numericId,
         userId: authContext.userId, // Strictly scoped to authenticated user
         isSandbox: authContext.isSandbox, // Strictly scoped to environment
+        OR: [
+          ...(!isNaN(numericId) && numericId > 0 ? [{ id: numericId }] : []),
+          { externalReference: id.trim() },
+          { externalReference: upperId },
+        ],
       },
       include: {
         dataPackage: { select: { name: true } },
@@ -138,6 +138,9 @@ export async function GET(
     });
 
     if (!order) {
+      if (isNaN(numericId) || numericId <= 0) {
+        throw new ApiError("INVALID_REQUEST", "Invalid order ID format. Example: API-12345 or API-CF-BATCH-000185", 400);
+      }
       throw new ApiError("ORDER_NOT_FOUND", `Order ${id} not found`, 404);
     }
 

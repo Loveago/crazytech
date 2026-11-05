@@ -55,16 +55,41 @@ export async function POST(request: NextRequest) {
     // Search for the matching Order in our database
     let orders: any[] = [];
     const searchKeys = [orderId, reference, batchCode].filter(Boolean).map(String);
+    const expandedKeys = new Set<string>();
+    for (const k of searchKeys) {
+      expandedKeys.add(k);
+      const stripped = k.replace(/^[A-Z0-9]+-/, "").trim();
+      if (stripped) expandedKeys.add(stripped);
+    }
 
-    if (searchKeys.length > 0) {
+    // Direct report ID lookup if provided in payload
+    const reportKey = String(data?.reportId || payload?.reportId || "").trim();
+    if (reportKey) {
+      const repSeq = parseInt(reportKey.replace(/^NR-0*/i, ""), 10);
+      const directReport = await prisma.deliveryReport.findFirst({
+        where: {
+          OR: [
+            { id: reportKey },
+            ...(!isNaN(repSeq) && repSeq > 0 ? [{ seq: repSeq }] : []),
+          ],
+        },
+        include: { order: true },
+      });
+      if (directReport?.order) {
+        orders.push(directReport.order);
+      }
+    }
+
+    if (expandedKeys.size > 0 && orders.length === 0) {
+      const keyList = Array.from(expandedKeys);
       orders = await prisma.order.findMany({
         where: {
           OR: [
-            ...searchKeys.map((k) => ({ providerReference: `TSKCONNECT:${k}` })),
-            ...searchKeys.map((k) => ({ providerReference: { startsWith: `TSKCONNECT:${k}` } })),
-            ...searchKeys.map((k) => ({ providerReference: { contains: k } })),
-            ...searchKeys.map((k) => ({ externalReference: k })),
-            ...searchKeys
+            ...keyList.map((k) => ({ providerReference: `TSKCONNECT:${k}` })),
+            ...keyList.map((k) => ({ providerReference: { startsWith: `TSKCONNECT:${k}` } })),
+            ...keyList.map((k) => ({ providerReference: { contains: k } })),
+            ...keyList.map((k) => ({ externalReference: k })),
+            ...keyList
               .map((k) => parseOrderCode(k))
               .filter((id): id is number => typeof id === "number" && id > 0)
               .map((id) => ({ id })),
@@ -89,10 +114,21 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const normalizedRawStatus = String(rawStatus || "").toLowerCase().replace(/[\s_-]+/g, "_");
+    const normalizedEvent = String(event || "").toLowerCase().replace(/[\s_-]+/g, "_");
     const isReportEvent =
-      event.startsWith("report.not_received.") ||
-      event.includes("not_received") ||
-      ["pending_resolution", "confirmed_sent"].includes(String(rawStatus).toLowerCase());
+      normalizedEvent.includes("report") ||
+      normalizedEvent.includes("not_received") ||
+      normalizedEvent.includes("dispute") ||
+      [
+        "pending_resolution",
+        "under_review",
+        "confirm_sent",
+        "confirmed_sent",
+        "delivered",
+        "resolved",
+        "refunded",
+      ].includes(normalizedRawStatus);
 
     let updatedCount = 0;
 
@@ -105,6 +141,11 @@ export async function POST(request: NextRequest) {
         evidenceUrl = evidenceRaw;
       } else if (evidenceRaw && typeof evidenceRaw === "object") {
         evidenceUrl = evidenceRaw.url || evidenceRaw.proofImage || null;
+      }
+
+      if (evidenceUrl && typeof evidenceUrl === "string" && evidenceUrl.startsWith("/")) {
+        const base = (config.tskconnect.baseUrl || "https://tsk05.net").replace(/\/v1\/?$/, "");
+        evidenceUrl = `${base}${evidenceUrl}`;
       }
 
       const carrierNote = data?.adminResponse || data?.carrierNote || data?.note || data?.message;

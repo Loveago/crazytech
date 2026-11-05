@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?session_expired=1");
   const halted = await isOrderProcessingHalted();
 
   const [maintenanceModeSetting, siteAnnouncementSetting] = await Promise.all([

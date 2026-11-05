@@ -71,27 +71,31 @@ async function resolveTargetOrder(id: string, userId: string, isSandbox: boolean
     return completedInBatch || batch.orders[0];
   }
 
-  // Parse single order ID
-  const cleanId = upperId.replace(/^(API|CLK)-/, "").trim();
+  // Parse single order ID (e.g. API-12345, TSK-12345, CLK-12345, 12345)
+  const cleanId = upperId.replace(/^[A-Z0-9]+-/, "").trim();
   const numericId = parseInt(cleanId, 10);
-
-  if (isNaN(numericId) || numericId <= 0) {
-    throw new ApiError(
-      "INVALID_REQUEST",
-      "Invalid order ID format. Example: API-12345 or API-CF-BATCH-000185",
-      400
-    );
-  }
 
   const order = await prisma.order.findFirst({
     where: {
-      id: numericId,
       userId,
       isSandbox,
+      OR: [
+        ...(!isNaN(numericId) && numericId > 0 ? [{ id: numericId }] : []),
+        { externalReference: id.trim() },
+        { externalReference: upperId },
+        { providerReference: { contains: id.trim() } },
+      ],
     },
   });
 
   if (!order) {
+    if (isNaN(numericId) || numericId <= 0) {
+      throw new ApiError(
+        "INVALID_REQUEST",
+        "Invalid order ID format. Example: API-12345 or API-CF-BATCH-000185",
+        400
+      );
+    }
     throw new ApiError("ORDER_NOT_FOUND", `Order ${id} not found`, 404);
   }
 

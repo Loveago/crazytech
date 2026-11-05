@@ -246,16 +246,42 @@ export async function middleware(request: NextRequest) {
   const isPortfolioPage =
     pathname === "/portfolio" || pathname.startsWith("/portfolio");
 
-  if (isAuthPage && role) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    url.search = "";
-    return NextResponse.redirect(url);
+  const isSessionReset =
+    request.nextUrl.searchParams.has("session_expired") ||
+    request.nextUrl.searchParams.has("logout") ||
+    request.nextUrl.searchParams.has("error");
+
+  if (isAuthPage) {
+    if (isSessionReset || (token && !payload)) {
+      const res = NextResponse.next();
+      res.cookies.delete("crazytech_session");
+      res.cookies.delete("commontech_session");
+      res.cookies.delete("mycedinet_session");
+      res.cookies.delete("tskconnect_session");
+      return res;
+    }
+
+    if (role) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
   }
 
   // Root URL redirection: authenticated users go to /dashboard, guests go to /login
   if (pathname === "/") {
     const url = request.nextUrl.clone();
+    if (token && !payload) {
+      url.pathname = "/login";
+      url.search = "";
+      const res = NextResponse.redirect(url);
+      res.cookies.delete("crazytech_session");
+      res.cookies.delete("commontech_session");
+      res.cookies.delete("mycedinet_session");
+      res.cookies.delete("tskconnect_session");
+      return res;
+    }
     url.pathname = role ? "/dashboard" : "/login";
     url.search = "";
     return NextResponse.redirect(url);
@@ -271,7 +297,14 @@ export async function middleware(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
       url.search = `?next=${encodeURIComponent(pathname + search)}`;
-      return NextResponse.redirect(url);
+      const res = NextResponse.redirect(url);
+      if (token) {
+        res.cookies.delete("crazytech_session");
+        res.cookies.delete("commontech_session");
+        res.cookies.delete("mycedinet_session");
+        res.cookies.delete("tskconnect_session");
+      }
+      return res;
     }
     if (role !== "ADMIN" && role !== "MANAGER") {
       const url = request.nextUrl.clone();

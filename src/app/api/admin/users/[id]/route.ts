@@ -64,8 +64,8 @@ export async function PATCH(
       balance: input.balance,
       pricingProfileId: input.pricingProfileId || null,
     };
-    if (input.password) {
-      data.passwordHash = await bcrypt.hash(input.password, 10);
+    if (input.password && input.password.trim().length >= 8) {
+      data.passwordHash = await bcrypt.hash(input.password.trim(), 10);
       data.tokenVersion = { increment: 1 }; // force re-login everywhere
     }
 

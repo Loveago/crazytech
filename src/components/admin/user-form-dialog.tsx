@@ -49,6 +49,7 @@ export function UserFormDialog({
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [changePassword, setChangePassword] = React.useState(false);
   const [role, setRole] = React.useState("USER");
   const [status, setStatus] = React.useState("ACTIVE");
   const [balance, setBalance] = React.useState("0");
@@ -60,6 +61,7 @@ export function UserFormDialog({
       setName(user?.name ?? "");
       setEmail(user?.email ?? "");
       setPassword("");
+      setChangePassword(false);
       setRole(user?.role ?? "USER");
       setStatus(user?.status ?? "ACTIVE");
       setBalance(String(user?.balance ?? 0));
@@ -71,9 +73,19 @@ export function UserFormDialog({
     setSaving(true);
     try {
       const url = user ? `/api/admin/users/${user.id}` : "/api/admin/users";
-      const body: Record<string, unknown> = { name, email, role, status, balance: Number(balance), pricingProfileId: profileId };
-      if (!user) body.password = password || undefined;
-      else if (password) body.password = password;
+      const body: Record<string, unknown> = {
+        name,
+        email,
+        role,
+        status,
+        balance: Number(balance),
+        pricingProfileId: profileId,
+      };
+      if (!user) {
+        if (password.trim()) body.password = password.trim();
+      } else if (changePassword && password.trim()) {
+        body.password = password.trim();
+      }
 
       const res = await fetch(url, {
         method: user ? "PATCH" : "POST",
@@ -139,17 +151,63 @@ export function UserFormDialog({
         </div>
         <div className="space-y-1.5">
           <Label>Email</Label>
-          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </div>
-        <div className="space-y-1.5">
-          <Label>{user ? "New password (leave blank to keep)" : "Password"}</Label>
           <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder={user ? "••••••••" : "min 8 characters"}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="off"
           />
         </div>
+        {user ? (
+          <div className="rounded-xl border border-slate-200 dark:border-white/10 p-3 space-y-2 bg-slate-50/50 dark:bg-white/[0.02]">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">
+                  Password
+                </span>
+                <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                  {changePassword
+                    ? "Enter new password (min 8 characters)"
+                    : "Password unchanged"}
+                </span>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant={changePassword ? "outline" : "secondary"}
+                className="text-xs h-7 px-2.5"
+                onClick={() => {
+                  setChangePassword(!changePassword);
+                  setPassword("");
+                }}
+              >
+                {changePassword ? "Cancel" : "Change password"}
+              </Button>
+            </div>
+            {changePassword && (
+              <div className="pt-1.5">
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="New password (min 8 characters)"
+                  autoComplete="new-password"
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-1.5">
+            <Label>Password</Label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="min 8 characters"
+              autoComplete="new-password"
+            />
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-1.5">
             <Label>Role</Label>

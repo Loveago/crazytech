@@ -20,6 +20,7 @@ export interface NotReceivedReportDetail {
   adminResponse: string | null;
   respondedAt: string | null;
   respondedBy?: string | null;
+  hasProofImage?: boolean;
   proofImageMime: string | null;
   proofImageUploadedAt: string | null;
   resolvedAt: string | null;
@@ -105,7 +106,7 @@ export function NotReceivedReportDetailDialog({
             <ReportInfoSection report={report} />
             <OrderInfoSection order={report.order} />
             {report.adminResponse && <AdminResponseSection report={report} />}
-            {report.proofImageMime && (
+            {Boolean(report.proofImageMime || report.hasProofImage) && (
               <EvidenceSection
                 reportId={report.id}
                 uploadedAt={report.proofImageUploadedAt}

@@ -178,8 +178,7 @@ function RegisterForm() {
       }
 
       toast("Account created. Welcome to CrazyTech!", "success");
-      router.push("/dashboard");
-      router.refresh();
+      window.location.href = "/dashboard";
     } catch {
       setServerError("An unexpected connection error occurred. Please try again.");
     }

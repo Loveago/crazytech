@@ -145,14 +145,31 @@ export function mapTskconnectStatus(
 export function mapTskconnectDisputeStatus(
   disputeStatus?: string | null
 ): "UNDER_REVIEW" | "CONFIRM_SENT" | "RESOLVED" | "REFUNDED" {
-  const s = (disputeStatus || "").trim().toLowerCase();
-  if (["confirmed_sent", "confirm_sent", "delivered", "report.not_received.confirmed_sent"].includes(s)) {
+  const s = (disputeStatus || "").trim().toLowerCase().replace(/[\s_-]+/g, "_");
+  if (
+    [
+      "confirmed_sent",
+      "confirm_sent",
+      "delivered",
+      "report_not_received_confirmed_sent",
+      "report_confirmed_sent",
+      "confirmed",
+    ].includes(s)
+  ) {
     return "CONFIRM_SENT";
   }
-  if (["refunded", "refund"].includes(s)) {
+  if (["refunded", "refund", "report_not_received_refunded"].includes(s)) {
     return "REFUNDED";
   }
-  if (["resolved", "report.not_received.resolved"].includes(s)) {
+  if (
+    [
+      "resolved",
+      "rejected",
+      "closed",
+      "report_not_received_resolved",
+      "resolve",
+    ].includes(s)
+  ) {
     return "RESOLVED";
   }
   return "UNDER_REVIEW";

@@ -43,6 +43,29 @@ export async function GET(request: NextRequest) {
 
     // "My Not Received" reports list (§14) — the user's actual filed reports
     if (searchParams.get("view") === "reports") {
+      // Auto-sync active TSKCONNECT disputes for the user so results are fresh
+      try {
+        const activeTskDisputes = await prisma.deliveryReport.findMany({
+          where: {
+            userId: user.id,
+            status: { in: ["OPEN", "UNDER_REVIEW", "INVESTIGATING"] },
+            order: { providerReference: { startsWith: "TSKCONNECT:" } },
+          },
+          include: {
+            order: { select: { id: true, providerReference: true, externalReference: true } },
+          },
+          take: 3,
+        });
+        if (activeTskDisputes.length > 0) {
+          const { syncTskconnectDispute } = await import("@/lib/provider-apis/router");
+          await Promise.allSettled(
+            activeTskDisputes.map((r) => syncTskconnectDispute(r.order, r.id))
+          );
+        }
+      } catch (syncErr) {
+        console.warn("[NotReceivedReports] Auto-sync warning:", syncErr);
+      }
+
       const reportWhere: Record<string, unknown> = { userId: user.id };
       if (status) {
         if (status === "UNDER_REVIEW" || status === "REVIEW") {

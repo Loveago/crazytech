@@ -17,7 +17,7 @@ export async function GET(
     const user = await requireUser();
     const { id } = await params;
 
-    const report = await prisma.deliveryReport.findUnique({
+    let report = await prisma.deliveryReport.findUnique({
       where: { id },
       select: {
         id: true,
@@ -30,6 +30,7 @@ export async function GET(
         adminResponse: true,
         respondedAt: true,
         respondedBy: true,
+        proofImage: true,
         proofImageMime: true,
         proofImageUploadedAt: true,
         resolvedAt: true,
@@ -45,6 +46,8 @@ export async function GET(
             gbAmount: true,
             amount: true,
             status: true,
+            providerReference: true,
+            externalReference: true,
             createdAt: true,
             completedAt: true,
             batch: { select: { batchCode: true } },
@@ -55,9 +58,63 @@ export async function GET(
 
     if (!report) return apiError(404, "Report not found");
 
+    // If report is still active and order was dispatched to Tskconnect, check live status from provider
+    if (
+      ["UNDER_REVIEW", "OPEN", "INVESTIGATING"].includes(report.status) &&
+      report.order?.providerReference?.startsWith("TSKCONNECT:")
+    ) {
+      try {
+        const { syncTskconnectDispute } = await import("@/lib/provider-apis/router");
+        const syncRes = await syncTskconnectDispute(report.order, report.id);
+        if (syncRes.updated) {
+          const refreshed = await prisma.deliveryReport.findUnique({
+            where: { id },
+            select: {
+              id: true,
+              seq: true,
+              userId: true,
+              status: true,
+              reason: true,
+              message: true,
+              adminNote: true,
+              adminResponse: true,
+              respondedAt: true,
+              respondedBy: true,
+              proofImage: true,
+              proofImageMime: true,
+              proofImageUploadedAt: true,
+              resolvedAt: true,
+              resolvedBy: true,
+              createdAt: true,
+              updatedAt: true,
+              events: { orderBy: { createdAt: "asc" }, select: { id: true, type: true, message: true, actorLabel: true, createdAt: true } },
+              order: {
+                select: {
+                  id: true,
+                  phoneNumber: true,
+                  network: true,
+                  gbAmount: true,
+                  amount: true,
+                  status: true,
+                  providerReference: true,
+                  externalReference: true,
+                  createdAt: true,
+                  completedAt: true,
+                  batch: { select: { batchCode: true } },
+                },
+              },
+            },
+          });
+          if (refreshed) report = refreshed;
+        }
+      } catch (syncErr) {
+        console.warn("[NotReceivedDetail] Live provider sync warning:", syncErr);
+      }
+    }
+
     const isStaff = user.role === "ADMIN" || user.role === "MANAGER";
     if (!isStaff && report.userId !== user.id) return apiError(403, "Not allowed");
-    const { userId: _ownerId, ...safeReport } = report;
+    const { userId: _ownerId, proofImage, ...safeReport } = report;
 
     const sanitizeActor = (label: string | null | undefined) => {
       if (!label) return null;
@@ -67,6 +124,7 @@ export async function GET(
     return NextResponse.json({
       report: {
         ...safeReport,
+        hasProofImage: Boolean(proofImage || safeReport.proofImageMime),
         code: deliveryReportCode(safeReport.seq),
         reason: isStaff ? safeReport.reason : sanitizeCustomerFacingText(safeReport.reason),
         message: isStaff ? safeReport.message : sanitizeCustomerFacingText(safeReport.message),

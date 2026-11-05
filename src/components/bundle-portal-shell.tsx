@@ -30,6 +30,7 @@ import {
   ExternalLink,
   Share2,
   Sparkles,
+  FileWarning,
 } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { useTheme } from "next-themes";
@@ -59,6 +60,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard/buy-now", label: "Buy Bundle", icon: Zap },
   { href: "/dashboard/send", label: "Bulk Order", icon: ShoppingCart },
   { href: "/dashboard/orders", label: "Orders", icon: ClipboardList },
+  { href: "/dashboard/not-received", label: "Not Received", icon: FileWarning },
   { href: "/dashboard/customers", label: "Customers", icon: Users },
   { href: "/dashboard/packages", label: "Products", icon: Package },
   { href: "/dashboard/services", label: "Other Services", icon: Sparkles },
