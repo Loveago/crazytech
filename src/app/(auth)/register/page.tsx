@@ -427,15 +427,15 @@ function RegisterForm() {
               <p className="text-center text-[10px] text-slate-500 leading-relaxed pt-1">
                 By registering, you agree to our{" "}
                 <Link href="/terms" target="_blank" className="text-indigo-600 dark:text-indigo-400 hover:underline">
-                  Terms
+                  Terms of Service
                 </Link>
                 ,{" "}
                 <Link href="/privacy" target="_blank" className="text-indigo-600 dark:text-indigo-400 hover:underline">
-                  Privacy
+                  Privacy Policy
                 </Link>
                 , and{" "}
                 <Link href="/refund-policy" target="_blank" className="text-indigo-600 dark:text-indigo-400 hover:underline">
-                  Refunds
+                  Refund Policy
                 </Link>
                 .
               </p>
@@ -453,6 +453,35 @@ function RegisterForm() {
             </Link>
           </div>
         </div>
+
+        {/* Global Legal & Compliance Links */}
+        <footer className="text-center space-y-2 pt-1 pb-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
+            <Link
+              href="/privacy"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors hover:underline"
+            >
+              Privacy Policy
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
+            <Link
+              href="/terms"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors hover:underline"
+            >
+              Terms of Service
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
+            <Link
+              href="/refund-policy"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors hover:underline"
+            >
+              Refund Policy
+            </Link>
+          </div>
+          <p className="text-[11px] text-slate-400 dark:text-slate-500">
+            © {new Date().getFullYear()} Crazy Tech Enterprise. All rights reserved.
+          </p>
+        </footer>
       </div>
     </div>
   );
