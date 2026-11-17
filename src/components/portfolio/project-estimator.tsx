@@ -177,15 +177,15 @@ export function ProjectEstimator({ prefillTitle }: { prefillTitle?: string | nul
   };
 
   return (
-    <section id="estimator" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
+    <section id="estimator" className="relative scroll-mt-24 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
       <div className="mx-auto max-w-6xl">
         {/* Section Title */}
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
+        <div className="text-center mb-10 sm:mb-14">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 sm:px-4 py-1.5 text-[11px] sm:text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
             <Calculator className="h-4 w-4 text-zinc-400" />
             <span>Interactive Project Scope &amp; Cost Estimator</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
             Calculate Your Software Investment in Real-Time
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
@@ -323,8 +323,8 @@ export function ProjectEstimator({ prefillTitle }: { prefillTitle?: string | nul
           </div>
 
           {/* Live Estimate Summary Sticky Card (Right 4 cols) */}
-          <div className="lg:col-span-4 sticky top-24 space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-[#0c0e14] p-6 shadow-2xl">
+          <div className="lg:col-span-4 lg:sticky lg:top-24 space-y-4">
+            <div className="rounded-2xl border border-white/10 bg-[#0c0e14] p-4 sm:p-6 shadow-2xl">
               <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
                 <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
                   Estimated Investment
@@ -354,9 +354,9 @@ export function ProjectEstimator({ prefillTitle }: { prefillTitle?: string | nul
               </div>
 
               {/* Huge Price Numbers */}
-              <div className="py-5 text-center">
+              <div className="py-4 sm:py-5 text-center">
                 <span className="text-xs text-zinc-400 block mb-1">Total Estimated Scope</span>
-                <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+                <div className="text-2xl sm:text-3xl lg:text-4xl font-black font-mono tracking-tight text-white">
                   {currency === "GHS" ? formattedGhs : formattedUsd}
                 </div>
                 <span className="inline-flex items-center gap-1.5 mt-2 rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-medium text-emerald-400 border border-emerald-500/20">

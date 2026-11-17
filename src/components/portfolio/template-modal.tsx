@@ -40,32 +40,33 @@ export function TemplateModal({ template, onClose, onRequestQuote }: TemplateMod
   if (!template) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-3xl border border-white/10 bg-[#0c0e14] text-zinc-100 shadow-2xl overflow-hidden"
+        className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl sm:rounded-3xl border border-white/10 bg-[#0c0e14] text-zinc-100 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] p-5 sm:p-6 bg-[#08090d]">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-3 border-b border-white/[0.08] p-4 sm:p-6 bg-[#08090d]">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
             <span
-              className={`rounded-full px-3 py-1 text-xs font-medium border ${template.badgeBg}`}
+              className={`rounded-full px-2.5 sm:px-3 py-0.5 sm:py-1 text-[11px] sm:text-xs font-medium border ${template.badgeBg}`}
             >
               {template.badge}
             </span>
-            <span className="text-xs font-mono text-zinc-400">Template {template.number}</span>
+            <span className="text-[11px] sm:text-xs font-mono text-zinc-400">Template {template.number}</span>
           </div>
 
           <button
             onClick={onClose}
-            className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+            aria-label="Close modal"
+            className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors shrink-0"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-6 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-7 space-y-5 sm:space-y-6 scrollbar-thin">
           <div>
             <h3 className="text-2xl sm:text-3xl font-black text-white">{template.title}</h3>
             <p className="text-sm sm:text-base text-zinc-300 mt-2 font-medium">

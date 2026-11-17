@@ -40,9 +40,9 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
   )}`;
 
   return (
-    <section id="contact" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
+    <section id="contact" className="relative scroll-mt-24 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
       <div className="mx-auto max-w-7xl">
-        <div className="rounded-3xl border border-white/10 bg-[#0c0e14] p-6 sm:p-10 lg:p-14 shadow-2xl backdrop-blur-xl">
+        <div className="rounded-2xl sm:rounded-3xl border border-white/10 bg-[#0c0e14] p-4 sm:p-10 lg:p-14 shadow-2xl backdrop-blur-xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             {/* Left Column: Direct Info & Trust */}
             <div className="lg:col-span-5 space-y-6">
@@ -127,7 +127,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
             </div>
 
             {/* Right Column: Interactive Proposal Form */}
-            <div className="lg:col-span-7 rounded-2xl border border-white/[0.08] bg-[#08090d] p-6 sm:p-8">
+            <div className="lg:col-span-7 rounded-2xl border border-white/[0.08] bg-[#08090d] p-4 sm:p-8">
               {submitted ? (
                 <div className="py-12 text-center space-y-4">
                   <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
@@ -171,7 +171,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="e.g. John Mensah"
-                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
+                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
                       />
                     </div>
 
@@ -185,7 +185,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="john@company.com"
-                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
+                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -201,7 +201,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="050 790 4981"
-                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
+                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
                       />
                     </div>
 
@@ -212,7 +212,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
                       <select
                         value={projectType}
                         onChange={(e) => setProjectType(e.target.value)}
-                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
+                        className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-base sm:text-xs text-white focus:border-white/30 focus:outline-none"
                       >
                         <option value="Enterprise Software & ERP">Enterprise Software &amp; ERP</option>
                         <option value="Mobile App Development">Mobile App (iOS / Android)</option>
@@ -231,7 +231,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
                     <select
                       value={budget}
                       onChange={(e) => setBudget(e.target.value)}
-                      className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-xs text-white focus:border-white/30 focus:outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-base sm:text-xs text-white focus:border-white/30 focus:outline-none"
                     >
                       <option value="GHS 10,000 - GHS 25,000 ($800 - $2,000)">
                         GHS 10,000 - GHS 25,000 ($800 - $2,000)
@@ -254,7 +254,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Tell us what you'd like to achieve, target launch date, and any special integrations..."
-                      className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-[#0c0e14] px-3.5 py-2.5 text-base sm:text-xs text-white placeholder-zinc-600 focus:border-white/30 focus:outline-none"
                     />
                   </div>
 

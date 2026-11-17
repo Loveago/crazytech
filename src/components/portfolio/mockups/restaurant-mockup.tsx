@@ -155,15 +155,15 @@ export function RestaurantMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-3 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Header with Mode Switcher (Delivery vs Dine-In Table QR) */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+      <div className="mb-4 sm:mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-amber-400">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-amber-400">
             <UtensilsCrossed className="h-5 w-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">Savoria Gourmet Dining Engine</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300 border border-amber-500/20">
                 <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" /> POS &amp; Kitchen Live
@@ -174,30 +174,30 @@ export function RestaurantMockup({
         </div>
 
         {/* Fulfillment Mode Toggle */}
-        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+        <div className="flex w-full sm:w-auto items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
           <button
             type="button"
             onClick={() => setOrderType("delivery")}
-            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-2.5 py-1.5 sm:py-1 text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap ${
               orderType === "delivery"
                 ? "bg-white text-zinc-950 shadow-sm"
                 : "text-zinc-400 hover:text-white"
             }`}
           >
-            <Bike className="h-3.5 w-3.5" />
+            <Bike className="h-3.5 w-3.5 shrink-0" />
             <span>Delivery (28 min)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setOrderType("dinein")}
-            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-2.5 py-1.5 sm:py-1 text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap ${
               orderType === "dinein"
                 ? "bg-white text-zinc-950 shadow-sm"
                 : "text-zinc-400 hover:text-white"
             }`}
           >
-            <QrCode className="h-3.5 w-3.5" />
+            <QrCode className="h-3.5 w-3.5 shrink-0" />
             <span>Table #12 QR</span>
           </button>
         </div>

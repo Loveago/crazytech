@@ -160,15 +160,15 @@ const SERVICES: ServiceCard[] = [
 
 export function ServicesSection({ onSelectService }: { onSelectService: (serviceTitle: string) => void }) {
   return (
-    <section id="services" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
+    <section id="services" className="relative scroll-mt-24 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
       <div className="mx-auto max-w-7xl">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
+        <div className="text-center mb-10 sm:mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 sm:px-4 py-1.5 text-[11px] sm:text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
             <Cpu className="h-4 w-4 text-zinc-400" />
             <span>Comprehensive Digital Engineering Solutions</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
             What We Build at CrazyTech Enterprises
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">

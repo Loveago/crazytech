@@ -39,15 +39,15 @@ export function OmniCoreMockup({
   ];
 
   return (
-    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-3 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Top Bar with Role Switcher & System Telemetry */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+      <div className="mb-4 sm:mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
             <Building2 className="h-5 w-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">OmniCore Enterprise Suite</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-zinc-300 border border-white/10">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Cluster Healthy
@@ -58,13 +58,13 @@ export function OmniCoreMockup({
         </div>
 
         {/* RBAC Role Switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+        <div className="flex w-full sm:w-auto items-center justify-between sm:justify-start gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
           {(["Super Admin", "Branch Lead", "Auditor"] as const).map((role) => (
             <button
               key={role}
               type="button"
               onClick={() => setActiveRole(role)}
-              className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
+              className={`flex-1 sm:flex-initial rounded-lg px-2.5 py-1 text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap ${
                 activeRole === role
                   ? "bg-white text-zinc-950 shadow-sm"
                   : "text-zinc-400 hover:text-white"
@@ -77,68 +77,70 @@ export function OmniCoreMockup({
       </div>
 
       {/* KPI Highlight Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 mb-5">
+        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-2.5 sm:p-3">
           <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">
             Total Revenue ({timeframe})
           </span>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-lg sm:text-xl font-extrabold font-mono text-indigo-300">
+          <div className="flex flex-wrap items-baseline gap-1.5">
+            <span className="text-sm sm:text-xl font-extrabold font-mono text-indigo-300">
               {timeframe === "24h" ? "GHS 38,420" : timeframe === "7d" ? "GHS 342,800" : "GHS 1,480,000"}
             </span>
-            <span className="text-[11px] font-bold text-emerald-400 flex items-center">
+            <span className="text-[10px] sm:text-[11px] font-bold text-emerald-400 flex items-center">
               <TrendingUp className="h-3 w-3 mr-0.5" /> +18.4%
             </span>
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-2.5 sm:p-3">
           <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">
             Active Branches
           </span>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-lg sm:text-xl font-extrabold font-mono text-white">52 Sites</span>
+          <div className="flex flex-wrap items-baseline gap-1.5">
+            <span className="text-sm sm:text-xl font-extrabold font-mono text-white">52 Sites</span>
             <span className="text-[10px] text-slate-400">Sync: 12ms</span>
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-2.5 sm:p-3">
           <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">
             API Throughput
           </span>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-lg sm:text-xl font-extrabold font-mono text-cyan-300">1,840/s</span>
+          <div className="flex flex-wrap items-baseline gap-1.5">
+            <span className="text-sm sm:text-xl font-extrabold font-mono text-cyan-300">1,840/s</span>
             <span className="text-[10px] text-emerald-400">0% error</span>
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-3">
+        <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-2.5 sm:p-3">
           <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">
             Audit Integrity
           </span>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-lg sm:text-xl font-extrabold font-mono text-emerald-400">100%</span>
+          <div className="flex flex-wrap items-baseline gap-1.5">
+            <span className="text-sm sm:text-xl font-extrabold font-mono text-emerald-400">100%</span>
             <span className="text-[10px] text-slate-400">ISO-Ready</span>
           </div>
         </div>
       </div>
 
       {/* Interactive Workflow Pipeline */}
-      <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-4 mb-5">
-        <div className="flex items-center justify-between mb-3">
+      <div className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-3 sm:p-4 mb-5">
+        <div className="flex flex-wrap items-center justify-between gap-1 mb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
             <Layers className="h-3.5 w-3.5 text-indigo-400" /> Interactive Fulfillment Pipeline
           </span>
-          <span className="text-[11px] text-indigo-400">Click a stage to simulate pipeline progression</span>
+          <span className="text-[10px] sm:text-[11px] text-indigo-400">Tap a stage to progress</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-          {steps.map((s) => (
+          {steps.map((s, idx) => (
             <button
               key={s.id}
               type="button"
               onClick={() => setPipelineStep(s.id)}
-              className={`flex flex-col text-left p-3 rounded-xl border transition-all ${
+              className={`flex flex-col text-left p-2.5 sm:p-3 rounded-xl border transition-all ${
+                idx === steps.length - 1 ? "col-span-2 sm:col-span-1" : ""
+              } ${
                 pipelineStep === s.id
                   ? "border-indigo-400 bg-indigo-500/20 shadow-md shadow-indigo-500/20"
                   : pipelineStep > s.id

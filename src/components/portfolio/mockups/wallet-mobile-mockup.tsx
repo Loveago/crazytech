@@ -108,15 +108,15 @@ export function WalletMobileMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-3 sm:p-5 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-2.5 sm:p-5 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Top Banner */}
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2.5 border-b border-white/[0.08] pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
             <CreditCard className="h-4 w-4" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-bold text-xs sm:text-sm tracking-wide text-white">ApexPay Neo-Wallet &amp; Card</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px] font-semibold text-zinc-300 border border-white/10">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> Virtual Visa Active
@@ -127,13 +127,13 @@ export function WalletMobileMockup({
         </div>
 
         {/* Currency Switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+        <div className="flex w-full sm:w-auto items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
           {(["GHS", "USD", "GBP"] as const).map((cur) => (
             <button
               key={cur}
               type="button"
               onClick={() => setCurrency(cur)}
-              className={`rounded-lg px-2.5 py-0.5 text-[11px] font-semibold transition-all ${
+              className={`flex-1 sm:flex-initial rounded-lg px-2.5 py-0.5 text-[11px] font-semibold transition-all ${
                 currency === cur
                   ? "bg-white text-zinc-950 shadow-sm"
                   : "text-zinc-400 hover:text-white"
@@ -146,7 +146,7 @@ export function WalletMobileMockup({
       </div>
 
       {/* Center Phone Frame */}
-      <div className="mx-auto w-full max-w-[360px] rounded-[40px] border-4 border-zinc-800 bg-[#08090d] p-3 shadow-2xl">
+      <div className="mx-auto w-full max-w-[360px] rounded-[34px] sm:rounded-[40px] border-4 border-zinc-800 bg-[#08090d] p-2 sm:p-3 shadow-2xl">
         {/* Dynamic Island / Status Bar */}
         <div className="mb-3 flex items-center justify-between px-3 text-[10px] font-mono text-zinc-400">
           <span>09:41</span>

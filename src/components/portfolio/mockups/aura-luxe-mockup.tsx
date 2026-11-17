@@ -101,7 +101,7 @@ export function AuraLuxeMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all overflow-hidden">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-3 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all overflow-hidden">
       {/* Top Header */}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
@@ -228,8 +228,8 @@ export function AuraLuxeMockup({
             </div>
           </div>
 
-          <div className="flex items-center gap-3 pt-2">
-            <div className="flex items-center rounded-xl border border-slate-800 bg-slate-900 px-2 py-1">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
+            <div className="flex items-center justify-between sm:justify-start rounded-xl border border-slate-800 bg-slate-900 px-3 py-1.5 sm:px-2 sm:py-1">
               <button
                 type="button"
                 onClick={() => setCartCount((c) => Math.max(1, c - 1))}
@@ -250,9 +250,9 @@ export function AuraLuxeMockup({
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-zinc-200 py-3 px-4 font-bold text-sm text-zinc-950 shadow-md transition-all active:scale-[0.99]"
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-zinc-200 py-3 px-4 font-bold text-xs sm:text-sm text-zinc-950 shadow-md transition-all active:scale-[0.99]"
             >
-              <ShoppingBag className="h-4 w-4" />
+              <ShoppingBag className="h-4 w-4 shrink-0" />
               <span>Add to Bag — GHS {subtotal.toLocaleString()}</span>
             </button>
           </div>

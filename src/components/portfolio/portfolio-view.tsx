@@ -25,6 +25,8 @@ import {
   ChevronDown,
   Star,
   Quote,
+  Menu,
+  X,
 } from "lucide-react";
 import { BrandMark, BrandLogo } from "@/components/brand-logo";
 import { InteractiveCanvasBg } from "./interactive-canvas-bg";
@@ -45,6 +47,7 @@ export function PortfolioView() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeModalTemplate, setActiveModalTemplate] = useState<TemplateData | null>(null);
   const [estimatorPrefill, setEstimatorPrefill] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   // Device view switcher state per template
   const [deviceViews, setDeviceViews] = useState<Record<string, "desktop" | "tablet" | "mobile">>({
@@ -102,14 +105,14 @@ export function PortfolioView() {
 
       {/* Top Navigation Bar */}
       <header className="sticky top-0 z-40 border-b border-white/[0.07] bg-[#08090d]/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3.5">
-          <Link href="/portfolio" className="flex items-center gap-3 shrink-0 mr-4 sm:mr-8 group">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3 sm:py-3.5">
+          <Link href="/portfolio" className="flex items-center gap-2.5 sm:gap-3 shrink-0 mr-2 sm:mr-8 group">
             <BrandMark size="sm" className="group-hover:scale-105 transition-transform" />
             <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-extrabold tracking-tight text-white flex items-center gap-1.5">
-                CrazyTech <span className="text-zinc-400 font-mono text-xs font-semibold">STUDIO</span>
+              <span className="text-sm sm:text-lg font-extrabold tracking-tight text-white flex items-center gap-1.5">
+                CrazyTech <span className="text-zinc-400 font-mono text-[10px] sm:text-xs font-semibold">STUDIO</span>
               </span>
-              <span className="text-[9px] font-mono tracking-widest text-zinc-400 uppercase">
+              <span className="text-[8px] sm:text-[9px] font-mono tracking-widest text-zinc-400 uppercase">
                 Software &amp; App Engineering
               </span>
             </div>
@@ -133,7 +136,7 @@ export function PortfolioView() {
             </a>
           </nav>
 
-          <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="https://wa.me/233507904981"
               target="_blank"
@@ -146,25 +149,70 @@ export function PortfolioView() {
 
             <a
               href="#estimator"
-              className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-bold text-zinc-950 shadow-sm transition-all active:scale-95"
+              className="flex items-center gap-1 sm:gap-1.5 rounded-xl bg-white hover:bg-zinc-200 px-3 sm:px-4 py-2 text-[11px] sm:text-xs font-bold text-zinc-950 shadow-sm transition-all active:scale-95 whitespace-nowrap"
             >
               <span>Start Project</span>
               <ArrowUpRight className="h-3.5 w-3.5 text-zinc-950" />
             </a>
+
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileMenuOpen}
+              className="lg:hidden flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] p-2 text-zinc-200 hover:bg-white/[0.08] transition-colors"
+            >
+              {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Slide-Down Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-white/[0.08] bg-[#08090d]/95 backdrop-blur-xl px-4 py-4 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
+            {[
+              { href: "#showcase", label: "Showcase Templates" },
+              { href: "#services", label: "Engineering Capabilities" },
+              { href: "#process", label: "4-Stage Delivery Blueprint" },
+              { href: "#estimator", label: "Project Cost Estimator" },
+              { href: "#contact", label: "Contact & RFP" },
+            ].map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium text-zinc-200 hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                <span>{item.label}</span>
+                <ArrowRight className="h-3.5 w-3.5 text-zinc-500" />
+              </a>
+            ))}
+            <div className="pt-2 mt-2 border-t border-white/[0.06]">
+              <a
+                href="https://wa.me/233507904981"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 py-2.5 text-xs font-bold text-emerald-300"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>WhatsApp Studio: +233 50 790 4981</span>
+              </a>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-20 sm:pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-12 sm:pt-24 lg:pt-28 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl text-center">
           {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-6 backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 sm:px-4 py-1.5 text-[11px] sm:text-xs font-medium text-zinc-300 mb-5 sm:mb-6 backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
             <span>High-Impact Engineering &amp; Custom Software Solutions</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.08]">
+          <h1 className="text-[32px] leading-[1.12] sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight sm:leading-[1.08]">
             We Engineer High-Impact{" "}
             <span className="bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               Software, Mobile Apps &amp; Platforms
@@ -172,15 +220,15 @@ export function PortfolioView() {
             That Scale.
           </h1>
 
-          <p className="mx-auto mt-6 max-w-3xl text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
+          <p className="mx-auto mt-5 sm:mt-6 max-w-3xl text-sm sm:text-lg text-zinc-400 leading-relaxed font-normal">
             From high-throughput telecommunication gateways and enterprise ERP suites to consumer mobile apps and 60fps headless commerce — CrazyTech delivers mission-critical software built for speed, security, and conversion.
           </p>
 
           {/* Action CTAs */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             <a
               href="#showcase"
-              className="flex items-center gap-2 rounded-xl bg-white hover:bg-zinc-200 px-7 py-3.5 font-bold text-sm text-zinc-950 shadow-[0_0_24px_rgba(255,255,255,0.14)] transition-all hover:-translate-y-0.5 active:scale-95"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-white hover:bg-zinc-200 px-6 sm:px-7 py-3.5 font-bold text-sm text-zinc-950 shadow-[0_0_24px_rgba(255,255,255,0.14)] transition-all hover:-translate-y-0.5 active:scale-95"
             >
               <span>Explore 6 Showcase Templates</span>
               <ArrowRight className="h-4 w-4" />
@@ -188,7 +236,7 @@ export function PortfolioView() {
 
             <a
               href="#estimator"
-              className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20 px-6 py-3.5 font-medium text-sm text-zinc-200 transition-all hover:-translate-y-0.5"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/20 px-6 py-3.5 font-medium text-sm text-zinc-200 transition-all hover:-translate-y-0.5"
             >
               <Sliders className="h-4 w-4 text-zinc-400" />
               <span>Calculate Project Scope</span>
@@ -198,7 +246,7 @@ export function PortfolioView() {
               href="https://wa.me/233507904981"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.08] hover:bg-emerald-500/15 px-6 py-3.5 font-medium text-sm text-emerald-300 transition-all hover:-translate-y-0.5"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.08] hover:bg-emerald-500/15 px-6 py-3.5 font-medium text-sm text-emerald-300 transition-all hover:-translate-y-0.5"
             >
               <MessageCircle className="h-4 w-4" />
               <span>WhatsApp Consultation</span>
@@ -206,39 +254,39 @@ export function PortfolioView() {
           </div>
 
           {/* Key Metrics Ticker */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-4 sm:p-5 backdrop-blur-xl">
-            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
+          <div className="mt-10 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-3 sm:p-5 backdrop-blur-xl">
+            <div className="text-center p-2.5 sm:p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 99.99%
               </span>
-              <span className="text-xs text-zinc-400 font-medium mt-1 block">System Uptime SLA</span>
+              <span className="text-[11px] sm:text-xs text-zinc-400 font-medium mt-1 block">System Uptime SLA</span>
             </div>
 
-            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
+            <div className="text-center p-2.5 sm:p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 GHS 4.2M+
               </span>
-              <span className="text-xs text-zinc-400 font-medium mt-1 block">Automated FinTech Volume</span>
+              <span className="text-[11px] sm:text-xs text-zinc-400 font-medium mt-1 block">Automated FinTech Volume</span>
             </div>
 
-            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
+            <div className="text-center p-2.5 sm:p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 &lt;120ms
               </span>
-              <span className="text-xs text-zinc-400 font-medium mt-1 block">API Microservice Latency</span>
+              <span className="text-[11px] sm:text-xs text-zinc-400 font-medium mt-1 block">API Microservice Latency</span>
             </div>
 
-            <div className="text-center p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
-              <span className="block text-2xl sm:text-3xl font-black font-mono text-white tracking-tight">
+            <div className="text-center p-2.5 sm:p-3 rounded-xl border border-white/[0.04] bg-white/[0.01]">
+              <span className="block text-xl sm:text-3xl font-black font-mono text-white tracking-tight">
                 50+ Systems
               </span>
-              <span className="text-xs text-zinc-400 font-medium mt-1 block">Enterprise Deployments</span>
+              <span className="text-[11px] sm:text-xs text-zinc-400 font-medium mt-1 block">Enterprise Deployments</span>
             </div>
           </div>
 
           {/* Hero Visual Studio Showcase with Live Telemetry Overlays */}
-          <div className="relative mt-12 overflow-hidden rounded-3xl border border-white/[0.12] bg-[#0c0e16] shadow-2xl group">
-            <div className="relative h-[300px] sm:h-[420px] lg:h-[500px] w-full overflow-hidden">
+          <div className="relative mt-8 sm:mt-12 overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.12] bg-[#0c0e16] shadow-2xl group">
+            <div className="relative h-[200px] sm:h-[420px] lg:h-[500px] w-full overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=80"
                 alt="CrazyTech High-Concurrency Platform Engine"
@@ -247,8 +295,14 @@ export function PortfolioView() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#08090d] via-[#08090d]/35 to-transparent" />
 
-              {/* Floating Live Telemetry Cards */}
-              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 rounded-2xl border border-white/15 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xl shadow-xl flex items-center gap-3">
+              {/* Mobile Corner Pill */}
+              <div className="sm:hidden absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-slate-950/85 px-3 py-1 backdrop-blur-md">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">Live Production Architecture</span>
+              </div>
+
+              {/* Desktop Floating Live Telemetry Cards */}
+              <div className="hidden sm:flex absolute top-6 left-6 rounded-2xl border border-white/15 bg-slate-950/80 p-4 backdrop-blur-xl shadow-xl items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
                   <Zap className="h-5 w-5" />
                 </div>
@@ -261,7 +315,7 @@ export function PortfolioView() {
                 </div>
               </div>
 
-              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 rounded-2xl border border-white/15 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xl shadow-xl flex items-center gap-3">
+              <div className="hidden sm:flex absolute bottom-6 left-6 rounded-2xl border border-white/15 bg-slate-950/80 p-4 backdrop-blur-xl shadow-xl items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
                   <Shield className="h-5 w-5" />
                 </div>
@@ -271,11 +325,44 @@ export function PortfolioView() {
                 </div>
               </div>
 
-              <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 hidden sm:flex rounded-2xl border border-white/15 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xl shadow-xl items-center gap-3">
+              <div className="hidden sm:flex absolute bottom-6 right-6 rounded-2xl border border-white/15 bg-slate-950/80 p-4 backdrop-blur-xl shadow-xl items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
                   <Cpu className="h-5 w-5" />
                 </div>
                 <div className="text-left">
+                  <span className="block text-xs font-bold text-white">VPS &amp; Nginx Hardened</span>
+                  <span className="text-[11px] font-mono text-zinc-400">Ubuntu 22.04 LTS • PM2 Cluster</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Stacked Telemetry Strip (cleanly displays all 3 metrics without blocking photo) */}
+            <div className="sm:hidden grid grid-cols-1 gap-2 p-3 border-t border-white/10 bg-[#0b0d14]">
+              <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                  <Zap className="h-4 w-4" />
+                </div>
+                <div className="text-left min-w-0">
+                  <span className="block text-xs font-bold text-white">Sub-Second Dispatch</span>
+                  <span className="text-[11px] font-mono text-zinc-400">Carrier Queue: 1.4s</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                  <Shield className="h-4 w-4" />
+                </div>
+                <div className="text-left min-w-0">
+                  <span className="block text-xs font-bold text-white">Atomic Double-Entry Ledger</span>
+                  <span className="text-[11px] font-mono text-zinc-400">Zero Transaction Discrepancy</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                  <Cpu className="h-4 w-4" />
+                </div>
+                <div className="text-left min-w-0">
                   <span className="block text-xs font-bold text-white">VPS &amp; Nginx Hardened</span>
                   <span className="text-[11px] font-mono text-zinc-400">Ubuntu 22.04 LTS • PM2 Cluster</span>
                 </div>
@@ -354,23 +441,23 @@ export function PortfolioView() {
       </section>
 
       {/* 6 High-Quality Showcase Templates Section */}
-      <section id="showcase" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8">
+      <section id="showcase" className="relative scroll-mt-24 py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Section Header */}
-          <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
+          <div className="text-center mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 sm:px-4 py-1.5 text-[11px] sm:text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
               <Layers className="h-4 w-4 text-zinc-400" />
               <span>Interactive Production-Grade Showcases</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-5xl font-black text-white tracking-tight">
               Six High-Caliber Architecture Templates
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
               Test-drive actual interactive components engineered by CrazyTech. Switch device framing, trigger simulated API dispatches, inspect metrics, and clone any template for your venture.
             </p>
 
-            {/* Category Filter Pills */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+            {/* Category Filter Pills (Swipeable horizontally on mobile) */}
+            <div className="mt-6 sm:mt-8 flex sm:flex-wrap items-center sm:justify-center gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
               {(
                 [
                   "All",
@@ -386,7 +473,7 @@ export function PortfolioView() {
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`rounded-xl px-4 py-2 text-xs font-medium transition-all ${
+                  className={`whitespace-nowrap shrink-0 rounded-xl px-3.5 sm:px-4 py-2 text-xs font-medium transition-all ${
                     selectedCategory === cat
                       ? "bg-white text-zinc-950 font-bold shadow-md"
                       : "border border-white/[0.08] bg-white/[0.03] text-zinc-400 hover:text-white hover:border-white/20"
@@ -399,14 +486,14 @@ export function PortfolioView() {
           </div>
 
           {/* Template Cards Feed */}
-          <div className="space-y-16">
+          <div className="space-y-10 sm:space-y-16">
             {filteredTemplates.map((template) => {
               const currentDevice = deviceViews[template.id] || "desktop";
 
               return (
                 <div
                   key={template.id}
-                  className="rounded-3xl border border-white/[0.08] bg-[#0c0e14]/90 p-6 sm:p-8 lg:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden group"
+                  className="rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#0c0e14]/90 p-4 sm:p-8 lg:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden group"
                 >
                   {/* Subtle Background Glow */}
                   <div
@@ -415,55 +502,55 @@ export function PortfolioView() {
                   />
 
                   {/* Top Bar: Template Number, Title & Device Switcher */}
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-white/[0.08] mb-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 sm:pb-6 border-b border-white/[0.08] mb-5 sm:mb-6">
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-xs font-bold text-zinc-400 tracking-wider">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <span className="font-mono text-[11px] sm:text-xs font-bold text-zinc-400 tracking-wider">
                           TEMPLATE {template.number}
                         </span>
                         <span
-                          className={`rounded-full px-3 py-0.5 text-xs font-medium border ${template.badgeBg}`}
+                          className={`rounded-full px-2.5 sm:px-3 py-0.5 text-[11px] sm:text-xs font-medium border ${template.badgeBg}`}
                         >
                           {template.badge}
                         </span>
                       </div>
-                      <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{template.title}</h3>
+                      <h3 className="text-xl sm:text-3xl font-extrabold text-white tracking-tight">{template.title}</h3>
                       <p className="text-xs sm:text-sm text-zinc-400 font-normal">
                         {template.tagline}
                       </p>
                     </div>
 
                     {/* View Switcher: Interactive vs Visual, and Device Framing */}
-                    <div className="flex flex-wrap items-center gap-2 self-start lg:self-auto">
-                      <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+                    <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+                      <div className="flex flex-1 sm:flex-initial items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
                         <button
                           type="button"
                           onClick={() => toggleViewMode(template.id, "interactive")}
-                          className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                          className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap ${
                             (viewModes[template.id] || "interactive") === "interactive"
                               ? "bg-white text-zinc-950 shadow-sm"
                               : "text-zinc-400 hover:text-white"
                           }`}
                         >
-                          <Sliders className="h-3.5 w-3.5" />
+                          <Sliders className="h-3.5 w-3.5 shrink-0" />
                           <span>Interactive Demo</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => toggleViewMode(template.id, "visual")}
-                          className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                          className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap ${
                             viewModes[template.id] === "visual"
                               ? "bg-white text-zinc-950 shadow-sm"
                               : "text-zinc-400 hover:text-white"
                           }`}
                         >
-                          <Layers className="h-3.5 w-3.5" />
+                          <Layers className="h-3.5 w-3.5 shrink-0" />
                           <span>Architecture Visual</span>
                         </button>
                       </div>
 
                       {(viewModes[template.id] || "interactive") === "interactive" && (
-                        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+                        <div className="hidden sm:flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
                           <button
                             type="button"
                             onClick={() => setTemplateDevice(template.id, "desktop")}
@@ -474,7 +561,7 @@ export function PortfolioView() {
                             }`}
                           >
                             <Monitor className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">Desktop</span>
+                            <span>Desktop</span>
                           </button>
 
                           <button
@@ -487,7 +574,7 @@ export function PortfolioView() {
                             }`}
                           >
                             <Tablet className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">Tablet</span>
+                            <span>Tablet</span>
                           </button>
 
                           <button
@@ -500,7 +587,7 @@ export function PortfolioView() {
                             }`}
                           >
                             <Smartphone className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline">Mobile</span>
+                            <span>Mobile</span>
                           </button>
                         </div>
                       )}
@@ -509,27 +596,27 @@ export function PortfolioView() {
 
                   {/* Template Presentation: Interactive Sandbox vs Production Visual */}
                   {viewModes[template.id] === "visual" ? (
-                    <div className="mb-8 space-y-4">
-                      <div className="relative h-[320px] sm:h-[420px] w-full overflow-hidden rounded-2xl border border-white/10 bg-[#08090d] group/visual">
+                    <div className="mb-6 sm:mb-8 space-y-4">
+                      <div className="relative h-[260px] sm:h-[420px] w-full overflow-hidden rounded-2xl border border-white/10 bg-[#08090d] group/visual">
                         <img
                           src={template.image}
                           alt={template.title}
                           className="h-full w-full object-cover object-center group-hover/visual:scale-105 transition-transform duration-700"
                           loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-                        <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/55 to-transparent" />
+                        <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-6 sm:left-6 sm:right-6 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-4">
                           <div className="space-y-1">
                             <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                               Production Environment
                             </span>
-                            <h4 className="text-xl sm:text-2xl font-bold text-white">{template.title}</h4>
-                            <p className="text-xs text-zinc-300 max-w-xl">{template.tagline}</p>
+                            <h4 className="text-lg sm:text-2xl font-bold text-white leading-tight">{template.title}</h4>
+                            <p className="text-xs text-zinc-300 max-w-xl line-clamp-2">{template.tagline}</p>
                           </div>
                           <button
                             type="button"
                             onClick={() => setActiveModalTemplate(template)}
-                            className="rounded-xl bg-white text-zinc-950 font-bold text-xs px-4 py-2 hover:bg-zinc-200 transition shadow-lg shrink-0 cursor-pointer"
+                            className="w-full sm:w-auto text-center rounded-xl bg-white text-zinc-950 font-bold text-xs px-4 py-2.5 sm:py-2 hover:bg-zinc-200 transition shadow-lg shrink-0 cursor-pointer"
                           >
                             View Architecture Specs
                           </button>
@@ -552,7 +639,7 @@ export function PortfolioView() {
                     </div>
                   ) : (
                     /* Device Framing Outer Wrap */
-                    <div className="flex justify-center mb-8">
+                    <div className="flex justify-center mb-6 sm:mb-8">
                       <div
                         className={`w-full transition-all duration-300 ${
                           currentDevice === "desktop"
@@ -563,23 +650,24 @@ export function PortfolioView() {
                         }`}
                       >
                         {/* Browser / Frame Chrome */}
-                        <div className="rounded-t-2xl border-t border-x border-white/10 bg-[#12141c] px-4 py-2.5 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
+                        <div className="rounded-t-2xl border-t border-x border-white/10 bg-[#12141c] px-3 sm:px-4 py-2.5 flex items-center justify-between gap-2">
+                          <div className="hidden sm:flex items-center gap-2 shrink-0">
                             <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
                             <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
                             <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
                           </div>
-                          <div className="rounded-lg bg-[#08090d] px-3 py-1 text-[11px] font-mono text-zinc-400 border border-white/[0.06] max-w-[280px] truncate">
+                          <div className="rounded-lg bg-[#08090d] px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono text-zinc-400 border border-white/[0.06] flex-1 sm:flex-initial min-w-0 sm:max-w-[280px] truncate">
                             https://demo.crazytechent.com/{template.id}
                           </div>
-                          <div className="text-[10px] text-zinc-400 font-mono flex items-center gap-1.5">
+                          <div className="text-[10px] text-zinc-400 font-mono flex items-center gap-1.5 shrink-0">
                             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                            <span>Interactive Sandbox</span>
+                            <span className="sm:hidden">Live</span>
+                            <span className="hidden sm:inline">Interactive Sandbox</span>
                           </div>
                         </div>
 
                         {/* Live Embedded Prototype Component */}
-                        <div className="rounded-b-2xl border-b border-x border-white/10 bg-[#08090d]/80 p-2 sm:p-4">
+                        <div className="rounded-b-2xl border-b border-x border-white/10 bg-[#08090d]/80 p-1.5 sm:p-4">
                           {template.previewType === "fintech" && <NexusPayMockup device={currentDevice} />}
                           {template.previewType === "restaurant" && <RestaurantMockup device={currentDevice} />}
                           {template.previewType === "wallet" && <WalletMobileMockup device={currentDevice} />}
@@ -647,14 +735,14 @@ export function PortfolioView() {
       <ServicesSection onSelectService={handleSelectService} />
 
       {/* Engineering Process & Architecture Section */}
-      <section id="process" className="relative scroll-mt-24 py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] bg-[#090a0f]">
+      <section id="process" className="relative scroll-mt-24 py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] bg-[#090a0f]">
         <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
               <Cpu className="h-4 w-4 text-zinc-400" />
               <span>The CrazyTech Standard</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-5xl font-black text-white tracking-tight">
               Our 4-Stage Rapid Delivery Blueprint
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
@@ -714,14 +802,14 @@ export function PortfolioView() {
       </section>
 
       {/* Studio Craftsmanship & Engineering Lab Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] bg-[#08090d]">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] bg-[#08090d]">
         <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
               <Terminal className="h-4 w-4 text-zinc-400" />
               <span>Studio Craftsmanship &amp; Engineering Culture</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-5xl font-black text-white tracking-tight">
               Behind the Code: Our Engineering Principles
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
@@ -781,13 +869,13 @@ export function PortfolioView() {
       </section>
 
       {/* Verified Client Testimonials */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
+      <section className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
         <div className="mx-auto max-w-6xl">
-          <div className="text-center mb-14">
+          <div className="text-center mb-10 sm:mb-14">
             <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-bold block mb-2">
               Verified Client Trust
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-white">
               Trusted by FinTech Founders &amp; Business Leaders
             </h2>
           </div>
@@ -864,19 +952,19 @@ export function PortfolioView() {
       <ContactRfpSection prefillService={estimatorPrefill} />
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] bg-[#06070a] py-12 px-4 sm:px-6 lg:px-8 text-xs text-zinc-400">
+      <footer className="border-t border-white/[0.06] bg-[#06070a] pt-12 pb-24 sm:pb-16 px-4 sm:px-6 lg:px-8 text-xs text-zinc-400">
         <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
           <div className="flex items-center gap-3">
             <BrandMark size="sm" />
-            <div>
-              <span className="font-bold text-white">CrazyTech Enterprises</span>
+            <div className="text-left">
+              <span className="font-bold text-white block">CrazyTech Enterprises</span>
               <p className="text-[11px] text-zinc-500">
                 High-Impact Software Engineering &amp; Next-Gen Digital Systems
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6 font-medium">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 font-medium">
             <a href="#showcase" className="hover:text-white transition-colors">
               Templates
             </a>

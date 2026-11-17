@@ -71,15 +71,15 @@ export function PulseHealthMockup({
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-4 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
+    <div className="relative w-full rounded-2xl border border-white/10 bg-[#0c0d12]/95 p-2.5 sm:p-6 text-zinc-100 shadow-2xl backdrop-blur-xl transition-all">
       {/* Header */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
+      <div className="mb-4 sm:mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-emerald-400">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-emerald-400">
             <HeartPulse className="h-5 w-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="font-bold text-sm tracking-wide text-white">PulseHealth Mobile Suite</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300 border border-emerald-500/20">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> iOS &amp; Android
@@ -90,7 +90,7 @@ export function PulseHealthMockup({
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+        <div className="flex w-full sm:w-auto items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1 overflow-x-auto">
           {[
             { id: "consult", label: "Consult", icon: UserCheck },
             { id: "schedule", label: "Booking", icon: Calendar },
@@ -103,13 +103,13 @@ export function PulseHealthMockup({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
+                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] sm:text-xs font-semibold transition-all whitespace-nowrap shrink-0 ${
                   activeTab === tab.id
                     ? "bg-white text-zinc-950 shadow-sm"
                     : "text-zinc-400 hover:text-white"
                 }`}
               >
-                <Icon className="h-3 w-3" />
+                <Icon className="h-3 w-3 shrink-0" />
                 <span>{tab.label}</span>
               </button>
             );
@@ -118,7 +118,7 @@ export function PulseHealthMockup({
       </div>
 
       {/* Interactive Mobile Device Frame */}
-      <div className="mx-auto max-w-sm rounded-[36px] border-4 border-zinc-800 bg-[#08090d] p-3 shadow-2xl">
+      <div className="mx-auto max-w-sm rounded-[32px] sm:rounded-[36px] border-4 border-zinc-800 bg-[#08090d] p-2 sm:p-3 shadow-2xl">
         {/* Dynamic Island / Bezel Top */}
         <div className="mb-3 flex items-center justify-between px-3 text-[10px] font-mono text-slate-400">
           <span>09:41</span>
@@ -163,9 +163,9 @@ export function PulseHealthMockup({
                 {doctors.map((doc) => (
                   <div
                     key={doc.name}
-                    className="flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-950/70 p-2.5 hover:border-emerald-500/30 transition-all"
+                    className="flex items-center justify-between gap-2 rounded-xl border border-slate-800/80 bg-slate-950/70 p-2.5 hover:border-emerald-500/30 transition-all"
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-800">
                         <img
                           src={doc.imageUrl}
@@ -174,16 +174,16 @@ export function PulseHealthMockup({
                           loading="lazy"
                         />
                       </div>
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-bold text-white">{doc.name}</span>
-                          <span className="flex items-center text-[10px] text-amber-400 font-bold">
+                          <span className="text-xs font-bold text-white truncate">{doc.name}</span>
+                          <span className="flex items-center text-[10px] text-amber-400 font-bold shrink-0">
                             <Star className="h-2.5 w-2.5 fill-amber-400 mr-0.5" />
                             {doc.rating}
                           </span>
                         </div>
-                        <span className="text-[10px] text-slate-400 block">{doc.hospital}</span>
-                        <span className="text-[10px] font-mono text-emerald-400 font-semibold">{doc.nextSlot}</span>
+                        <span className="text-[10px] text-slate-400 block truncate">{doc.hospital}</span>
+                        <span className="text-[10px] font-mono text-emerald-400 font-semibold block truncate">{doc.nextSlot}</span>
                       </div>
                     </div>
 
@@ -193,7 +193,7 @@ export function PulseHealthMockup({
                         setSelectedDate(doc.nextSlot);
                         setActiveTab("schedule");
                       }}
-                      className="rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-2.5 py-1.5 text-[10px] font-bold border border-emerald-500/30 transition-colors"
+                      className="shrink-0 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 px-2.5 py-1.5 text-[10px] font-bold border border-emerald-500/30 transition-colors"
                     >
                       Book
                     </button>
