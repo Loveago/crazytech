@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import {
   ShoppingBag,
-  Sparkles,
+  Gem,
   Star,
   Check,
   Plus,
@@ -106,7 +106,7 @@ export function AuraLuxeMockup({
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.05] border border-white/10 text-white">
-            <Sparkles className="h-5 w-5" />
+            <Gem className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">

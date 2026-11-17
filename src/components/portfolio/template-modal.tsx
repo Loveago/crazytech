@@ -8,7 +8,6 @@ import {
   Layers,
   Shield,
   Gauge,
-  Sparkles,
   ArrowRight,
   Send,
   Code2,
@@ -80,7 +79,7 @@ export function TemplateModal({ template, onClose, onRequestQuote }: TemplateMod
           {/* Visual Showcase Gallery */}
           <div className="space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-zinc-400" /> Production Architecture &amp; Visual Gallery
+              <Layers className="h-4 w-4 text-zinc-400" /> Production Architecture &amp; Visual Gallery
             </span>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="md:col-span-2 relative h-52 sm:h-64 rounded-2xl overflow-hidden border border-white/10 bg-[#08090d]">

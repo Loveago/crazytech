@@ -50,7 +50,7 @@ export function PulseHealthMockup({
       nextSlot: "Tomorrow, 10:00 AM",
       avatarBg: "bg-teal-600",
       avatarInitials: "AO",
-      imageUrl: "https://images.unsplash.com/photo-1594824813637-2808c1a29367?auto=format&fit=crop&w=200&q=80",
+      imageUrl: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=200&q=80",
     },
     {
       name: "Dr. Samuel Coffie",

@@ -6,7 +6,6 @@ import {
   Calculator,
   Layers,
   ArrowUp,
-  Sparkles,
   PhoneCall,
 } from "lucide-react";
 

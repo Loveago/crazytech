@@ -13,7 +13,6 @@ import {
   RefreshCw,
   Wifi,
   Battery,
-  Sparkles,
   CheckCircle2,
   Eye,
   EyeOff,

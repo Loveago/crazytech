@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-  Sparkles,
+  ArrowUpRight,
   ArrowRight,
+  Terminal,
   Shield,
   Zap,
   Cpu,
@@ -147,8 +148,8 @@ export function PortfolioView() {
               href="#estimator"
               className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-bold text-zinc-950 shadow-sm transition-all active:scale-95"
             >
-              <Sparkles className="h-3.5 w-3.5 text-zinc-950" />
               <span>Start Project</span>
+              <ArrowUpRight className="h-3.5 w-3.5 text-zinc-950" />
             </a>
           </div>
         </div>
@@ -717,7 +718,7 @@ export function PortfolioView() {
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
-              <Sparkles className="h-4 w-4 text-zinc-400" />
+              <Terminal className="h-4 w-4 text-zinc-400" />
               <span>Studio Craftsmanship &amp; Engineering Culture</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">

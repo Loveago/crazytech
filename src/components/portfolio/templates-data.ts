@@ -14,7 +14,6 @@ import {
   CreditCard,
   Lock,
   Workflow,
-  Sparkles,
   CheckCircle2,
   Globe2,
   UtensilsCrossed,
@@ -68,7 +67,7 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     badgeBg: "bg-blue-500/10 text-blue-300 border-blue-500/20",
     badgeBorder: "border-blue-500/30",
     gradientBg: "from-blue-600/10 via-slate-900 to-transparent",
-    image: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",

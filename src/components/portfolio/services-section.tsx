@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   Cpu,
   Layers,
-  Sparkles,
   ShieldCheck,
 } from "lucide-react";
 
@@ -102,7 +101,7 @@ const SERVICES: ServiceCard[] = [
     icon: Zap,
     accentColor: "bg-white/[0.05] text-white border-white/10",
     badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
-    imageUrl: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?auto=format&fit=crop&w=800&q=80",
     description:
       "Industrial-grade telecommunication and financial aggregation systems. We integrate direct MTN, Telecel, and AT carrier APIs with Paystack, Hubtel, and Mobile Money webhooks.",
     deliverables: [
@@ -166,7 +165,7 @@ export function ServicesSection({ onSelectService }: { onSelectService: (service
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
-            <Sparkles className="h-4 w-4 text-zinc-400" />
+            <Cpu className="h-4 w-4 text-zinc-400" />
             <span>Comprehensive Digital Engineering Solutions</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">

@@ -10,7 +10,7 @@ import {
   Clock,
   ShieldCheck,
   CheckCircle2,
-  Sparkles,
+  Terminal,
   ArrowRight,
 } from "lucide-react";
 
@@ -48,7 +48,7 @@ export function ContactRfpSection({ prefillService }: { prefillService?: string 
             <div className="lg:col-span-5 space-y-6">
               <div>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
-                  <Sparkles className="h-3.5 w-3.5 text-zinc-400" /> Direct Consultation
+                  <Terminal className="h-3.5 w-3.5 text-zinc-400" /> Direct Consultation
                 </span>
                 <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
                   Let&apos;s Build Your Next High-Impact System

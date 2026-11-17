@@ -12,7 +12,6 @@ import {
   Minus,
   CheckCircle2,
   ChefHat,
-  Sparkles,
   Star,
   MapPin,
   ChevronRight,

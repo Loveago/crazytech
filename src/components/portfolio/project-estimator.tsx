@@ -13,7 +13,6 @@ import {
   Copy,
   Check,
   Zap,
-  Sparkles,
   Clock,
   ShieldCheck,
   DollarSign,
