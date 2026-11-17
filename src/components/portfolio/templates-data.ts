@@ -41,6 +41,8 @@ export interface TemplateData {
   badgeBg: string;
   badgeBorder: string;
   gradientBg: string;
+  image: string;
+  gallery: string[];
   stats: { label: string; value: string; hint?: string }[];
   techStack: string[];
   keyFeatures: string[];
@@ -66,6 +68,11 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     badgeBg: "bg-blue-500/10 text-blue-300 border-blue-500/20",
     badgeBorder: "border-blue-500/30",
     gradientBg: "from-blue-600/10 via-slate-900 to-transparent",
+    image: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
+    ],
     stats: [
       { label: "Dispatch Speed", value: "<1.8s", hint: "Average gateway queue-to-delivery" },
       { label: "Volume Processed", value: "GHS 4.2M+", hint: "Automated wallet volume" },
@@ -127,6 +134,11 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     badgeBg: "bg-amber-500/10 text-amber-200 border-amber-500/20",
     badgeBorder: "border-amber-500/30",
     gradientBg: "from-amber-600/10 via-slate-900 to-transparent",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+    ],
     stats: [
       { label: "Table Turnaround", value: "+38%", hint: "Faster table ordering & billing" },
       { label: "Kitchen Sync", value: "<1.2s", hint: "From click to kitchen printer ticket" },
@@ -187,6 +199,11 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     badgeBg: "bg-indigo-500/10 text-indigo-200 border-indigo-500/20",
     badgeBorder: "border-indigo-500/30",
     gradientBg: "from-indigo-600/10 via-slate-900 to-transparent",
+    image: "https://images.unsplash.com/photo-1559526324-593bc073d938?auto=format&fit=crop&w=1200&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&w=800&q=80",
+    ],
     stats: [
       { label: "P2P Settlement", value: "<1.0s", hint: "Instant wallet-to-wallet transfer" },
       { label: "Card Generation", value: "Instant", hint: "Dynamic 3D virtual Visa card" },
@@ -247,6 +264,11 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     badgeBg: "bg-sky-500/10 text-sky-200 border-sky-500/20",
     badgeBorder: "border-sky-500/30",
     gradientBg: "from-sky-600/10 via-slate-900 to-transparent",
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+    ],
     stats: [
       { label: "Admin Time Saved", value: "85%", hint: "Automated manual reconciliations" },
       { label: "Query Latency", value: "<85ms", hint: "Optimized database read replicas" },
@@ -308,6 +330,11 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     badgeBg: "bg-white/10 text-slate-200 border-white/15",
     badgeBorder: "border-white/20",
     gradientBg: "from-white/5 via-slate-900 to-transparent",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
+    ],
     stats: [
       { label: "Mobile Conversion", value: "+340%", hint: "Compared to standard Shopify" },
       { label: "LCP Load Time", value: "0.4s", hint: "Largest Contentful Paint speed" },
@@ -369,6 +396,11 @@ export const SHOWCASE_TEMPLATES: TemplateData[] = [
     badgeBg: "bg-emerald-500/10 text-emerald-200 border-emerald-500/20",
     badgeBorder: "border-emerald-500/30",
     gradientBg: "from-emerald-600/10 via-slate-900 to-transparent",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+    gallery: [
+      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80",
+    ],
     stats: [
       { label: "App Store Rating", value: "4.9 / 5.0", hint: "Verified patient satisfaction" },
       { label: "Consultations", value: "35K+", hint: "Completed digital sessions" },

@@ -27,6 +27,7 @@ interface Contact {
   phone: string;
   initials: string;
   bg: string;
+  imageUrl: string;
 }
 
 export function WalletMobileMockup({
@@ -55,10 +56,34 @@ export function WalletMobileMockup({
   });
 
   const contacts: Contact[] = [
-    { name: "Ama Serwaa", phone: "024 892 1099", initials: "AS", bg: "bg-zinc-700" },
-    { name: "Kofi Mensah", phone: "050 710 4421", initials: "KM", bg: "bg-blue-600" },
-    { name: "David Osei", phone: "027 334 9912", initials: "DO", bg: "bg-emerald-700" },
-    { name: "Akua Darko", phone: "055 192 8472", initials: "AD", bg: "bg-amber-700" },
+    {
+      name: "Ama Serwaa",
+      phone: "024 892 1099",
+      initials: "AS",
+      bg: "bg-zinc-700",
+      imageUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+    },
+    {
+      name: "Kofi Mensah",
+      phone: "050 710 4421",
+      initials: "KM",
+      bg: "bg-blue-600",
+      imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+    },
+    {
+      name: "David Osei",
+      phone: "027 334 9912",
+      initials: "DO",
+      bg: "bg-emerald-700",
+      imageUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+    },
+    {
+      name: "Akua Darko",
+      phone: "055 192 8472",
+      initials: "AD",
+      bg: "bg-amber-700",
+      imageUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80",
+    },
   ];
 
   const themeGradients = {
@@ -337,10 +362,13 @@ export function WalletMobileMockup({
                   }}
                   className="flex flex-col items-center gap-1 shrink-0 group"
                 >
-                  <div
-                    className={`h-9 w-9 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-md border border-white/10 group-hover:scale-105 transition-transform ${c.bg}`}
-                  >
-                    {c.initials}
+                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-white/20 shadow-md group-hover:scale-105 transition-transform bg-zinc-800">
+                    <img
+                      src={c.imageUrl}
+                      alt={c.name}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
                   <span className="text-[9px] text-zinc-300 max-w-[50px] truncate">
                     {c.name.split(" ")[0]}

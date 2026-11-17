@@ -39,6 +39,7 @@ export function PulseHealthMockup({
       nextSlot: "Today, 3:30 PM",
       avatarBg: "bg-emerald-600",
       avatarInitials: "KM",
+      imageUrl: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=200&q=80",
     },
     {
       name: "Dr. Ama Owusu",
@@ -49,6 +50,7 @@ export function PulseHealthMockup({
       nextSlot: "Tomorrow, 10:00 AM",
       avatarBg: "bg-teal-600",
       avatarInitials: "AO",
+      imageUrl: "https://images.unsplash.com/photo-1594824813637-2808c1a29367?auto=format&fit=crop&w=200&q=80",
     },
     {
       name: "Dr. Samuel Coffie",
@@ -59,6 +61,7 @@ export function PulseHealthMockup({
       nextSlot: "Today, 5:00 PM",
       avatarBg: "bg-cyan-600",
       avatarInitials: "SC",
+      imageUrl: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=200&q=80",
     },
   ];
 
@@ -163,10 +166,13 @@ export function PulseHealthMockup({
                     className="flex items-center justify-between rounded-xl border border-slate-800/80 bg-slate-950/70 p-2.5 hover:border-emerald-500/30 transition-all"
                   >
                     <div className="flex items-center gap-2.5">
-                      <div
-                        className={`h-9 w-9 rounded-xl flex items-center justify-center font-bold text-xs text-white ${doc.avatarBg}`}
-                      >
-                        {doc.avatarInitials}
+                      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-800">
+                        <img
+                          src={doc.imageUrl}
+                          alt={doc.name}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
                       </div>
                       <div>
                         <div className="flex items-center gap-1.5">

@@ -22,6 +22,7 @@ interface Variant {
   priceGHS: number;
   stock: number;
   sku: string;
+  imageUrl: string;
 }
 
 export function AuraLuxeMockup({
@@ -39,6 +40,7 @@ export function AuraLuxeMockup({
       priceGHS: 6370,
       stock: 4,
       sku: "AURA-OB-01",
+      imageUrl: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=800&q=80",
     },
     {
       name: "Cyber Cyan",
@@ -47,6 +49,7 @@ export function AuraLuxeMockup({
       priceGHS: 6760,
       stock: 7,
       sku: "AURA-CC-02",
+      imageUrl: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=800&q=80",
     },
     {
       name: "Imperial Rose",
@@ -55,6 +58,7 @@ export function AuraLuxeMockup({
       priceGHS: 7020,
       stock: 2,
       sku: "AURA-IR-03",
+      imageUrl: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=80",
     },
     {
       name: "Emerald Aurum",
@@ -63,6 +67,7 @@ export function AuraLuxeMockup({
       priceGHS: 6890,
       stock: 9,
       sku: "AURA-EA-04",
+      imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
     },
   ];
 
@@ -145,21 +150,19 @@ export function AuraLuxeMockup({
               <span className="text-[10px] font-mono text-slate-400">{activeVariant.sku}</span>
             </div>
 
-            {/* Simulated 3D Headset / Luxury Device */}
-            <div className="relative h-44 w-full flex items-center justify-center overflow-hidden rounded-xl bg-slate-950/70 border border-slate-800/80 group">
-              <div
-                className="h-28 w-28 rounded-full border-4 transition-all duration-500 shadow-2xl flex items-center justify-center"
-                style={{
-                  borderColor: activeVariant.colorHex,
-                  boxShadow: `0 0 35px ${activeVariant.colorHex}66`,
-                }}
-              >
-                <div
-                  className="h-20 w-20 rounded-full transition-all duration-500 flex items-center justify-center text-xs font-mono font-bold text-white shadow-inner"
-                  style={{ backgroundColor: activeVariant.colorHex }}
-                >
-                  60 FPS
-                </div>
+            {/* Product Photography with 60FPS Ambient Glow */}
+            <div className="relative h-48 w-full flex items-center justify-center overflow-hidden rounded-xl bg-slate-950/70 border border-slate-800/80 group">
+              <img
+                key={activeVariant.imageUrl}
+                src={activeVariant.imageUrl}
+                alt={activeVariant.name}
+                className="h-full w-full object-cover object-center transition-all duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 rounded-full bg-slate-950/80 backdrop-blur-md px-2.5 py-1 text-[10px] font-mono font-medium text-white border border-white/10">
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: activeVariant.colorHex }} />
+                <span>60 FPS Fluid</span>
               </div>
             </div>
 

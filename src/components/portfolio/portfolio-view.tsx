@@ -55,6 +55,20 @@ export function PortfolioView() {
     "pulse-health": "mobile",
   });
 
+  // Showcase display mode (Interactive sandbox vs Production visual architecture)
+  const [viewModes, setViewModes] = useState<Record<string, "interactive" | "visual">>({
+    "nexus-pay": "interactive",
+    "savoria-restaurant": "interactive",
+    "apex-wallet": "interactive",
+    "omni-core": "interactive",
+    "aura-luxe": "interactive",
+    "pulse-health": "interactive",
+  });
+
+  const toggleViewMode = (templateId: string, mode: "interactive" | "visual") => {
+    setViewModes((prev) => ({ ...prev, [templateId]: mode }));
+  };
+
   const setTemplateDevice = (templateId: string, device: "desktop" | "tablet" | "mobile") => {
     setDeviceViews((prev) => ({ ...prev, [templateId]: device }));
   };
@@ -220,6 +234,53 @@ export function PortfolioView() {
               <span className="text-xs text-zinc-400 font-medium mt-1 block">Enterprise Deployments</span>
             </div>
           </div>
+
+          {/* Hero Visual Studio Showcase with Live Telemetry Overlays */}
+          <div className="relative mt-12 overflow-hidden rounded-3xl border border-white/[0.12] bg-[#0c0e16] shadow-2xl group">
+            <div className="relative h-[300px] sm:h-[420px] lg:h-[500px] w-full overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=80"
+                alt="CrazyTech High-Concurrency Platform Engine"
+                className="h-full w-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-1000 opacity-90"
+                loading="eager"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08090d] via-[#08090d]/35 to-transparent" />
+
+              {/* Floating Live Telemetry Cards */}
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 rounded-2xl border border-white/15 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xl shadow-xl flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs font-bold text-white">Sub-Second Dispatch</span>
+                  </div>
+                  <span className="text-[11px] font-mono text-zinc-400">Carrier Queue: 1.4s</span>
+                </div>
+              </div>
+
+              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 rounded-2xl border border-white/15 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xl shadow-xl flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                  <Shield className="h-5 w-5" />
+                </div>
+                <div className="text-left">
+                  <span className="block text-xs font-bold text-white">Atomic Double-Entry Ledger</span>
+                  <span className="text-[11px] font-mono text-zinc-400">Zero Transaction Discrepancy</span>
+                </div>
+              </div>
+
+              <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 hidden sm:flex rounded-2xl border border-white/15 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xl shadow-xl items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                  <Cpu className="h-5 w-5" />
+                </div>
+                <div className="text-left">
+                  <span className="block text-xs font-bold text-white">VPS &amp; Nginx Hardened</span>
+                  <span className="text-[11px] font-mono text-zinc-400">Ubuntu 22.04 LTS • PM2 Cluster</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -371,87 +432,163 @@ export function PortfolioView() {
                       </p>
                     </div>
 
-                    {/* View Switcher: Desktop vs Tablet vs Mobile */}
-                    <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1 self-start lg:self-auto">
-                      <button
-                        type="button"
-                        onClick={() => setTemplateDevice(template.id, "desktop")}
-                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                    {/* View Switcher: Interactive vs Visual, and Device Framing */}
+                    <div className="flex flex-wrap items-center gap-2 self-start lg:self-auto">
+                      <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+                        <button
+                          type="button"
+                          onClick={() => toggleViewMode(template.id, "interactive")}
+                          className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                            (viewModes[template.id] || "interactive") === "interactive"
+                              ? "bg-white text-zinc-950 shadow-sm"
+                              : "text-zinc-400 hover:text-white"
+                          }`}
+                        >
+                          <Sliders className="h-3.5 w-3.5" />
+                          <span>Interactive Demo</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => toggleViewMode(template.id, "visual")}
+                          className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                            viewModes[template.id] === "visual"
+                              ? "bg-white text-zinc-950 shadow-sm"
+                              : "text-zinc-400 hover:text-white"
+                          }`}
+                        >
+                          <Layers className="h-3.5 w-3.5" />
+                          <span>Architecture Visual</span>
+                        </button>
+                      </div>
+
+                      {(viewModes[template.id] || "interactive") === "interactive" && (
+                        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-[#08090d] p-1">
+                          <button
+                            type="button"
+                            onClick={() => setTemplateDevice(template.id, "desktop")}
+                            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                              currentDevice === "desktop"
+                                ? "bg-white text-zinc-950 shadow-sm"
+                                : "text-zinc-400 hover:text-white"
+                            }`}
+                          >
+                            <Monitor className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Desktop</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setTemplateDevice(template.id, "tablet")}
+                            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                              currentDevice === "tablet"
+                                ? "bg-white text-zinc-950 shadow-sm"
+                                : "text-zinc-400 hover:text-white"
+                            }`}
+                          >
+                            <Tablet className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Tablet</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setTemplateDevice(template.id, "mobile")}
+                            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                              currentDevice === "mobile"
+                                ? "bg-white text-zinc-950 shadow-sm"
+                                : "text-zinc-400 hover:text-white"
+                            }`}
+                          >
+                            <Smartphone className="h-3.5 w-3.5" />
+                            <span className="hidden sm:inline">Mobile</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Template Presentation: Interactive Sandbox vs Production Visual */}
+                  {viewModes[template.id] === "visual" ? (
+                    <div className="mb-8 space-y-4">
+                      <div className="relative h-[320px] sm:h-[420px] w-full overflow-hidden rounded-2xl border border-white/10 bg-[#08090d] group/visual">
+                        <img
+                          src={template.image}
+                          alt={template.title}
+                          className="h-full w-full object-cover object-center group-hover/visual:scale-105 transition-transform duration-700"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                        <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+                          <div className="space-y-1">
+                            <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                              Production Environment
+                            </span>
+                            <h4 className="text-xl sm:text-2xl font-bold text-white">{template.title}</h4>
+                            <p className="text-xs text-zinc-300 max-w-xl">{template.tagline}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setActiveModalTemplate(template)}
+                            className="rounded-xl bg-white text-zinc-950 font-bold text-xs px-4 py-2 hover:bg-zinc-200 transition shadow-lg shrink-0 cursor-pointer"
+                          >
+                            View Architecture Specs
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        {template.gallery?.map((img, i) => (
+                          <div key={i} className="relative h-24 rounded-xl overflow-hidden border border-white/10 bg-[#08090d]">
+                            <img src={img} alt={`${template.title} view ${i + 1}`} className="h-full w-full object-cover" loading="lazy" />
+                          </div>
+                        ))}
+                        {template.architecturePoints.slice(0, 2).map((pt) => (
+                          <div key={pt.title} className="rounded-xl border border-white/10 bg-white/[0.02] p-2.5 flex flex-col justify-center">
+                            <span className="text-xs font-bold text-white truncate">{pt.title}</span>
+                            <span className="text-[10px] text-zinc-400 line-clamp-2 mt-0.5">{pt.desc}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    /* Device Framing Outer Wrap */
+                    <div className="flex justify-center mb-8">
+                      <div
+                        className={`w-full transition-all duration-300 ${
                           currentDevice === "desktop"
-                            ? "bg-white text-zinc-950 shadow-sm"
-                            : "text-zinc-400 hover:text-white"
+                            ? "max-w-full"
+                            : currentDevice === "tablet"
+                            ? "max-w-2xl"
+                            : "max-w-sm"
                         }`}
                       >
-                        <Monitor className="h-3.5 w-3.5" />
-                        <span className="hidden sm:inline">Desktop</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setTemplateDevice(template.id, "tablet")}
-                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                          currentDevice === "tablet"
-                            ? "bg-white text-zinc-950 shadow-sm"
-                            : "text-zinc-400 hover:text-white"
-                        }`}
-                      >
-                        <Tablet className="h-3.5 w-3.5" />
-                        <span className="hidden sm:inline">Tablet</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setTemplateDevice(template.id, "mobile")}
-                        className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                          currentDevice === "mobile"
-                            ? "bg-white text-zinc-950 shadow-sm"
-                            : "text-zinc-400 hover:text-white"
-                        }`}
-                      >
-                        <Smartphone className="h-3.5 w-3.5" />
-                        <span className="hidden sm:inline">Mobile</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Device Framing Outer Wrap */}
-                  <div className="flex justify-center mb-8">
-                    <div
-                      className={`w-full transition-all duration-300 ${
-                        currentDevice === "desktop"
-                          ? "max-w-full"
-                          : currentDevice === "tablet"
-                          ? "max-w-2xl"
-                          : "max-w-sm"
-                      }`}
-                    >
-                      {/* Browser / Frame Chrome */}
-                      <div className="rounded-t-2xl border-t border-x border-white/10 bg-[#12141c] px-4 py-2.5 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
-                          <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
-                          <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
+                        {/* Browser / Frame Chrome */}
+                        <div className="rounded-t-2xl border-t border-x border-white/10 bg-[#12141c] px-4 py-2.5 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
+                            <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
+                            <span className="h-2.5 w-2.5 rounded-full bg-zinc-600/70 inline-block" />
+                          </div>
+                          <div className="rounded-lg bg-[#08090d] px-3 py-1 text-[11px] font-mono text-zinc-400 border border-white/[0.06] max-w-[280px] truncate">
+                            https://demo.crazytechent.com/{template.id}
+                          </div>
+                          <div className="text-[10px] text-zinc-400 font-mono flex items-center gap-1.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            <span>Interactive Sandbox</span>
+                          </div>
                         </div>
-                        <div className="rounded-lg bg-[#08090d] px-3 py-1 text-[11px] font-mono text-zinc-400 border border-white/[0.06] max-w-[280px] truncate">
-                          https://demo.crazytechent.com/{template.id}
-                        </div>
-                        <div className="text-[10px] text-zinc-400 font-mono flex items-center gap-1.5">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span>Interactive</span>
+
+                        {/* Live Embedded Prototype Component */}
+                        <div className="rounded-b-2xl border-b border-x border-white/10 bg-[#08090d]/80 p-2 sm:p-4">
+                          {template.previewType === "fintech" && <NexusPayMockup device={currentDevice} />}
+                          {template.previewType === "restaurant" && <RestaurantMockup device={currentDevice} />}
+                          {template.previewType === "wallet" && <WalletMobileMockup device={currentDevice} />}
+                          {template.previewType === "erp" && <OmniCoreMockup device={currentDevice} />}
+                          {template.previewType === "ecommerce" && <AuraLuxeMockup device={currentDevice} />}
+                          {template.previewType === "health" && <PulseHealthMockup device={currentDevice} />}
                         </div>
                       </div>
-
-                      {/* Live Embedded Prototype Component */}
-                      <div className="rounded-b-2xl border-b border-x border-white/10 bg-[#08090d]/80 p-2 sm:p-4">
-                        {template.previewType === "fintech" && <NexusPayMockup device={currentDevice} />}
-                        {template.previewType === "restaurant" && <RestaurantMockup device={currentDevice} />}
-                        {template.previewType === "wallet" && <WalletMobileMockup device={currentDevice} />}
-                        {template.previewType === "erp" && <OmniCoreMockup device={currentDevice} />}
-                        {template.previewType === "ecommerce" && <AuraLuxeMockup device={currentDevice} />}
-                        {template.previewType === "health" && <PulseHealthMockup device={currentDevice} />}
-                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Template Meta, Stats & Action Row */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center border-t border-white/[0.08] pt-6">
@@ -575,6 +712,73 @@ export function PortfolioView() {
         </div>
       </section>
 
+      {/* Studio Craftsmanship & Engineering Lab Section */}
+      <section className="relative py-24 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] bg-[#08090d]">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-zinc-300 mb-3 backdrop-blur-md">
+              <Sparkles className="h-4 w-4 text-zinc-400" />
+              <span>Studio Craftsmanship &amp; Engineering Culture</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              Behind the Code: Our Engineering Principles
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm sm:text-base text-zinc-400">
+              We operate as a boutique software engineering studio combining silicon-valley architecture rigor with local telecom and payment execution.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                title: "Architectural Blueprinting First",
+                subtitle: "Schema Normalization & Concurrency Safety",
+                desc: "Before writing application code, we map database transactions, carrier routing fallback matrices, and data protection boundaries.",
+                image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+                tag: "System Design",
+              },
+              {
+                title: "Tactile, High-Fidelity UI",
+                subtitle: "Tailwind CSS v4 & 60fps Micro-Interactions",
+                desc: "We engineer interfaces that feel physical and immediate, with sub-second optimistic updates, zero layout shifts, and dark mode elegance.",
+                image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
+                tag: "Design System",
+              },
+              {
+                title: "Hardened VPS & Telemetry",
+                subtitle: "Automated Deployments & 99.99% SLA",
+                desc: "We configure Ubuntu VPS nodes with PM2 clustering, Nginx reverse-proxies, Certbot auto-SSL, and proactive uptime monitors.",
+                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+                tag: "Cloud DevOps",
+              },
+            ].map((card) => (
+              <div
+                key={card.title}
+                className="group relative rounded-2xl border border-white/[0.08] bg-[#0c0e14] overflow-hidden shadow-xl hover:border-white/20 transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="relative h-48 w-full overflow-hidden bg-slate-900">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e14] via-[#0c0e14]/40 to-transparent" />
+                  <span className="absolute top-3 left-3 rounded-full bg-slate-950/80 backdrop-blur-md px-2.5 py-1 text-[10px] font-mono text-zinc-300 border border-white/10">
+                    {card.tag}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-white mb-1">{card.title}</h3>
+                  <span className="text-xs font-mono text-zinc-400 block mb-3">{card.subtitle}</span>
+                  <p className="text-xs text-zinc-400 leading-relaxed font-normal">{card.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Verified Client Testimonials */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
         <div className="mx-auto max-w-6xl">
@@ -595,6 +799,7 @@ export function PortfolioView() {
                 author: "Emmanuel Boakye",
                 role: "Operations Director, Telecom Aggregator Hub",
                 metric: "+340% Revenue Velocity",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
               },
               {
                 quote:
@@ -602,6 +807,7 @@ export function PortfolioView() {
                 author: "Sarah Addo",
                 role: "Founder, DataConnect Ghana",
                 metric: "Saved $8,400/yr in Server Costs",
+                avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
               },
               {
                 quote:
@@ -609,6 +815,7 @@ export function PortfolioView() {
                 author: "Michael Ansah",
                 role: "Product Lead, Retail FinTech App",
                 metric: "4.9★ App Store Rating",
+                avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
               },
             ].map((t) => (
               <div
@@ -626,12 +833,22 @@ export function PortfolioView() {
                   </p>
                 </div>
 
-                <div className="border-t border-white/[0.06] pt-4">
-                  <span className="block text-xs font-bold text-white">{t.author}</span>
-                  <span className="block text-[11px] text-zinc-400">{t.role}</span>
-                  <span className="inline-block mt-2 rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-mono font-medium text-emerald-400 border border-emerald-500/20">
-                    {t.metric}
-                  </span>
+                <div className="border-t border-white/[0.06] pt-4 flex items-center gap-3">
+                  <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-white/15 bg-zinc-800">
+                    <img
+                      src={t.avatar}
+                      alt={t.author}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="block text-xs font-bold text-white truncate">{t.author}</span>
+                    <span className="block text-[11px] text-zinc-400 truncate">{t.role}</span>
+                    <span className="inline-block mt-1 rounded bg-emerald-500/10 px-2 py-0.5 text-[9px] font-mono font-medium text-emerald-400 border border-emerald-500/20">
+                      {t.metric}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}

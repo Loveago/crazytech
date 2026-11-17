@@ -33,6 +33,7 @@ interface MenuItem {
   tag: string;
   spicy: boolean;
   imageAccent: string;
+  imageUrl: string;
 }
 
 const MENU: MenuItem[] = [
@@ -46,6 +47,7 @@ const MENU: MenuItem[] = [
     tag: "Chef's Signature",
     spicy: false,
     imageAccent: "from-amber-500 to-orange-600",
+    imageUrl: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
   },
   {
     id: "dish-2",
@@ -57,6 +59,7 @@ const MENU: MenuItem[] = [
     tag: "Top Seller 🔥",
     spicy: true,
     imageAccent: "from-orange-500 to-red-600",
+    imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
   },
   {
     id: "dish-3",
@@ -68,6 +71,7 @@ const MENU: MenuItem[] = [
     tag: "Wood Fired",
     spicy: true,
     imageAccent: "from-red-500 to-rose-600",
+    imageUrl: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80",
   },
   {
     id: "dish-4",
@@ -79,6 +83,7 @@ const MENU: MenuItem[] = [
     tag: "Superfood",
     spicy: false,
     imageAccent: "from-emerald-500 to-teal-600",
+    imageUrl: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",
   },
 ];
 
@@ -225,14 +230,23 @@ export function RestaurantMockup({
             {filteredMenu.map((dish) => (
               <div
                 key={dish.id}
-                className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-3.5 hover:border-amber-500/40 transition-all flex flex-col justify-between group"
+                className="rounded-xl border border-slate-800/80 bg-slate-900/60 p-3 hover:border-amber-500/40 transition-all flex flex-col justify-between group"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                  <div className="relative h-28 w-full overflow-hidden rounded-lg mb-2.5 bg-slate-800">
+                    <img
+                      src={dish.imageUrl}
+                      alt={dish.name}
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+                    <span className="absolute top-2 left-2 text-[9px] font-bold uppercase tracking-wider text-amber-300 bg-slate-950/80 backdrop-blur-md px-2 py-0.5 rounded border border-amber-500/30">
                       {dish.tag}
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400">{dish.calories}</span>
+                    <span className="absolute bottom-1.5 right-2 text-[9px] font-mono text-zinc-300 bg-slate-950/70 px-1.5 py-0.5 rounded backdrop-blur-sm">
+                      {dish.calories}
+                    </span>
                   </div>
 
                   <h4 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">

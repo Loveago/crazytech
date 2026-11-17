@@ -77,6 +77,39 @@ export function TemplateModal({ template, onClose, onRequestQuote }: TemplateMod
             </p>
           </div>
 
+          {/* Visual Showcase Gallery */}
+          <div className="space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-zinc-400" /> Production Architecture &amp; Visual Gallery
+            </span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="md:col-span-2 relative h-52 sm:h-64 rounded-2xl overflow-hidden border border-white/10 bg-[#08090d]">
+                <img
+                  src={template.image}
+                  alt={template.title}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute bottom-3 left-3 text-[11px] font-mono text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10">
+                  Production Environment
+                </span>
+              </div>
+              <div className="flex flex-col gap-3">
+                {template.gallery?.map((imgUrl, idx) => (
+                  <div key={idx} className="relative h-[122px] rounded-xl overflow-hidden border border-white/10 bg-[#08090d]">
+                    <img
+                      src={imgUrl}
+                      alt={`${template.title} preview ${idx + 1}`}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* Lighthouse Scorecard */}
           <div className="rounded-2xl border border-white/[0.08] bg-[#08090d] p-4 sm:p-5">
             <div className="flex items-center justify-between mb-4">

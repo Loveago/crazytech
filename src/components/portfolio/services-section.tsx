@@ -27,6 +27,7 @@ interface ServiceCard {
   description: string;
   deliverables: string[];
   techTags: string[];
+  imageUrl: string;
 }
 
 const SERVICES: ServiceCard[] = [
@@ -38,6 +39,7 @@ const SERVICES: ServiceCard[] = [
     icon: Laptop,
     accentColor: "bg-white/[0.05] text-white border-white/10",
     badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
+    imageUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
     description:
       "Bespoke software systems engineered to replace clunky legacy workflows. We build integrated ERPs, school/hospital suites, POS retail networks, and multi-branch distributed inventory databases.",
     deliverables: [
@@ -58,6 +60,7 @@ const SERVICES: ServiceCard[] = [
     icon: Smartphone,
     accentColor: "bg-white/[0.05] text-white border-white/10",
     badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
+    imageUrl: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
     description:
       "Stunning mobile apps published directly to the Apple App Store and Google Play Store. Built for smooth 60fps animations, offline-first reliability, biometric security, and push notifications.",
     deliverables: [
@@ -78,6 +81,7 @@ const SERVICES: ServiceCard[] = [
     icon: Globe2,
     accentColor: "bg-white/[0.05] text-white border-white/10",
     badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
+    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
     description:
       "High-converting cloud applications and digital storefronts engineered on Next.js 16 and React 19. Designed for sub-second page loads, SEO domination, and frictionless buyer conversion.",
     deliverables: [
@@ -98,6 +102,7 @@ const SERVICES: ServiceCard[] = [
     icon: Zap,
     accentColor: "bg-white/[0.05] text-white border-white/10",
     badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
+    imageUrl: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80",
     description:
       "Industrial-grade telecommunication and financial aggregation systems. We integrate direct MTN, Telecel, and AT carrier APIs with Paystack, Hubtel, and Mobile Money webhooks.",
     deliverables: [
@@ -118,6 +123,7 @@ const SERVICES: ServiceCard[] = [
     icon: Server,
     accentColor: "bg-white/[0.05] text-white border-white/10",
     badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
+    imageUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
     description:
       "Rock-solid deployment architecture built for zero-downtime scalability. From single multi-tenant VPS deployments to Kubernetes microservices, automated backups, and SSL certbots.",
     deliverables: [
@@ -138,6 +144,7 @@ const SERVICES: ServiceCard[] = [
     icon: Palette,
     accentColor: "bg-white/[0.05] text-white border-white/10",
     badgeClass: "bg-white/[0.04] text-zinc-300 border-white/10",
+    imageUrl: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80",
     description:
       "Award-winning aesthetic polish that converts casual visitors into loyal high-ticket clients. Fluid 60fps micro-animations, glassmorphism, responsive tactile physics, and cohesive design systems.",
     deliverables: [
@@ -177,16 +184,22 @@ export function ServicesSection({ onSelectService }: { onSelectService: (service
             return (
               <div
                 key={s.id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#0c0e14] p-6 sm:p-7 backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-[#10121a] hover:shadow-2xl hover:-translate-y-1"
+                className="group relative flex flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#0c0e14] p-5 sm:p-6 backdrop-blur-md transition-all duration-300 hover:border-white/20 hover:bg-[#10121a] hover:shadow-2xl hover:-translate-y-1 overflow-hidden"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <div
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.05] border border-white/10 text-white shadow-md group-hover:scale-105 group-hover:bg-white/[0.08] transition-all"
-                    >
-                      <Icon className="h-6 w-6 stroke-[2]" />
+                  {/* Real Photographic Header with Gradient Scrim */}
+                  <div className="relative h-44 w-full overflow-hidden rounded-xl mb-5 bg-[#08090d]">
+                    <img
+                      src={s.imageUrl}
+                      alt={s.title}
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-85 group-hover:opacity-100"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e14] via-[#0c0e14]/50 to-transparent" />
+                    <div className="absolute top-3 left-3 flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950/80 border border-white/20 text-white backdrop-blur-md shadow-lg">
+                      <Icon className="h-5 w-5" />
                     </div>
-                    <span className="rounded-full px-3 py-1 text-[11px] font-mono text-zinc-300 bg-white/[0.04] border border-white/10">
+                    <span className="absolute top-3 right-3 rounded-full px-2.5 py-1 text-[10px] font-mono text-zinc-200 bg-slate-950/85 border border-white/15 backdrop-blur-md">
                       {s.badge}
                     </span>
                   </div>
