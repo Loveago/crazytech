@@ -84,6 +84,10 @@ export default function StorefrontIndexPage() {
             <Link href="/privacy" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
               Privacy
             </Link>
+            <span>·</span>
+            <Link href="/support" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              Support
+            </Link>
           </div>
         </div>
       </footer>

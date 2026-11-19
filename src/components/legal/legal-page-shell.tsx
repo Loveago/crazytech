@@ -375,6 +375,13 @@ export function LegalPageShell({
               Privacy Policy
             </Link>
             <span>·</span>
+            <Link
+              href="/support"
+              className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              Support
+            </Link>
+            <span>·</span>
             <span className="inline-flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
               <ShieldCheck className="h-3.5 w-3.5" />
               Paystack PCI-DSS Secured

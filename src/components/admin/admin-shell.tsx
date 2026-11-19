@@ -544,6 +544,10 @@ export function AdminShell({ user, children, allowedNavHrefs, supportWhatsapp, a
                   <Link href="/privacy" target="_blank" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                     Privacy
                   </Link>
+                  <span>·</span>
+                  <Link href="/support" target="_blank" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                    Support
+                  </Link>
                 </div>
                 <a
                   href="https://wa.me/233507904981"

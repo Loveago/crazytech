@@ -322,6 +322,13 @@ function LoginForm() {
             >
               Refund Policy
             </Link>
+            <span className="text-slate-300 dark:text-slate-700">·</span>
+            <Link
+              href="/support"
+              className="hover:text-slate-900 dark:hover:text-white transition-colors hover:underline"
+            >
+              Support
+            </Link>
           </div>
           <p className="text-[11px] text-slate-400 dark:text-slate-500">
             © {new Date().getFullYear()} Crazy Tech Enterprise. All rights reserved.

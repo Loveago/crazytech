@@ -117,7 +117,8 @@ export async function middleware(request: NextRequest) {
       pathname === "/privacy-policy" ||
       pathname === "/refund-policy" ||
       pathname === "/refunds" ||
-      pathname === "/cancellation-policy"
+      pathname === "/cancellation-policy" ||
+      pathname === "/support"
     ) {
       return NextResponse.next();
     }
@@ -189,6 +190,7 @@ export async function middleware(request: NextRequest) {
     "refund-policy",
     "refunds",
     "cancellation-policy",
+    "support",
     "maintenance",
     "icon.svg",
     "apple-icon.png",
@@ -242,7 +244,8 @@ export async function middleware(request: NextRequest) {
     pathname === "/privacy-policy" ||
     pathname === "/refund-policy" ||
     pathname === "/refunds" ||
-    pathname === "/cancellation-policy";
+    pathname === "/cancellation-policy" ||
+    pathname === "/support";
   const isPortfolioPage =
     pathname === "/portfolio" || pathname.startsWith("/portfolio");
 
